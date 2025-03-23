@@ -1,129 +1,11 @@
-// Základní proměnné pro karusel
-let currentSlide = 0;
-let totalSlides = 0;
-let isSliding = false; // Zabránění více kliknutím během animace
-
-// Připravíme nekonečný karusel při načtení stránky
-function setupInfiniteCarousel() {
-    const track = document.getElementById('carousel-track');
-    const slides = document.querySelectorAll('.carousel-slide');
+// Kompletně přepracovaný a zjednodušený script.js
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializace mobilního menu
+    initMobileMenu();
     
-    if (slides.length < 2) return; // Není co dělat, pokud máme méně než 2 slidy
-    
-    // Vytvoříme klony prvního a posledního slidu
-    const firstSlideClone = slides[0].cloneNode(true);
-    const lastSlideClone = slides[slides.length - 1].cloneNode(true);
-    
-    // Přidáme třídy pro identifikaci
-    firstSlideClone.classList.add('clone');
-    lastSlideClone.classList.add('clone');
-    
-    // Přidáme klony na začátek a konec
-    track.appendChild(firstSlideClone);
-    track.insertBefore(lastSlideClone, slides[0]);
-    
-    // Nastavíme pozici karuselu (přeskočíme klon poslední položky)
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-100%)`;
-    
-    // Vynutíme překreslení
-    setTimeout(() => {
-        track.style.transition = 'transform 0.5s ease';
-    }, 10);
-    
-    // Vrátíme počet skutečných slidů (bez klonů)
-    return slides.length;
-}
-
-// Funkce pro pohyb karuselu - plynulý přechod dokola
-function moveCarousel(direction) {
-    if (isSliding) return; // Zabrání vícenásobnému klikání během animace
-    isSliding = true;
-    
-    const track = document.getElementById('carousel-track');
-    const slides = document.querySelectorAll('.carousel-slide');
-    const realSlidesCount = totalSlides; // Používáme globální proměnnou
-    
-    // Přidáme přechod (pokud není vypnutý)
-    track.style.transition = 'transform 0.5s ease';
-    
-    // Posuneme aktuální index
-    currentSlide += direction;
-    
-    // Aktualizujeme pozici
-    track.style.transform = `translateX(-${(currentSlide + 1) * 100}%)`;
-    
-    // Aktualizace indikátorů - zobrazujeme pouze skutečné slidy (ne klony)
-    const realIndex = (currentSlide % realSlidesCount + realSlidesCount) % realSlidesCount;
-    const dots = document.querySelectorAll('.indicator-dot');
-    dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === realIndex);
-    });
-    
-    // Posloucháme, až se dokončí animace
-    const handleTransitionEnd = function() {
-        track.removeEventListener('transitionend', handleTransitionEnd);
-        
-        // Pokud jsme přešli za okraj, vrátíme se na opačnou stranu bez přechodu
-        if (currentSlide < 0) {
-            // Jsme za klonem posledního slidu - skočíme na konec
-            track.style.transition = 'none';
-            currentSlide = realSlidesCount - 1;
-            track.style.transform = `translateX(-${(currentSlide + 1) * 100}%)`;
-            
-            // Vynutíme překreslení
-            setTimeout(() => {
-                track.style.transition = 'transform 0.5s ease';
-                isSliding = false;
-            }, 10);
-        } 
-        else if (currentSlide >= realSlidesCount) {
-            // Jsme za klonem prvního slidu - skočíme na začátek
-            track.style.transition = 'none';
-            currentSlide = 0;
-            track.style.transform = `translateX(-${(currentSlide + 1) * 100}%)`;
-            
-            // Vynutíme překreslení
-            setTimeout(() => {
-                track.style.transition = 'transform 0.5s ease';
-                isSliding = false;
-            }, 10);
-        } else {
-            isSliding = false;
-        }
-    };
-    
-    track.addEventListener('transitionend', handleTransitionEnd);
-}
-
-// Funkce pro přesun na konkrétní slide
-function goToSlide(slideIndex) {
-    if (isSliding) return;
-    isSliding = true;
-    
-    const track = document.getElementById('carousel-track');
-    
-    // Nastavíme aktuální slide
-    currentSlide = slideIndex;
-    
-    // Přidáme přechod
-    track.style.transition = 'transform 0.5s ease';
-    
-    // Aktualizujeme pozici (musíme přičíst 1 kvůli počátečnímu klonu)
-    track.style.transform = `translateX(-${(currentSlide + 1) * 100}%)`;
-    
-    // Aktualizace indikátorů
-    const dots = document.querySelectorAll('.indicator-dot');
-    dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentSlide);
-    });
-    
-    // Resetování flag po přechodu
-    track.addEventListener('transitionend', function resetFlag() {
-        track.removeEventListener('transitionend', resetFlag);
-        isSliding = false;
-    });
-}
+    // Inicializace karuselu
+    initCarousel();
+});
 
 // Inicializace mobilního menu
 function initMobileMenu() {
@@ -148,27 +30,80 @@ function initMobileMenu() {
     }
 }
 
-// Spuštění po načtení stránky
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializace mobilního menu
-    initMobileMenu();
+// Proměnné pro karusel
+let currentSlideIndex = 0;
+let slideCount = 0;
+let isTransitioning = false;
+
+// Inicializace karuselu
+function initCarousel() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    slideCount = slides.length;
     
-    // Nastaví nekonečný karusel a vrátí počet skutečných slidů
-    const slidesCount = setupInfiniteCarousel();
-    if (slidesCount) {
-        totalSlides = slidesCount;
-        
-        // Inicializace indikátorů
-        const indicatorContainer = document.getElementById('carousel-indicator');
-        indicatorContainer.innerHTML = '';
-        
-        for (let i = 0; i < totalSlides; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'indicator-dot' + (i === 0 ? ' active' : '');
-            dot.onclick = () => {
-                goToSlide(i);
-            };
-            indicatorContainer.appendChild(dot);
-        }
+    if (slideCount < 2) return; // Není co dělat, pokud máme méně než 2 slidy
+    
+    // Nastavení aktivního indikátoru
+    updateIndicators(0);
+}
+
+// Funkce pro pohyb karuselu
+function moveCarousel(direction) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    
+    // Vypočítáme nový index s ošetřením přechodu přes okraje
+    let newIndex = currentSlideIndex + direction;
+    
+    // Zajistíme "nekonečnost" karuselu
+    if (newIndex < 0) {
+        newIndex = slideCount - 1;
+    } else if (newIndex >= slideCount) {
+        newIndex = 0;
     }
-});
+    
+    // Provedeme animaci
+    const track = document.getElementById('carousel-track');
+    track.style.transition = 'transform 0.5s ease';
+    track.style.transform = `translateX(-${newIndex * 100}%)`;
+    
+    // Aktualizujeme indikátory
+    updateIndicators(newIndex);
+    
+    // Uložíme nový index
+    currentSlideIndex = newIndex;
+    
+    // Po dokončení animace resetujeme příznak
+    setTimeout(() => {
+        isTransitioning = false;
+    }, 500); // Délka animace
+}
+
+// Funkce pro přesun na konkrétní slide
+function goToSlide(slideIndex) {
+    if (isTransitioning || slideIndex === currentSlideIndex) return;
+    isTransitioning = true;
+    
+    // Provedeme animaci
+    const track = document.getElementById('carousel-track');
+    track.style.transition = 'transform 0.5s ease';
+    track.style.transform = `translateX(-${slideIndex * 100}%)`;
+    
+    // Aktualizujeme indikátory
+    updateIndicators(slideIndex);
+    
+    // Uložíme nový index
+    currentSlideIndex = slideIndex;
+    
+    // Po dokončení animace resetujeme příznak
+    setTimeout(() => {
+        isTransitioning = false;
+    }, 500); // Délka animace
+}
+
+// Aktualizace indikátorů
+function updateIndicators(activeIndex) {
+    const dots = document.querySelectorAll('.indicator-dot');
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === activeIndex);
+    });
+}

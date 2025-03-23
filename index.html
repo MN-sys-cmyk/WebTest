@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Literární komunita - Platforma pro autory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-top">
+                <a href="#" class="logo">Literární<span>Komunita</span></a>
+                <div class="language-switcher">
+                    <a href="#" class="language-link active">CZ</a>
+                    <a href="#" class="language-link">EN</a>
+                </div>
+                <button class="mobile-menu-toggle">☰</button>
+            </div>
+            <div class="header-bottom">
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#" class="active">Úvod</a></li>
+                        <li><a href="#">Autoři</a></li>
+                        <li><a href="#">Texty</a></li>
+                        <li><a href="#">Události</a></li>
+                        <li><a href="#">O projektu</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <div class="mobile-menu">
+        <button class="mobile-menu-close">✕</button>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Úvod</a></li>
+                <li><a href="#">Autoři</a></li>
+                <li><a href="#">Texty</a></li>
+                <li><a href="#">Události</a></li>
+                <li><a href="#">O projektu</a></li>
+                <li><a href="#">Kontakt</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <section class="hero">
+        <div class="hero-image"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Objevujte svět současné české literatury</h1>
+                <p class="hero-subtitle">Platforma propojující autory, čtenáře a literární nadšence</p>
+                <a href="#" class="hero-button">Prozkoumat</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="authors-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Představujeme autory</h2>
+                <p class="section-subtitle">Osobnosti české literární scény</p>
+            </div>
+            
+            <div class="authors-carousel">
+                <div class="carousel-arrow prev" onclick="moveCarousel(-1)">❮</div>
+                <div class="carousel-container">
+                    <div class="carousel-track" id="carousel-track">
+                        <!-- První slide s 3 autory -->
+                        <div class="carousel-slide">
+                            <a href="#" class="author-card">
+                                <div class="author-image-container">
+                                    <img src="https://via.placeholder.com/300" alt="Jan Novák" class="author-image">
+                                </div>
+                                <h3 class="author-name">Jan Novák</h3>
+                                <p class="author-genre">Próza, román</p>
+                            </a>
+                            <a href="#" class="author-card">
+                                <div class="author-image-container">
+                                    <img src="https://via.placeholder.com/300" alt="Petra Svobodová" class="author-image">
+                                </div>
+                                <h3 class="author-name">Petra Svobodová</h3>
+                                <p class="author-genre">Poezie, překlad</p>
+                            </a>
+                            <a href="#" class="author-card">
+                                <div class="author-image-container">
+                                    <img src="https://via.placeholder.com/300" alt="Tomáš Černý" class="author-image">
+                                </div>
+                                <h3 class="author-name">Tomáš Černý</h3>
+                                <p class="author-genre">Scenáristika, drama</p>
+                            </a>
+                        </div>
+                        
+                        <!-- Druhý slide s 3 autory -->
+                        <div class="carousel-slide">
+                            <a href="#" class="author-card">
+                                <div class="author-image-container">
+                                    <img src="https://via.placeholder.com/300" alt="Lucie Králová" class="author-image">
+                                </div>
+                                <h3 class="author-name">Lucie Králová</h3>
+                                <p class="author-genre">Literatura pro děti</p>
+                            </a>
+                            <a href="#" class="author-card">
+                                <div class="author-image-container">
+                                    <img src="https://via.placeholder.com/300" alt="Karel Malý" class="author-image">
+                                </div>
+                                <h3 class="author-name">Karel Malý</h3>
+                                <p class="author-genre">Eseje, kritika</p>
+                            </a>
+                            <a href="#" class="author-card">
+                                <div class="author-image-container">
+                                    <img src="https://via.placeholder.com/300" alt="Monika Veselá" class="author-image">
+                                </div>
+                                <h3 class="author-name">Monika Veselá</h3>
+                                <p class="author-genre">Fantasy, sci-fi</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-arrow next" onclick="moveCarousel(1)">❯</div>
+                
+                <div class="carousel-indicator" id="carousel-indicator">
+                    <div class="indicator-dot active" onclick="goToSlide(0)"></div>
+                    <div class="indicator-dot" onclick="goToSlide(1)"></div>
+                </div>
+            </div>
+            
+            <div class="view-all">
+                <a href="#" class="view-all-button">Zobrazit všechny autory</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="latest-posts">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Nejnovější texty</h2>
+                <p class="section-subtitle">Aktuální tvorba našich autorů</p>
+            </div>
+            <div class="posts-container">
+                <div class="featured-post">
+                    <div class="featured-post-image"></div>
+                    <div class="featured-post-content">
+                        <div class="post-meta">
+                            <span class="post-date">23. března 2025</span>
+                            <span class="post-category">Povídka</span>
+                        </div>
+                        <h3 class="post-title">Vzpomínky na dětství: Nová próza Jana Nováka</h3>
+                        <p class="post-excerpt">Jan Novák dokončil novou povídku o dospívání na malém městě, která kombinuje autobiografické prvky s fikcí. Přemýšlí, jak citlivě pracovat s reálnými zážitky, aniž by narušil soukromí skutečných osob.</p>
+                        <a href="#" class="read-more">Přečíst celý text</a>
+                    </div>
+                </div>
+                <div class="posts-grid">
+                    <div class="post-card">
+                        <div class="post-card-image" style="background-image: url('https://via.placeholder.com/600x400');"></div>
+                        <div class="post-card-content">
+                            <div class="post-meta">
+                                <span class="post-date">22. března 2025</span>
+                                <span class="post-category">Poezie</span>
+                            </div>
+                            <h3 class="post-title">Koncepce nové básnické sbírky</h3>
+                            <p class="post-excerpt">Petra Svobodová přemýšlí o struktuře své nové básnické sbírky inspirované ročními obdobími.</p>
+                            <a href="#" class="read-more">Číst více</a>
+                        </div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-card-image" style="background-image: url('https://via.placeholder.com/600x400');"></div>
+                        <div class="post-card-content">
+                            <div class="post-meta">
+                                <span class="post-date">21. března 2025</span>
+                                <span class="post-category">Scénář</span>
+                            </div>
+                            <h3 class="post-title">První draft scénáře dokončen</h3>
+                            <p class="post-excerpt">Tomáš Černý odevzdal první draft scénáře k novému filmu o vztahu otce a syna v době klimatické krize.</p>
+                            <a href="#" class="read-more">Číst více</a>
+                        </div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-card-image" style="background-image: url('https://via.placeholder.com/600x400');"></div>
+                        <div class="post-card-content">
+                            <div class="post-meta">
+                                <span class="post-date">20. března 2025</span>
+                                <span class="post-category">Knihy pro děti</span>
+                            </div>
+                            <h3 class="post-title">Nová dětská kniha na cestě</h3>
+                            <p class="post-excerpt">Lucie Králová oznamuje vydání své nové knihy pro děti s ekologickou tematikou a krásnými ilustracemi.</p>
+                            <a href="#" class="read-more">Číst více</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">Literární<span>Komunita</span></div>
+                    <p class="footer-description">Platforma propojující autory, čtenáře a všechny milovníky literatury. Objevujte současnou českou literární scénu.</p>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Navigace</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Úvod</a></li>
+                        <li><a href="#">Autoři</a></li>
+                        <li><a href="#">Texty</a></li>
+                        <li><a href="#">Události</a></li>
+                        <li><a href="#">O projektu</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Kategorie</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Próza</a></li>
+                        <li><a href="#">Poezie</a></li>
+                        <li><a href="#">Scénáře</a></li>
+                        <li><a href="#">Literatura pro děti</a></li>
+                        <li><a href="#">Eseje</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Kontakt</h3>
+                    <ul class="footer-links">
+                        <li>info@literarnikomunita.cz</li>
+                        <li>+420 123 456 789</li>
+                        <li>Literární 123, Praha 1</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                © 2025 LiterárníKomunita. Všechna práva vyhrazena.
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

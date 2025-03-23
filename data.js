@@ -21,7 +21,7 @@ const authorsData = [
     {
         id: "lucie-kralova",
         name: "Lucie Králová",
-        image: "https://via.placeholder.com/300",
+        image: "https://i.redd.it/stable-diffusion-free-dall-e-2-competitor-is-inviting-v0-ukmxwqcui7d91.jpg?width=1536&format=pjpg&auto=webp&s=3c46e63c668f0c629c7bb8b1cd1ec98d9e705537",
         genre: "Literatura pro děti"
     },
     {

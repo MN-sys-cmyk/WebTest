@@ -78,8 +78,18 @@ function generatePosts() {
         return new Date(b.date) - new Date(a.date);
     });
     
-    // Najdeme featured příspěvek (buď explicitně označený nebo nejnovější)
-    const featuredPost = sortedPosts.find(post => post.featured) || sortedPosts[0];
+    // ZMĚNA: Vždy použijeme nejnovější příspěvek jako featured
+    // Pouze pokud je explicitně označený jako featured a je v top 3, jinak vždy nejnovější
+    let featuredPost;
+    const explicitFeatured = sortedPosts.find(post => post.featured);
+    
+    // Pokud je explicitně označený příspěvek mezi 3 nejnovějšími, použijeme ho jako featured
+    if (explicitFeatured && sortedPosts.indexOf(explicitFeatured) < 3) {
+        featuredPost = explicitFeatured;
+    } else {
+        // Jinak použijeme nejnovější příspěvek (který je již na indexu 0)
+        featuredPost = sortedPosts[0];
+    }
     
     // Vytvoříme featured příspěvek
     const featuredPostHTML = `
@@ -97,7 +107,7 @@ function generatePosts() {
         </div>
     `;
     
-    // Ostatní příspěvky (bez featured příspěvku, seřazené podle data)
+    // Ostatní příspěvky (bez featured příspěvku, stále seřazené podle data)
     const otherPosts = sortedPosts
         .filter(post => post.id !== featuredPost.id)
         .slice(0, 3);  // Zobrazíme max 3 další příspěvky

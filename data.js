@@ -50,7 +50,6 @@ const postsData = [
         category: "Povídka",
         excerpt: "Jan Novák dokdku o dospívánhjhjhkerá kombinuje autobiografické prvky s fikcí. Přemýšlí, jak citlivě pracovat s reálnými zážitky, aniž by narušil soukromí skutečných osob.",
         image: "https://via.placeholder.com/800x600",
-        featured: true
     },
     {
         id: 2,

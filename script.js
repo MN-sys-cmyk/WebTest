@@ -72,8 +72,14 @@ function generatePosts() {
     // Vyčistit obsah
     postsContainer.innerHTML = '';
     
-    // Najdeme featured příspěvek
-    const featuredPost = postsData.find(post => post.featured) || postsData[0];
+    // Seřadíme příspěvky podle data (nejnovější první)
+    const sortedPosts = [...postsData].sort((a, b) => {
+        // Porovnáváme data ve formátu YYYY-MM-DD
+        return new Date(b.date) - new Date(a.date);
+    });
+    
+    // Najdeme featured příspěvek (buď explicitně označený nebo nejnovější)
+    const featuredPost = sortedPosts.find(post => post.featured) || sortedPosts[0];
     
     // Vytvoříme featured příspěvek
     const featuredPostHTML = `
@@ -81,7 +87,7 @@ function generatePosts() {
             <div class="featured-post-image" style="background-image: url('${featuredPost.image}');"></div>
             <div class="featured-post-content">
                 <div class="post-meta">
-                    <span class="post-date">${featuredPost.date}</span>
+                    <span class="post-date">${featuredPost.displayDate || featuredPost.date}</span>
                     <span class="post-category">${featuredPost.category}</span>
                 </div>
                 <h3 class="post-title">${featuredPost.title}</h3>
@@ -91,8 +97,10 @@ function generatePosts() {
         </div>
     `;
     
-    // Ostatní příspěvky
-    const otherPosts = postsData.filter(post => post.id !== featuredPost.id).slice(0, 3);
+    // Ostatní příspěvky (bez featured příspěvku, seřazené podle data)
+    const otherPosts = sortedPosts
+        .filter(post => post.id !== featuredPost.id)
+        .slice(0, 3);  // Zobrazíme max 3 další příspěvky
     
     let otherPostsHTML = '<div class="posts-grid">';
     
@@ -102,7 +110,7 @@ function generatePosts() {
                 <div class="post-card-image" style="background-image: url('${post.image}');"></div>
                 <div class="post-card-content">
                     <div class="post-meta">
-                        <span class="post-date">${post.date}</span>
+                        <span class="post-date">${post.displayDate || post.date}</span>
                         <span class="post-category">${post.category}</span>
                     </div>
                     <h3 class="post-title">${post.title}</h3>

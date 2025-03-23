@@ -45,7 +45,7 @@ const postsData = [
         id: 1,
         title: "Vzpomínky na dětství:króza pana zadka",
         author: "Jan Novák",
-        date: "2025-03-23", // Standard ISO formát (YYYY-MM-DD)
+        date: "2024-03-23", // Standard ISO formát (YYYY-MM-DD)
         displayDate: "23. března 2025", // Pro zobrazení
         category: "Povídka",
         excerpt: "Jan Novák dokdku o dospívánhjhjhkerá kombinuje autobiografické prvky s fikcí. Přemýšlí, jak citlivě pracovat s reálnými zážitky, aniž by narušil soukromí skutečných osob.",
@@ -56,7 +56,7 @@ const postsData = [
         id: 2,
         title: "Koncepce nové básnické sbírky",
         author: "Petra Svobodová",
-        date: "2025-03-22",
+        date: "2023-03-22",
         displayDate: "22. března 2025",
         category: "Poezie",
         excerpt: "Petra Svobodová přemýšlí o struktuřkjjkjkgkky inspirované ročními obdobími.",

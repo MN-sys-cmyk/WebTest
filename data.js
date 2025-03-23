@@ -2,19 +2,19 @@
 const authorsData = [
     {
         id: "jan-novak",
-        name: "Jan Novák",
+        name: "uáaaaa",
         image: "https://via.placeholder.com/300",
         genre: "Próza, román"
     },
     {
         id: "petra-svobodova",
-        name: "Petra Svobodová",
+        name: "uaaaaa",
         image: "https://via.placeholder.com/300",
         genre: "Poezie, překlad"
     },
     {
         id: "tomas-cerny",
-        name: "Tomáš Černý",
+        name: "Blabla",
         image: "https://via.placeholder.com/300",
         genre: "Scenáristika, drama"
     },
@@ -43,7 +43,7 @@ const authorsData = [
 const postsData = [
     {
         id: 1,
-        title: "Vzpomínky na dětství: Nová próza Jana Nováka",
+        title: "Vzpomínky na dětství: Nová próza pana zadka",
         author: "Jan Novák",
         date: "23. března 2025",
         category: "Povídka",

@@ -45,8 +45,9 @@ const postsData = [
         id: 1,
         title: "Vzpomínky na dětství:króza pana zadka",
         author: "Jan Novák",
-        date: "23. března 2025",
-        category: "Pokdka",
+        date: "2025-03-23", // Standard ISO formát (YYYY-MM-DD)
+        displayDate: "23. března 2025", // Pro zobrazení
+        category: "Povídka",
         excerpt: "Jan Novák dokdku o dospívánhjhjhkerá kombinuje autobiografické prvky s fikcí. Přemýšlí, jak citlivě pracovat s reálnými zážitky, aniž by narušil soukromí skutečných osob.",
         image: "https://via.placeholder.com/800x600",
         featured: true
@@ -55,7 +56,8 @@ const postsData = [
         id: 2,
         title: "Koncepce nové básnické sbírky",
         author: "Petra Svobodová",
-        date: "22. března 2025",
+        date: "2025-03-22",
+        displayDate: "22. března 2025",
         category: "Poezie",
         excerpt: "Petra Svobodová přemýšlí o struktuřkjjkjkgkky inspirované ročními obdobími.",
         image: "https://via.placeholder.com/600x400"
@@ -64,7 +66,8 @@ const postsData = [
         id: 3,
         title: "První draft scénáře dokončen",
         author: "Tomáš Černý",
-        date: "21. března 2025",
+        date: "2025-03-21",
+        displayDate: "21. března 2025",
         category: "Scénář",
         excerpt: "Tomáš Čekní draft scénáře k novému filmu o vztahu otce a syna v době klimatické krize.",
         image: "https://via.placeholder.com/600x400"
@@ -73,7 +76,8 @@ const postsData = [
         id: 4,
         title: "Nová dětská kniha na cestě",
         author: "Lucie Králová",
-        date: "20. března 2025",
+        date: "2025-03-20",
+        displayDate: "20. března 2025",
         category: "Knihy pro děti",
         excerpt: "Lucie Krák nové knihy pro děti s ekologickou tematikou a krásnými ilustracemi.",
         image: "https://via.placeholder.com/600x400"

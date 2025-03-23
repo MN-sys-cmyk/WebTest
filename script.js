@@ -17,53 +17,25 @@ function goToSlide(slideIndex) {
     });
 }
 
-// Funkce pro pohyb karuselu plynule dokola
+// Funkce pro pohyb karuselu - plynulé přecházení dokola
 function moveCarousel(direction) {
     const track = document.getElementById('carousel-track');
-    const slides = document.querySelectorAll('.carousel-slide');
     
     // Výpočet nového indexu
     let newIndex = currentSlide + direction;
     
-    // Plynulé přecházení dokola
+    // Plynulý přechod dokola
     if (newIndex < 0) {
-        // Pokud jdeme doleva od první položky
+        // Když jsme na prvním slidu a jdeme doleva
         newIndex = totalSlides - 1;
-        
-        // Připravíme poslední slide jako předchozí (bez přechodu)
-        track.style.transition = 'none';
-        track.style.transform = `translateX(-${(totalSlides) * 100}%)`;
-        
-        // Vynutíme překreslení
-        setTimeout(() => {
-            // Vrátíme přechod a posuneme na poslední slide
-            track.style.transition = 'transform 0.5s ease';
-            track.style.transform = `translateX(-${newIndex * 100}%)`;
-        }, 10);
-        
     } else if (newIndex >= totalSlides) {
-        // Pokud jdeme doprava za poslední položku
+        // Když jsme na posledním slidu a jdeme doprava
         newIndex = 0;
-        
-        // Nejprve dokončíme animaci za poslední slide
-        track.style.transform = `translateX(-${totalSlides * 100}%)`;
-        
-        // Potom plynule přejdeme na první slide
-        setTimeout(() => {
-            track.style.transition = 'none';
-            track.style.transform = 'translateX(0)';
-            
-            // Vynutíme překreslení
-            setTimeout(() => {
-                track.style.transition = 'transform 0.5s ease';
-                track.style.transform = 'translateX(0)';
-            }, 10);
-        }, 500); // Počkáme na dokončení předchozí animace
-    } else {
-        // Běžný posun
-        track.style.transition = 'transform 0.5s ease';
-        track.style.transform = `translateX(-${newIndex * 100}%)`;
     }
+    
+    // Animace přechodu
+    track.style.transition = 'transform 0.5s ease';
+    track.style.transform = `translateX(-${newIndex * 100}%)`;
     
     // Aktualizace indikátorů
     const dots = document.querySelectorAll('.indicator-dot');

@@ -9,7 +9,7 @@ const authorsData = [
     {
         id: "petra-svobodova",
         name: "uaaaaa",
-        image: "https://via.placeholder.com/300",
+        image: "jan-novak.jpg",
         genre: "Poezie, překlad"
     },
     {

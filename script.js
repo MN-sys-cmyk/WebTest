@@ -1,14 +1,26 @@
-// Kompletně přepracovaný a zjednodušený script.js
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializace mobilního menu
-    initMobileMenu();
-    
-    // Inicializace karuselu
-    initCarousel();
-});
+// Globální proměnné
+let currentSlide = 0;
+let slidesCount = 0;
 
-// Inicializace mobilního menu
-function initMobileMenu() {
+// Funkce pro inicializaci
+function init() {
+    // Zjistíme počet slidů
+    const slides = document.querySelectorAll('.carousel-slide');
+    slidesCount = slides.length;
+    
+    if (slidesCount < 2) return; // Není potřeba karusel pro jeden slide
+    
+    // Nastavíme posluchače událostí na tlačítka
+    document.querySelector('.carousel-arrow.prev').addEventListener('click', () => moveTo(currentSlide - 1));
+    document.querySelector('.carousel-arrow.next').addEventListener('click', () => moveTo(currentSlide + 1));
+    
+    // Nastavíme posluchače událostí na indikátory
+    const dots = document.querySelectorAll('.indicator-dot');
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => moveTo(index));
+    });
+    
+    // Inicializace mobilního menu
     const toggleBtn = document.querySelector('.mobile-menu-toggle');
     const closeBtn = document.querySelector('.mobile-menu-close');
     const mobileMenu = document.querySelector('.mobile-menu');
@@ -16,94 +28,47 @@ function initMobileMenu() {
     if (toggleBtn && closeBtn && mobileMenu) {
         toggleBtn.addEventListener('click', () => {
             mobileMenu.style.display = 'block';
-            setTimeout(() => {
-                mobileMenu.classList.add('active');
-            }, 10);
+            setTimeout(() => mobileMenu.classList.add('active'), 10);
         });
         
         closeBtn.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
-            setTimeout(() => {
-                mobileMenu.style.display = 'none';
-            }, 500);
+            setTimeout(() => mobileMenu.style.display = 'none', 500);
         });
     }
 }
 
-// Proměnné pro karusel
-let currentSlideIndex = 0;
-let slideCount = 0;
-let isTransitioning = false;
-
-// Inicializace karuselu
-function initCarousel() {
-    const slides = document.querySelectorAll('.carousel-slide');
-    slideCount = slides.length;
-    
-    if (slideCount < 2) return; // Není co dělat, pokud máme méně než 2 slidy
-    
-    // Nastavení aktivního indikátoru
-    updateIndicators(0);
-}
-
-// Funkce pro pohyb karuselu
-function moveCarousel(direction) {
-    if (isTransitioning) return;
-    isTransitioning = true;
-    
-    // Vypočítáme nový index s ošetřením přechodu přes okraje
-    let newIndex = currentSlideIndex + direction;
-    
-    // Zajistíme "nekonečnost" karuselu
-    if (newIndex < 0) {
-        newIndex = slideCount - 1;
-    } else if (newIndex >= slideCount) {
-        newIndex = 0;
+// Funkce pro pohyb na konkrétní slide
+function moveTo(index) {
+    // Zajištění nekonečné cykličnosti
+    if (index < 0) {
+        index = slidesCount - 1;
+    } else if (index >= slidesCount) {
+        index = 0;
     }
     
-    // Provedeme animaci
+    // Aktualizace aktuálního indexu
+    currentSlide = index;
+    
+    // Pohyb karuselu
     const track = document.getElementById('carousel-track');
-    track.style.transition = 'transform 0.5s ease';
-    track.style.transform = `translateX(-${newIndex * 100}%)`;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
     
-    // Aktualizujeme indikátory
-    updateIndicators(newIndex);
-    
-    // Uložíme nový index
-    currentSlideIndex = newIndex;
-    
-    // Po dokončení animace resetujeme příznak
-    setTimeout(() => {
-        isTransitioning = false;
-    }, 500); // Délka animace
-}
-
-// Funkce pro přesun na konkrétní slide
-function goToSlide(slideIndex) {
-    if (isTransitioning || slideIndex === currentSlideIndex) return;
-    isTransitioning = true;
-    
-    // Provedeme animaci
-    const track = document.getElementById('carousel-track');
-    track.style.transition = 'transform 0.5s ease';
-    track.style.transform = `translateX(-${slideIndex * 100}%)`;
-    
-    // Aktualizujeme indikátory
-    updateIndicators(slideIndex);
-    
-    // Uložíme nový index
-    currentSlideIndex = slideIndex;
-    
-    // Po dokončení animace resetujeme příznak
-    setTimeout(() => {
-        isTransitioning = false;
-    }, 500); // Délka animace
-}
-
-// Aktualizace indikátorů
-function updateIndicators(activeIndex) {
+    // Aktualizace indikátorů
     const dots = document.querySelectorAll('.indicator-dot');
-    dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === activeIndex);
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
     });
+}
+
+// Spuštění po načtení stránky
+document.addEventListener('DOMContentLoaded', init);
+
+// Pro kompatibilitu se stávajícím HTML
+function moveCarousel(direction) {
+    moveTo(currentSlide + direction);
+}
+
+function goToSlide(index) {
+    moveTo(index);
 }

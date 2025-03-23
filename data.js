@@ -43,11 +43,11 @@ const authorsData = [
 const postsData = [
     {
         id: 1,
-        title: "Vzpomínky na dětství: Nová próza pana zadka",
+        title: "Vzpomínky na dětství:króza pana zadka",
         author: "Jan Novák",
         date: "23. března 2025",
-        category: "Povídka",
-        excerpt: "Jan Novák dokončil novou povídku o dospívání na malém městě, která kombinuje autobiografické prvky s fikcí. Přemýšlí, jak citlivě pracovat s reálnými zážitky, aniž by narušil soukromí skutečných osob.",
+        category: "Pokdka",
+        excerpt: "Jan Novák dokdku o dospívánhjhjhkerá kombinuje autobiografické prvky s fikcí. Přemýšlí, jak citlivě pracovat s reálnými zážitky, aniž by narušil soukromí skutečných osob.",
         image: "https://via.placeholder.com/800x600",
         featured: true
     },
@@ -57,7 +57,7 @@ const postsData = [
         author: "Petra Svobodová",
         date: "22. března 2025",
         category: "Poezie",
-        excerpt: "Petra Svobodová přemýšlí o struktuře své nové básnické sbírky inspirované ročními obdobími.",
+        excerpt: "Petra Svobodová přemýšlí o struktuřkjjkjkgkky inspirované ročními obdobími.",
         image: "https://via.placeholder.com/600x400"
     },
     {
@@ -66,7 +66,7 @@ const postsData = [
         author: "Tomáš Černý",
         date: "21. března 2025",
         category: "Scénář",
-        excerpt: "Tomáš Černý odevzdal první draft scénáře k novému filmu o vztahu otce a syna v době klimatické krize.",
+        excerpt: "Tomáš Čekní draft scénáře k novému filmu o vztahu otce a syna v době klimatické krize.",
         image: "https://via.placeholder.com/600x400"
     },
     {
@@ -75,7 +75,7 @@ const postsData = [
         author: "Lucie Králová",
         date: "20. března 2025",
         category: "Knihy pro děti",
-        excerpt: "Lucie Králová oznamuje vydání své nové knihy pro děti s ekologickou tematikou a krásnými ilustracemi.",
+        excerpt: "Lucie Krák nové knihy pro děti s ekologickou tematikou a krásnými ilustracemi.",
         image: "https://via.placeholder.com/600x400"
     }
     // Zde můžete přidávat další příspěvky

@@ -9,7 +9,7 @@ const authorsData = [
     {
         id: "petra-svobodova",
         name: "uaaaaa",
-        image: "image2.png",
+        image: "image3.png",
         genre: "Poezie, překlad"
     },
     {

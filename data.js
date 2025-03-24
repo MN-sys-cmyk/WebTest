@@ -15,7 +15,7 @@ const authorsData = [
     {
         id: "tomas-cerny",
         name: "Blabla",
-        image: "image3.png",
+        image: "Image2.png",
         genre: "Scenáristika, drama"
     },
     {

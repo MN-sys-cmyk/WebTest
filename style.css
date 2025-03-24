@@ -710,3 +710,102 @@ ul {
         font-size: 24px;
     }
 }
+/* Úpravy pro karusel textů */
+.posts-carousel {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 60px;
+}
+
+.posts-carousel .carousel-container {
+    overflow: hidden;
+}
+
+.posts-carousel .posts-container {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.posts-carousel .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.posts-carousel .carousel-arrow:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.posts-carousel .carousel-arrow.prev {
+    left: 0;
+}
+
+.posts-carousel .carousel-arrow.next {
+    right: 0;
+}
+
+.posts-slide {
+    min-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+/* Úpravy pro indikátory karuselu textů */
+.posts-carousel .carousel-indicator {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 10px;
+}
+
+/* Úpravy pro "Zobrazit všechny texty" tlačítko */
+.latest-posts .view-all {
+    text-align: center;
+    margin-top: 40px;
+}
+
+/* Úprava rozložení featured post a ostatních postů */
+.featured-post {
+    margin-bottom: 0; /* Odstraňuje původní margin, který byl nastaven na 50px */
+}
+
+.posts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: space-between;
+}
+
+.post-card {
+    flex: 1;
+    min-width: 300px;
+    max-width: 32%;
+}
+
+@media (max-width: 992px) {
+    .post-card {
+        max-width: 48%;
+    }
+}
+
+@media (max-width: 768px) {
+    .post-card {
+        max-width: 100%;
+    }
+}

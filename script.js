@@ -47,7 +47,7 @@ function generateAuthorsCarousel() {
         for (let j = startIndex; j < endIndex; j++) {
             const author = authorsData[j];
             slide.innerHTML += `
-                <a href="#" class="author-card">
+                <a href="author.html?id=${author.id}" class="author-card">
                     <div class="author-image-container">
                         <img src="${author.image}" alt="${author.name}" class="author-image">
                     </div>
@@ -113,7 +113,7 @@ function generatePostsCarousel() {
                     </div>
                     <h3 class="post-title">${featuredPost.title}</h3>
                     <p class="post-excerpt">${featuredPost.excerpt}</p>
-                    <a href="#" class="read-more">Přečíst celý text</a>
+                    <a href="post.html?id=${featuredPost.id}" class="read-more">Přečíst celý text</a>
                 </div>
             </div>
         `;
@@ -134,7 +134,7 @@ function generatePostsCarousel() {
                         </div>
                         <h3 class="post-title">${post.title}</h3>
                         <p class="post-excerpt">${post.excerpt}</p>
-                        <a href="#" class="read-more">Číst více</a>
+                        <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
                     </div>
                 </div>
             `;

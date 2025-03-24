@@ -22,6 +22,9 @@ function init() {
     initMobileMenu();
 }
 
+// Spuštění po načtení stránky
+document.addEventListener('DOMContentLoaded', init);
+
 // Generování karuselu autorů
 function generateAuthorsCarousel() {
     const carouselTrack = document.getElementById('carousel-track');

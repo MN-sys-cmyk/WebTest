@@ -1,6 +1,8 @@
 // Globální proměnné
 let currentSlide = 0;
 let slidesCount = 0;
+let currentPostSlide = 0;
+let postSlidesCount = 0;
 
 // Funkce pro inicializaci
 function init() {
@@ -8,10 +10,13 @@ function init() {
     generateAuthorsCarousel();
     
     // Generování příspěvků
-    generatePosts();
+    generatePostsCarousel();
     
-    // Inicializace karuselu
-    initCarousel();
+    // Inicializace karuselu autorů
+    initAuthorsCarousel();
+    
+    // Inicializace karuselu příspěvků
+    initPostsCarousel();
     
     // Inicializace mobilního menu
     initMobileMenu();
@@ -58,19 +63,21 @@ function generateAuthorsCarousel() {
         // Přidáme indikátor
         const dot = document.createElement('div');
         dot.className = 'indicator-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => moveTo(i);
+        dot.onclick = () => moveAuthorsTo(i);
         indicatorContainer.appendChild(dot);
     }
     
     return slidesNeeded;
 }
 
-// Generování příspěvků
-function generatePosts() {
-    const postsContainer = document.querySelector('.posts-container');
+// Generování karuselu příspěvků
+function generatePostsCarousel() {
+    const postsContainer = document.getElementById('posts-container');
+    const indicatorContainer = document.getElementById('posts-indicator');
     
     // Vyčistit obsah
     postsContainer.innerHTML = '';
+    if (indicatorContainer) indicatorContainer.innerHTML = '';
     
     // Seřadíme příspěvky podle data (nejnovější první)
     const sortedPosts = [...postsData].sort((a, b) => {
@@ -78,67 +85,83 @@ function generatePosts() {
         return new Date(b.date) - new Date(a.date);
     });
     
-    // ZMĚNA: Vždy použijeme nejnovější příspěvek jako featured
-    // Pouze pokud je explicitně označený jako featured a je v top 3, jinak vždy nejnovější
-    let featuredPost;
-    const explicitFeatured = sortedPosts.find(post => post.featured);
+    // ZMĚNA: Vytvoříme slidey s příspěvky (1 slide = 1 featured + 3 běžné příspěvky)
+    // Kolik příspěvků zobrazíme na jeden slide
+    const postsPerSlide = 4;
+    const slidesNeeded = Math.ceil(sortedPosts.length / postsPerSlide);
     
-    // Pokud je explicitně označený příspěvek mezi 3 nejnovějšími, použijeme ho jako featured
-    if (explicitFeatured && sortedPosts.indexOf(explicitFeatured) < 3) {
-        featuredPost = explicitFeatured;
-    } else {
-        // Jinak použijeme nejnovější příspěvek (který je již na indexu 0)
-        featuredPost = sortedPosts[0];
-    }
-    
-    // Vytvoříme featured příspěvek
-    const featuredPostHTML = `
-        <div class="featured-post">
-            <div class="featured-post-image" style="background-image: url('${featuredPost.image}');"></div>
-            <div class="featured-post-content">
-                <div class="post-meta">
-                    <span class="post-date">${featuredPost.displayDate || featuredPost.date}</span>
-                    <span class="post-category">${featuredPost.category}</span>
-                </div>
-                <h3 class="post-title">${featuredPost.title}</h3>
-                <p class="post-excerpt">${featuredPost.excerpt}</p>
-                <a href="#" class="read-more">Přečíst celý text</a>
-            </div>
-        </div>
-    `;
-    
-    // Ostatní příspěvky (bez featured příspěvku, stále seřazené podle data)
-    const otherPosts = sortedPosts
-        .filter(post => post.id !== featuredPost.id)
-        .slice(0, 3);  // Zobrazíme max 3 další příspěvky
-    
-    let otherPostsHTML = '<div class="posts-grid">';
-    
-    otherPosts.forEach(post => {
-        otherPostsHTML += `
-            <div class="post-card">
-                <div class="post-card-image" style="background-image: url('${post.image}');"></div>
-                <div class="post-card-content">
+    for (let i = 0; i < slidesNeeded; i++) {
+        // Vytvoříme nový slide
+        const slide = document.createElement('div');
+        slide.className = 'posts-slide';
+        
+        // Získáme příspěvky pro tento slide
+        const startIndex = i * postsPerSlide;
+        const postsForThisSlide = sortedPosts.slice(startIndex, startIndex + postsPerSlide);
+        
+        // První příspěvek bude featured
+        const featuredPost = postsForThisSlide[0];
+        
+        // Vytvoříme featured příspěvek
+        const featuredPostHTML = `
+            <div class="featured-post">
+                <div class="featured-post-image" style="background-image: url('${featuredPost.image}');"></div>
+                <div class="featured-post-content">
                     <div class="post-meta">
-                        <span class="post-date">${post.displayDate || post.date}</span>
-                        <span class="post-category">${post.category}</span>
+                        <span class="post-date">${featuredPost.displayDate || featuredPost.date}</span>
+                        <span class="post-category">${featuredPost.category}</span>
                     </div>
-                    <h3 class="post-title">${post.title}</h3>
-                    <p class="post-excerpt">${post.excerpt}</p>
-                    <a href="#" class="read-more">Číst více</a>
+                    <h3 class="post-title">${featuredPost.title}</h3>
+                    <p class="post-excerpt">${featuredPost.excerpt}</p>
+                    <a href="#" class="read-more">Přečíst celý text</a>
                 </div>
             </div>
         `;
-    });
+        
+        // Ostatní příspěvky v tomto slidu
+        const otherPosts = postsForThisSlide.slice(1);
+        
+        let otherPostsHTML = '<div class="posts-grid">';
+        
+        otherPosts.forEach(post => {
+            otherPostsHTML += `
+                <div class="post-card">
+                    <div class="post-card-image" style="background-image: url('${post.image}');"></div>
+                    <div class="post-card-content">
+                        <div class="post-meta">
+                            <span class="post-date">${post.displayDate || post.date}</span>
+                            <span class="post-category">${post.category}</span>
+                        </div>
+                        <h3 class="post-title">${post.title}</h3>
+                        <p class="post-excerpt">${post.excerpt}</p>
+                        <a href="#" class="read-more">Číst více</a>
+                    </div>
+                </div>
+            `;
+        });
+        
+        otherPostsHTML += '</div>';
+        
+        // Přidáme vše do slidu
+        slide.innerHTML = featuredPostHTML + otherPostsHTML;
+        
+        // Přidáme slide do karuselu
+        postsContainer.appendChild(slide);
+        
+        // Přidáme indikátor, pokud kontejner existuje
+        if (indicatorContainer) {
+            const dot = document.createElement('div');
+            dot.className = 'indicator-dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => movePostsTo(i);
+            indicatorContainer.appendChild(dot);
+        }
+    }
     
-    otherPostsHTML += '</div>';
-    
-    // Přidáme vše do kontejneru
-    postsContainer.innerHTML = featuredPostHTML + otherPostsHTML;
+    return slidesNeeded;
 }
 
-// Inicializace karuselu
-function initCarousel() {
+// Inicializace karuselu autorů
+function initAuthorsCarousel() {
     // Zjistíme počet slidů
     const slides = document.querySelectorAll('.carousel-slide');
     slidesCount = slides.length;
@@ -146,12 +169,35 @@ function initCarousel() {
     if (slidesCount < 2) return; // Není potřeba karusel pro jeden slide
     
     // Nastavíme posluchače událostí na tlačítka
-    document.querySelector('.carousel-arrow.prev').addEventListener('click', () => moveTo(currentSlide - 1));
-    document.querySelector('.carousel-arrow.next').addEventListener('click', () => moveTo(currentSlide + 1));
+    const prevButton = document.querySelector('.authors-carousel .carousel-arrow.prev');
+    const nextButton = document.querySelector('.authors-carousel .carousel-arrow.next');
+    
+    if (prevButton && nextButton) {
+        prevButton.addEventListener('click', () => moveAuthorsTo(currentSlide - 1));
+        nextButton.addEventListener('click', () => moveAuthorsTo(currentSlide + 1));
+    }
 }
 
-// Funkce pro pohyb na konkrétní slide
-function moveTo(index) {
+// Inicializace karuselu příspěvků
+function initPostsCarousel() {
+    // Zjistíme počet slidů
+    const slides = document.querySelectorAll('.posts-slide');
+    postSlidesCount = slides.length;
+    
+    if (postSlidesCount < 2) return; // Není potřeba karusel pro jeden slide
+    
+    // Nastavíme posluchače událostí na tlačítka
+    const prevButton = document.querySelector('.posts-carousel .carousel-arrow.prev');
+    const nextButton = document.querySelector('.posts-carousel .carousel-arrow.next');
+    
+    if (prevButton && nextButton) {
+        prevButton.addEventListener('click', () => movePostsTo(currentPostSlide - 1));
+        nextButton.addEventListener('click', () => movePostsTo(currentPostSlide + 1));
+    }
+}
+
+// Funkce pro pohyb karuselu autorů na konkrétní slide
+function moveAuthorsTo(index) {
     // Zajištění nekonečné cykličnosti
     if (index < 0) {
         index = slidesCount - 1;
@@ -167,9 +213,32 @@ function moveTo(index) {
     track.style.transform = `translateX(-${currentSlide * 100}%)`;
     
     // Aktualizace indikátorů
-    const dots = document.querySelectorAll('.indicator-dot');
+    const dots = document.querySelectorAll('.authors-carousel .indicator-dot');
     dots.forEach((dot, i) => {
         dot.classList.toggle('active', i === currentSlide);
+    });
+}
+
+// Funkce pro pohyb karuselu příspěvků na konkrétní slide
+function movePostsTo(index) {
+    // Zajištění nekonečné cykličnosti
+    if (index < 0) {
+        index = postSlidesCount - 1;
+    } else if (index >= postSlidesCount) {
+        index = 0;
+    }
+    
+    // Aktualizace aktuálního indexu
+    currentPostSlide = index;
+    
+    // Pohyb karuselu
+    const container = document.getElementById('posts-container');
+    container.style.transform = `translateX(-${currentPostSlide * 100}%)`;
+    
+    // Aktualizace indikátorů
+    const dots = document.querySelectorAll('.posts-carousel .indicator-dot');
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentPostSlide);
     });
 }
 
@@ -194,11 +263,11 @@ function initMobileMenu() {
 
 // Pro kompatibilitu se stávajícím HTML
 function moveCarousel(direction) {
-    moveTo(currentSlide + direction);
+    moveAuthorsTo(currentSlide + direction);
 }
 
 function goToSlide(index) {
-    moveTo(index);
+    moveAuthorsTo(index);
 }
 
 // Spuštění po načtení stránky

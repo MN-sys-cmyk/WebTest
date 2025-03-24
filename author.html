@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil autora - LiterárníKomunita</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=1.3">
+    <link rel="stylesheet" href="author.css?v=1.0">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-top">
+                <a href="index.html" class="logo">Literární<span>Komunita</span></a>
+                <div class="language-switcher">
+                    <a href="#" class="language-link active">CZ</a>
+                    <a href="#" class="language-link">EN</a>
+                </div>
+                <button class="mobile-menu-toggle">☰</button>
+            </div>
+            <div class="header-bottom">
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="index.html">Úvod</a></li>
+                        <li><a href="#" class="active">Autoři</a></li>
+                        <li><a href="#">Texty</a></li>
+                        <li><a href="#">Události</a></li>
+                        <li><a href="#">O projektu</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <div class="mobile-menu">
+        <button class="mobile-menu-close">✕</button>
+        <nav>
+            <ul>
+                <li><a href="index.html">Úvod</a></li>
+                <li><a href="#" class="active">Autoři</a></li>
+                <li><a href="#">Texty</a></li>
+                <li><a href="#">Události</a></li>
+                <li><a href="#">O projektu</a></li>
+                <li><a href="#">Kontakt</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <!-- Hlavní obsah stránky autora -->
+    <main class="author-page">
+        <div class="container">
+            <!-- Hlavička profilu autora -->
+            <section class="author-header">
+                <div class="author-image-large">
+                    <img src="image5.png" alt="Jméno autora" id="authorImage">
+                </div>
+                <div class="author-info">
+                    <h1 class="author-name" id="authorName">Jméno autora</h1>
+                    <p class="author-genre" id="authorGenre">Žánr</p>
+                    <div class="author-social">
+                        <a href="#" class="social-link"><img src="fb-icon.png" alt="Facebook"></a>
+                        <a href="#" class="social-link"><img src="twitter-icon.png" alt="Twitter"></a>
+                        <a href="#" class="social-link"><img src="instagram-icon.png" alt="Instagram"></a>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Biografie autora -->
+            <section class="author-bio">
+                <h2 class="section-title">O autorovi</h2>
+                <div class="bio-content">
+                    <p id="authorBio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras porttitor metus quis tincidunt lobortis. Integer condimentum eros id metus bibendum, vel tempor odio faucibus. Praesent malesuada, nibh eget tincidunt ullamcorper, dolor elit feugiat neque, sed efficitur nulla nunc vel metus.</p>
+                    
+                    <p>Etiam sit amet est vel nisl interdum iaculis. Nulla facilisi. Aenean a justo justo. Donec at vestibulum nibh, vel ornare nisl. Donec euismod, justo vel elementum iaculis, nisl ipsum feugiat odio, non pulvinar est lectus at ligula. Morbi cursus orci ut elementum maximus. Fusce id vehicula neque.</p>
+                </div>
+            </section>
+            
+            <!-- Publikované dílo autora -->
+            <section class="author-works">
+                <h2 class="section-title">Publikované dílo</h2>
+                
+                <div class="work-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-year">2025</div>
+                        <div class="timeline-content">
+                            <h3>Název posledního díla</h3>
+                            <p>Krátký popis nebo ukázka z díla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.</p>
+                            <a href="#" class="read-more">Přečíst více</a>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">2023</div>
+                        <div class="timeline-content">
+                            <h3>Název předchozího díla</h3>
+                            <p>Krátký popis nebo ukázka z díla. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <a href="#" class="read-more">Přečíst více</a>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">2021</div>
+                        <div class="timeline-content">
+                            <h3>Starší dílo</h3>
+                            <p>Krátký popis nebo ukázka z díla. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <a href="#" class="read-more">Přečíst více</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Nejnovější příspěvky autora -->
+            <section class="author-posts">
+                <h2 class="section-title">Nejnovější příspěvky</h2>
+                
+                <div class="posts-grid">
+                    <div class="post-card">
+                        <div class="post-card-image" style="background-image: url('book1.png');"></div>
+                        <div class="post-card-content">
+                            <div class="post-meta">
+                                <span class="post-date">22. března 2025</span>
+                                <span class="post-category">Povídka</span>
+                            </div>
+                            <h3 class="post-title">Název nejnovějšího příspěvku</h3>
+                            <p class="post-excerpt">Ukázka z příspěvku nebo krátký popis. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <a href="#" class="read-more">Číst více</a>
+                        </div>
+                    </div>
+                    
+                    <div class="post-card">
+                        <div class="post-card-image" style="background-image: url('book2.png');"></div>
+                        <div class="post-card-content">
+                            <div class="post-meta">
+                                <span class="post-date">15. února 2025</span>
+                                <span class="post-category">Esej</span>
+                            </div>
+                            <h3 class="post-title">Druhý nejnovější příspěvek</h3>
+                            <p class="post-excerpt">Ukázka z příspěvku nebo krátký popis. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <a href="#" class="read-more">Číst více</a>
+                        </div>
+                    </div>
+                    
+                    <div class="post-card">
+                        <div class="post-card-image" style="background-image: url('book3.png');"></div>
+                        <div class="post-card-content">
+                            <div class="post-meta">
+                                <span class="post-date">5. ledna 2025</span>
+                                <span class="post-category">Báseň</span>
+                            </div>
+                            <h3 class="post-title">Třetí nejnovější příspěvek</h3>
+                            <p class="post-excerpt">Ukázka z příspěvku nebo krátký popis. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <a href="#" class="read-more">Číst více</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Kontaktní formulář pro autora -->
+            <section class="author-contact">
+                <h2 class="section-title">Kontaktujte autora</h2>
+                
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Vaše jméno</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Předmět</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Vaše zpráva</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-button">Odeslat zprávu</button>
+                </form>
+            </section>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">Literární<span>Komunita</span></div>
+                    <p class="footer-description">Platforma propojující autory, čtenáře a všechny milovníky literatury. Objevujte současnou českou literární scénu.</p>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Navigace</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Úvod</a></li>
+                        <li><a href="#">Autoři</a></li>
+                        <li><a href="#">Texty</a></li>
+                        <li><a href="#">Události</a></li>
+                        <li><a href="#">O projektu</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Kategorie</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Próza</a></li>
+                        <li><a href="#">Poezie</a></li>
+                        <li><a href="#">Scénáře</a></li>
+                        <li><a href="#">Literatura pro děti</a></li>
+                        <li><a href="#">Eseje</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Kontakt</h3>
+                    <ul class="footer-links">
+                        <li>info@literarnikomunita.cz</li>
+                        <li>+420 123 456 789</li>
+                        <li>Literární 123, Praha 1</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                © 2025 LiterárníKomunita. Všechna práva vyhrazena.
+            </div>
+        </div>
+    </footer>
+    
+    <script src="data.js?v=1.2"></script>
+    <script src="script.js?v=1.2"></script>
+    <script src="author.js?v=1.0"></script>
+</body>
+</html>

@@ -3,37 +3,37 @@ const authorsData = [
     {
         id: "jan-novak",
         name: "uáaaaa",
-        image: "https://via.placeholder.com/300",
+        image: "image5.png",
         genre: "Próza, román"
     },
     {
         id: "petra-svobodova",
         name: "uaaaaa",
-        image: "jan-novak.jpg",
+        image: "image2.png",
         genre: "Poezie, překlad"
     },
     {
         id: "tomas-cerny",
         name: "Blabla",
-        image: "https://via.placeholder.com/300",
+        image: "image3.png",
         genre: "Scenáristika, drama"
     },
     {
         id: "lucie-kralova",
         name: "Lucie Králová",
-        image: "https://i.redd.it/stable-diffusion-free-dall-e-2-competitor-is-inviting-v0-ukmxwqcui7d91.jpg?width=1536&format=pjpg&auto=webp&s=3c46e63c668f0c629c7bb8b1cd1ec98d9e705537",
+        image: "image6.png",
         genre: "Literatura pro děti"
     },
     {
         id: "karel-maly",
         name: "Karel Malý",
-        image: "https://via.placeholder.com/300",
+        image: "image7.png",
         genre: "Eseje, kritika"
     },
     {
         id: "monika-vesela",
         name: "Monika Veselá",
-        image: "https://via.placeholder.com/300",
+        image: "image4.png",
         genre: "Fantasy, sci-fi"
     }
     // Zde můžete přidávat další autory

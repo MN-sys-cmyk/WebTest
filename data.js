@@ -49,7 +49,7 @@ const postsData = [
         displayDate: "23. března 2024", // Pro zobrazení
         category: "Povídka",
         excerpt: "Jan Novák dokdku o dospívánhjhjhkerá kombinuje autobiografické prvky s fikcí. Přemýšlí, jak citlivě pracovat s reálnými zážitky, aniž by narušil soukromí skutečných osob.",
-        image: "https://via.placeholder.com/800x600",
+        image: "book4.png",
     },
     {
         id: 2,
@@ -59,7 +59,7 @@ const postsData = [
         displayDate: "22. března 2023",
         category: "Poezie",
         excerpt: "Petra Svobodová přemýšlí o struktuřkjjkjkgkky inspirované ročními obdobími.",
-        image: "https://via.placeholder.com/600x400"
+        image: "book3.png"
     },
     {
         id: 3,
@@ -69,7 +69,7 @@ const postsData = [
         displayDate: "21. března 2025",
         category: "Scénář",
         excerpt: "Tomáš Čekní draft scénáře k novému filmu o vztahu otce a syna v době klimatické krize.",
-        image: "https://via.placeholder.com/600x400"
+        image: "book2.png"
     },
     {
         id: 4,
@@ -79,7 +79,7 @@ const postsData = [
         displayDate: "20. března 2025",
         category: "Knihy pro děti",
         excerpt: "Lucie Krák nové knihy pro děti s ekologickou tematikou a krásnými ilustracemi.",
-        image: "https://via.placeholder.com/600x400"
+        image: "book1.png"
     }
     // Zde můžete přidávat další příspěvky
 ];

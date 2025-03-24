@@ -92,15 +92,32 @@
     </section>
     
     <section class="latest-posts">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Nejnovější texty</h2>
-                <p class="section-subtitle">Aktuální tvorba našich autorů</p>
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Nejnovější texty</h2>
+            <p class="section-subtitle">Aktuální tvorba našich autorů</p>
+        </div>
+        
+        <!-- Přidání karuselu pro texty podobně jako u autorů -->
+        <div class="posts-carousel">
+            <div class="carousel-arrow prev">❮</div>
+            <div class="carousel-container">
+                <div class="posts-container" id="posts-container">
+                    <!-- Obsah bude generován dynamicky -->
+                </div>
             </div>
-            <div class="posts-container" id="posts-container">
-                <!-- Obsah bude generován dynamicky -->
+            <div class="carousel-arrow next">❯</div>
+            
+            <div class="carousel-indicator" id="posts-indicator">
+                <!-- Indikátory budou generovány dynamicky -->
             </div>
         </div>
+        
+        <!-- Přidání tlačítka "Zobrazit všechny texty" -->
+        <div class="view-all">
+            <a href="#" class="view-all-button">Zobrazit všechny texty</a>
+        </div>
+    </div>
     </section>
     
     <footer class="footer">

@@ -809,3 +809,21 @@ ul {
         max-width: 100%;
     }
 }
+/* Zabránit označování obsahu při klikání na navigační prvky */
+.carousel-arrow,
+.authors-carousel,
+.posts-carousel,
+.author-card,
+.post-card,
+.featured-post,
+.posts-grid {
+    user-select: none;
+    -webkit-user-select: none;  /* Pro Safari */
+    -moz-user-select: none;     /* Pro Firefox */
+    -ms-user-select: none;      /* Pro IE/Edge */
+}
+
+/* Oprava kurzoru pro navigační šipky */
+.carousel-arrow {
+    cursor: pointer;
+}

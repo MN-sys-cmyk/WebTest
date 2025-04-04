@@ -996,12 +996,14 @@ ul {
 .author-posts .posts-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 30px;
+    justify-content: flex-start;
 }
 
 .author-posts .post-card {
-    flex: 0 0 calc(33.333% - 14px);
-    max-width: calc(33.333% - 14px);
+    flex: 0 0 calc(33.333% - 20px);
+    max-width: calc(33.333% - 20px);
+    margin-bottom: 20px;
 }
 
 /* Stránka se všemi autory */
@@ -1080,11 +1082,16 @@ ul {
     }
     
     .carousel-slide {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    
-    .author-card {
-        width: 140px;
-    }
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.author-card {
+    width: 220px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
 }

@@ -9,8 +9,6 @@ function loadPostData() {
     // Pokud nemáme ID příspěvku, přesměrujeme na hlavní stránku
     if (!postId) {
         console.error('Nebylo zadáno ID příspěvku');
-        // Alternativně můžeme zobrazit výchozí příspěvek nebo chybovou zprávu
-        // window.location.href = 'index.html';
         return;
     }
     
@@ -20,7 +18,6 @@ function loadPostData() {
     // Pokud příspěvek neexistuje, přesměrujeme na hlavní stránku
     if (!post) {
         console.error('Příspěvek s ID ' + postId + ' nebyl nalezen');
-        // window.location.href = 'index.html';
         return;
     }
     
@@ -37,6 +34,9 @@ function loadPostData() {
     
     // Načteme související příspěvky
     loadRelatedPosts(post);
+    
+    // Inicializujeme tlačítka slovo autora
+    initAuthorWordToggle();
 }
 
 // Funkce pro vyhledání příspěvku podle ID
@@ -115,6 +115,12 @@ function populatePostPage(post) {
         
         postContentElement.innerHTML = contentHTML;
     }
+    
+    // Nastavíme slovo autora
+    const authorWordElement = document.getElementById('authorWord');
+    if (authorWordElement) {
+        authorWordElement.textContent = "Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.";
+    }
 }
 
 // Funkce pro naplnění informací o autorovi
@@ -186,6 +192,13 @@ function loadRelatedPosts(currentPost) {
                     <h3 class="post-title">${post.title}</h3>
                     <p class="post-excerpt">${post.excerpt}</p>
                     <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
+                    <div class="author-word-toggle">
+                        <span>Slovo autora</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="author-word-content">
+                        <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
+                    </div>
                 </div>
             </div>
         `;
@@ -205,9 +218,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializace formuláře komentářů
     initCommentForm();
+    
+    // Inicializace tlačítek pro sdílení
+    initShareButtons();
 });
 
-// Funkce pro inicializaci mobilního menu (zkopírováno z hlavní stránky)
+// Funkce pro inicializaci mobilního menu
 function initMobileMenu() {
     const toggleBtn = document.querySelector('.mobile-menu-toggle');
     const closeBtn = document.querySelector('.mobile-menu-close');
@@ -221,9 +237,29 @@ function initMobileMenu() {
         
         closeBtn.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
-            setTimeout(() => mobileMenu.style.display = 'none'), 500;
+            setTimeout(() => mobileMenu.style.display = 'none', 500);
         });
     }
+}
+
+// Inicializace tlačítka slovo autora
+function initAuthorWordToggle() {
+    const toggleButtons = document.querySelectorAll('.author-word-toggle');
+    
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            const arrow = this.querySelector('.arrow');
+            
+            if(content.style.maxHeight) {
+                content.style.maxHeight = null;
+                arrow.textContent = '▼';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                arrow.textContent = '▲';
+            }
+        });
+    });
 }
 
 // Funkce pro inicializaci formuláře komentářů

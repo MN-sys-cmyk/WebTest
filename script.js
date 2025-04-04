@@ -40,8 +40,8 @@ function generateAuthorsCarousel() {
     carouselTrack.innerHTML = '';
     indicatorContainer.innerHTML = '';
     
-    // Rozdělíme autory na skupiny po 4
-    const authorsPerSlide = 4;
+    // Rozdělíme autory na skupiny po 5
+    const authorsPerSlide = 5;
     const slidesNeeded = Math.ceil(authorsData.length / authorsPerSlide);
     
     for (let i = 0; i < slidesNeeded; i++) {
@@ -140,7 +140,7 @@ function generatePostsCarousel() {
         // Ostatní příspěvky v tomto slidu
         const otherPosts = postsForThisSlide.slice(1);
         
-        let otherPostsHTML = '<div class="posts-grid">';
+        let otherPostsHTML = '<div class="posts-grid posts-grid-home">';
         
         otherPosts.forEach(post => {
             otherPostsHTML += `
@@ -161,6 +161,7 @@ function generatePostsCarousel() {
                         <div class="author-word-content">
                             <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
                         </div>
+                    </div>
                 </div>
             `;
         });

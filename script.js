@@ -40,8 +40,8 @@ function generateAuthorsCarousel() {
     carouselTrack.innerHTML = '';
     indicatorContainer.innerHTML = '';
     
-    // Rozdělíme autory na skupiny po 5
-    const authorsPerSlide = 5;
+    // Rozdělíme autory na skupiny po 4
+    const authorsPerSlide = 4;
     const slidesNeeded = Math.ceil(authorsData.length / authorsPerSlide);
     
     for (let i = 0; i < slidesNeeded; i++) {

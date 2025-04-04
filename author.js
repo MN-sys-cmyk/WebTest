@@ -1,149 +1,43 @@
-// Upravená funkce pro načtení dat autora podle ID z URL
-function loadAuthorData() {
-    // Získáme ID autora z URL parametru
-    const urlParams = new URLSearchParams(window.location.search);
-    const authorId = urlParams.get('id');
-    
-    // Pokud nemáme ID autora, přesměrujeme na hlavní stránku
-    if (!authorId) {
-        console.error('Nebylo zadáno ID autora');
-        return;
-    }
-    
-    // Najdeme autora podle ID v datech
-    const author = authorsData.find(author => author.id === authorId);
-    
-    // Pokud autor neexistuje, přesměrujeme na hlavní stránku
-    if (!author) {
-        console.error('Autor s ID ' + authorId + ' nebyl nalezen');
-        return;
-    }
-    
-    // Naplníme stránku daty autora
-    populateAuthorPage(author);
-    
-    // Načteme příspěvky autora
-    loadAuthorPosts(author.name);
-    
-    // Inicializujeme tlačítka slovo autora
-    initAuthorWordToggle();
-}
+// JavaScript pro stránku se všemi autory
 
-// Funkce pro naplnění stránky daty autora
-function populateAuthorPage(author) {
-    // Nastavíme titulek stránky
-    document.title = author.name + ' - LiterárníKomunita';
-    
-    // Nastavíme jméno autora
-    const authorNameElement = document.getElementById('authorName');
-    if (authorNameElement) {
-        authorNameElement.textContent = author.name;
-    }
-    
-    // Nastavíme žánr autora
-    const authorGenreElement = document.getElementById('authorGenre');
-    if (authorGenreElement) {
-        authorGenreElement.textContent = author.genre;
-    }
-    
-    // Nastavíme biografii autora
-    const authorBioElement = document.getElementById('authorBio');
-    if (authorBioElement && author.bio) {
-        authorBioElement.textContent = author.bio;
-    }
-    
-    // Nastavíme obrázek autora
-    const authorImageElement = document.getElementById('authorImage');
-    if (authorImageElement && author.image) {
-        authorImageElement.src = author.image;
-        authorImageElement.alt = author.name;
-    }
-}
-
-// Funkce pro načtení příspěvků autora
-function loadAuthorPosts(authorName) {
-    // Zkontrolujeme, zda existuje globální proměnná postsData
-    if (typeof postsData === 'undefined') {
-        console.error('Data příspěvků nejsou k dispozici');
+// Funkce pro načtení všech autorů
+function loadAllAuthors() {
+    // Zkontrolujeme, zda existuje globální proměnná authorsData
+    if (typeof authorsData === 'undefined') {
+        console.error('Data autorů nejsou k dispozici');
         return;
     }
     
-    // Filtrujeme příspěvky podle jména autora
-    const authorPosts = postsData.filter(post => post.author === authorName);
-    
-    // Seřadíme příspěvky podle data (nejnovější první)
-    authorPosts.sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-    });
-    
-    // Získáme kontejner pro příspěvky
-    const postsGrid = document.querySelector('.posts-grid');
-    if (!postsGrid) {
-        console.error('Kontejner pro příspěvky nebyl nalezen');
+    // Získáme kontejner pro autory
+    const authorsGrid = document.getElementById('authors-grid');
+    if (!authorsGrid) {
+        console.error('Kontejner pro autory nebyl nalezen');
         return;
     }
     
-    // Pokud nemá autor žádné příspěvky, zobrazíme zprávu
-    if (authorPosts.length === 0) {
-        postsGrid.innerHTML = '<p>Autor zatím nemá žádné příspěvky.</p>';
-        return;
-    }
+    // Vygenerujeme HTML pro všechny autory
+    let authorsHTML = '';
     
-    // Vygenerujeme HTML pro příspěvky
-    let postsHTML = '';
-    
-    authorPosts.forEach(post => {
-        postsHTML += `
-            <div class="post-card">
-                <div class="post-card-image" style="background-image: url('${post.image}');"></div>
-                <div class="post-card-content">
-                    <div class="post-meta">
-                        <span class="post-date">${post.displayDate || post.date}</span>
-                        <span class="post-category">${post.category}</span>
-                    </div>
-                    <h3 class="post-title">${post.title}</h3>
-                    <p class="post-excerpt">${post.excerpt}</p>
-                    <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
-                    <div class="author-word-toggle">
-                        <span>Slovo autora</span>
-                        <span class="arrow">▼</span>
-                    </div>
-                    <div class="author-word-content">
-                        <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
-                    </div>
+    authorsData.forEach(author => {
+        authorsHTML += `
+            <a href="author.html?id=${author.id}" class="author-card">
+                <div class="author-image-container">
+                    <img src="${author.image}" alt="${author.name}" class="author-image">
                 </div>
-            </div>
+                <h3 class="author-name">${author.name}</h3>
+                <p class="author-genre">${author.genre}</p>
+            </a>
         `;
     });
     
     // Vložíme HTML do kontejneru
-    postsGrid.innerHTML = postsHTML;
-}
-
-// Inicializace tlačítka slovo autora
-function initAuthorWordToggle() {
-    const toggleButtons = document.querySelectorAll('.author-word-toggle');
-    
-    toggleButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const content = this.nextElementSibling;
-            const arrow = this.querySelector('.arrow');
-            
-            if(content.style.maxHeight) {
-                content.style.maxHeight = null;
-                arrow.textContent = '▼';
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-                arrow.textContent = '▲';
-            }
-        });
-    });
+    authorsGrid.innerHTML = authorsHTML;
 }
 
 // Inicializace stránky po načtení DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Načteme data autora
-    loadAuthorData();
+    // Načteme všechny autory
+    loadAllAuthors();
     
     // Inicializace mobilního menu
     initMobileMenu();

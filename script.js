@@ -7,10 +7,10 @@ let postSlidesCount = 0;
 // Funkce pro inicializaci
 function init() {
     // Generování autorů
-    generateAuthorsCarousel();
+    slidesCount = generateAuthorsCarousel();
     
     // Generování příspěvků
-    generatePostsCarousel();
+    postSlidesCount = generatePostsCarousel();
     
     // Inicializace karuselu autorů
     initAuthorsCarousel();
@@ -20,6 +20,9 @@ function init() {
     
     // Inicializace mobilního menu
     initMobileMenu();
+    
+    // Inicializace tlačítka slovo autora
+    initAuthorWordToggle();
 }
 
 // Spuštění po načtení stránky
@@ -30,12 +33,15 @@ function generateAuthorsCarousel() {
     const carouselTrack = document.getElementById('carousel-track');
     const indicatorContainer = document.getElementById('carousel-indicator');
     
+    // Pokud elementy neexistují, vrátíme 0
+    if (!carouselTrack || !indicatorContainer) return 0;
+    
     // Vyčistit obsah
     carouselTrack.innerHTML = '';
     indicatorContainer.innerHTML = '';
     
-    // Rozdělíme autory na skupiny po 3
-    const authorsPerSlide = 3;
+    // Rozdělíme autory na skupiny po 4
+    const authorsPerSlide = 4;
     const slidesNeeded = Math.ceil(authorsData.length / authorsPerSlide);
     
     for (let i = 0; i < slidesNeeded; i++) {
@@ -78,6 +84,9 @@ function generatePostsCarousel() {
     const postsContainer = document.getElementById('posts-container');
     const indicatorContainer = document.getElementById('posts-indicator');
     
+    // Pokud elementy neexistují, vrátíme 0
+    if (!postsContainer) return 0;
+    
     // Vyčistit obsah
     postsContainer.innerHTML = '';
     if (indicatorContainer) indicatorContainer.innerHTML = '';
@@ -117,6 +126,13 @@ function generatePostsCarousel() {
                     <h3 class="post-title">${featuredPost.title}</h3>
                     <p class="post-excerpt">${featuredPost.excerpt}</p>
                     <a href="post.html?id=${featuredPost.id}" class="read-more">Přečíst celý text</a>
+                    <div class="author-word-toggle">
+                        <span>Slovo autora</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="author-word-content">
+                        <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
+                    </div>
                 </div>
             </div>
         `;
@@ -138,7 +154,13 @@ function generatePostsCarousel() {
                         <h3 class="post-title">${post.title}</h3>
                         <p class="post-excerpt">${post.excerpt}</p>
                         <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
-                    </div>
+                        <div class="author-word-toggle">
+                            <span>Slovo autora</span>
+                            <span class="arrow">▼</span>
+                        </div>
+                        <div class="author-word-content">
+                            <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
+                        </div>
                 </div>
             `;
         });
@@ -213,7 +235,9 @@ function moveAuthorsTo(index) {
     
     // Pohyb karuselu
     const track = document.getElementById('carousel-track');
-    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    if (track) {
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
     
     // Aktualizace indikátorů
     const dots = document.querySelectorAll('.authors-carousel .indicator-dot');
@@ -236,7 +260,9 @@ function movePostsTo(index) {
     
     // Pohyb karuselu
     const container = document.getElementById('posts-container');
-    container.style.transform = `translateX(-${currentPostSlide * 100}%)`;
+    if (container) {
+        container.style.transform = `translateX(-${currentPostSlide * 100}%)`;
+    }
     
     // Aktualizace indikátorů
     const dots = document.querySelectorAll('.posts-carousel .indicator-dot');
@@ -264,6 +290,26 @@ function initMobileMenu() {
     }
 }
 
+// Inicializace tlačítka slovo autora
+function initAuthorWordToggle() {
+    const toggleButtons = document.querySelectorAll('.author-word-toggle');
+    
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            const arrow = this.querySelector('.arrow');
+            
+            if(content.style.maxHeight) {
+                content.style.maxHeight = null;
+                arrow.textContent = '▼';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                arrow.textContent = '▲';
+            }
+        });
+    });
+}
+
 // Pro kompatibilitu se stávajícím HTML
 function moveCarousel(direction) {
     moveAuthorsTo(currentSlide + direction);
@@ -272,6 +318,3 @@ function moveCarousel(direction) {
 function goToSlide(index) {
     moveAuthorsTo(index);
 }
-
-// Spuštění po načtení stránky
-document.addEventListener('DOMContentLoaded', init);

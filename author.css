@@ -94,78 +94,6 @@
     margin-bottom: 20px;
 }
 
-/* Publikované dílo autora - časová osa */
-.author-works {
-    margin-bottom: 60px;
-}
-
-.author-works .section-title {
-    text-align: left;
-    margin-bottom: 30px;
-}
-
-.author-works .section-title::after {
-    left: 0;
-    transform: none;
-}
-
-.work-timeline {
-    position: relative;
-    padding-left: 50px;
-}
-
-.work-timeline::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 20px;
-    width: 2px;
-    background-color: var(--light-gray);
-}
-
-.timeline-item {
-    position: relative;
-    margin-bottom: 40px;
-}
-
-.timeline-item::before {
-    content: "";
-    position: absolute;
-    top: 10px;
-    left: -35px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: var(--accent-color);
-    z-index: 1;
-}
-
-.timeline-year {
-    position: absolute;
-    top: 5px;
-    left: -85px;
-    font-weight: 600;
-    color: var(--accent-color);
-}
-
-.timeline-content {
-    padding: 20px;
-    background-color: var(--secondary-color);
-    border-radius: 8px;
-}
-
-.timeline-content h3 {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    font-family: var(--font-heading);
-}
-
-.timeline-content p {
-    margin-bottom: 15px;
-}
-
 /* Nejnovější příspěvky autora */
 .author-posts {
     margin-bottom: 60px;
@@ -181,76 +109,44 @@
     transform: none;
 }
 
-/* Kontaktní formulář pro autora */
-.author-contact {
-    margin-bottom: 60px;
-}
-
-.author-contact .section-title {
-    text-align: left;
-    margin-bottom: 30px;
-}
-
-.author-contact .section-title::after {
-    left: 0;
-    transform: none;
-}
-
-.contact-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
-    background-color: var(--secondary-color);
-    padding: 40px;
-    border-radius: 8px;
-}
-
-.contact-form .form-group:nth-child(3),
-.contact-form .form-group:nth-child(4) {
-    grid-column: span 2;
-}
-
-.form-group {
+/* Styly pro slovo autora */
+.author-word-toggle {
     display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.form-group input,
-.form-group textarea {
-    padding: 12px 15px;
-    border: 1px solid var(--light-gray);
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    margin-top: 15px;
+    background-color: var(--secondary-color);
     border-radius: 4px;
-    font-family: var(--font-main);
-    font-size: 16px;
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 150px;
-}
-
-.submit-button {
-    grid-column: span 2;
-    padding: 15px 20px;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-family: var(--font-main);
-    font-size: 16px;
-    font-weight: 600;
-    text-transform: uppercase;
     cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
     transition: all 0.3s ease;
 }
 
-.submit-button:hover {
-    background-color: var(--primary-color);
+.author-word-toggle:hover {
+    background-color: var(--light-gray);
+}
+
+.author-word-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: var(--secondary-color);
+    border-radius: 0 0 4px 4px;
+    margin-top: -5px;
+    padding: 0 15px;
+}
+
+.author-word-content p {
+    padding: 15px 0;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.arrow {
+    transition: transform 0.3s ease;
 }
 
 /* Responsivní design */
@@ -271,43 +167,10 @@
     .author-page {
         margin-top: 120px;
     }
-    
-    .contact-form {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-form .form-group:nth-child(3),
-    .contact-form .form-group:nth-child(4),
-    .submit-button {
-        grid-column: span 1;
-    }
-    
-    .work-timeline {
-        padding-left: 30px;
-    }
-    
-    .timeline-year {
-        left: -65px;
-    }
 }
 
 @media (max-width: 576px) {
     .author-info .author-name {
         font-size: 32px;
-    }
-    
-    .timeline-year {
-        position: relative;
-        left: 0;
-        margin-bottom: 10px;
-        display: inline-block;
-    }
-    
-    .work-timeline {
-        padding-left: 20px;
-    }
-    
-    .timeline-item::before {
-        left: -25px;
     }
 }

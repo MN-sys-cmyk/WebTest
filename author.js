@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initMobileMenu();
 });
 
-// Funkce pro inicializaci mobilního menu (zkopírováno z hlavní stránky)
+// Funkce pro inicializaci mobilního menu
 function initMobileMenu() {
     const toggleBtn = document.querySelector('.mobile-menu-toggle');
     const closeBtn = document.querySelector('.mobile-menu-close');

@@ -7,8 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=1.3">
-    <link rel="stylesheet" href="post.css?v=1.0">
+    <link rel="stylesheet" href="style.css?v=1.4">
+    <link rel="stylesheet" href="post.css?v=1.1">
 </head>
 <body>
     <header class="header">
@@ -21,33 +21,11 @@
                 </div>
                 <button class="mobile-menu-toggle">☰</button>
             </div>
-            <div class="header-bottom">
-                <nav class="main-nav">
-                    <ul>
-                        <li><a href="index.html">Úvod</a></li>
-                        <li><a href="#">Autoři</a></li>
-                        <li><a href="#" class="active">Texty</a></li>
-                        <li><a href="#">Události</a></li>
-                        <li><a href="#">O projektu</a></li>
-                        <li><a href="#">Kontakt</a></li>
-                    </ul>
-                </nav>
-            </div>
         </div>
     </header>
     
     <div class="mobile-menu">
         <button class="mobile-menu-close">✕</button>
-        <nav>
-            <ul>
-                <li><a href="index.html">Úvod</a></li>
-                <li><a href="#">Autoři</a></li>
-                <li><a href="#" class="active">Texty</a></li>
-                <li><a href="#">Události</a></li>
-                <li><a href="#">O projektu</a></li>
-                <li><a href="#">Kontakt</a></li>
-            </ul>
-        </nav>
     </div>
     
     <!-- Hlavní obsah stránky příspěvku -->
@@ -75,6 +53,16 @@
                 
                 <div class="post-body" id="postContent">
                     <p>Obsah příspěvku bude načten dynamicky z dat.</p>
+                </div>
+                
+                <div class="author-word-box">
+                    <div class="author-word-toggle">
+                        <span>Slovo autora</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="author-word-content">
+                        <p id="authorWord">Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
+                    </div>
                 </div>
                 
                 <footer class="post-footer">
@@ -167,28 +155,6 @@
                 </div>
                 
                 <div>
-                    <h3 class="footer-heading">Navigace</h3>
-                    <ul class="footer-links">
-                        <li><a href="index.html">Úvod</a></li>
-                        <li><a href="#">Autoři</a></li>
-                        <li><a href="#">Texty</a></li>
-                        <li><a href="#">Události</a></li>
-                        <li><a href="#">O projektu</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="footer-heading">Kategorie</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Próza</a></li>
-                        <li><a href="#">Poezie</a></li>
-                        <li><a href="#">Scénáře</a></li>
-                        <li><a href="#">Literatura pro děti</a></li>
-                        <li><a href="#">Eseje</a></li>
-                    </ul>
-                </div>
-                
-                <div>
                     <h3 class="footer-heading">Kontakt</h3>
                     <ul class="footer-links">
                         <li>info@literarnikomunita.cz</li>
@@ -205,7 +171,7 @@
     </footer>
     
     <script src="data.js?v=1.2"></script>
-    <script src="script.js?v=1.2"></script>
-    <script src="post.js?v=1.0"></script>
+    <script src="script.js?v=1.3"></script>
+    <script src="post.js?v=1.1"></script>
 </body>
 </html>

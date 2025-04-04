@@ -827,3 +827,92 @@ ul {
 .carousel-arrow {
     cursor: pointer;
 }
+
+/* Styly pro sekci "Slovo autora" */
+.author-word-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    margin-top: 15px;
+    background-color: var(--secondary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.author-word-toggle:hover {
+    background-color: var(--light-gray);
+}
+
+.author-word-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: var(--secondary-color);
+    border-radius: 0 0 4px 4px;
+    margin-top: -5px;
+    padding: 0 15px;
+}
+
+.author-word-content p {
+    padding: 15px 0;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+}
+
+/* Úprava karuselu autorů pro 4 autory místo 3 */
+.carousel-slide {
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.author-card {
+    width: 220px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Styly pro stránku s textem */
+.author-word-box {
+    margin: 30px 0;
+    border-top: 1px solid var(--light-gray);
+    padding-top: 20px;
+}
+
+@media (max-width: 992px) {
+    .carousel-slide {
+        flex-wrap: wrap;
+    }
+    
+    .author-card {
+        width: 250px;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .author-card {
+        width: 220px;
+    }
+}
+
+@media (max-width: 576px) {
+    .carousel-slide {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .author-card {
+        width: 280px;
+    }
+}

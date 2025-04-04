@@ -916,3 +916,175 @@ ul {
         width: 280px;
     }
 }
+/* Styly pro sekci "Slovo autora" */
+.author-word-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    margin-top: 15px;
+    background-color: var(--secondary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.author-word-toggle:hover {
+    background-color: var(--light-gray);
+}
+
+.author-word-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: var(--secondary-color);
+    border-radius: 0 0 4px 4px;
+    margin-top: -5px;
+    padding: 0 15px;
+}
+
+.author-word-content p {
+    padding: 15px 0;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+}
+
+/* Úprava karuselu autorů pro 5 autorů místo 3 */
+.carousel-slide {
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.author-card {
+    width: 180px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+}
+
+/* Styly pro stránku s textem */
+.author-word-box {
+    margin: 30px 0;
+    border-top: 1px solid var(--light-gray);
+    padding-top: 20px;
+}
+
+/* Úprava rozložení příspěvků na homepage */
+.posts-grid-home {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.posts-grid-home .post-card {
+    flex: 0 0 calc(33.333% - 14px);
+    max-width: calc(33.333% - 14px);
+}
+
+/* Úprava rozložení příspěvků na stránce autora */
+.author-posts .posts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.author-posts .post-card {
+    flex: 0 0 calc(33.333% - 14px);
+    max-width: calc(33.333% - 14px);
+}
+
+/* Stránka se všemi autory */
+.all-authors-page {
+    margin-top: 140px;
+    padding-bottom: 80px;
+}
+
+.authors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: flex-start;
+    margin-top: 40px;
+}
+
+.authors-grid .author-card {
+    width: 220px;
+    margin-bottom: 30px;
+}
+
+/* Stránka se všemi texty */
+.all-posts-page {
+    margin-top: 140px;
+    padding-bottom: 80px;
+}
+
+.all-posts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: flex-start;
+    margin-top: 40px;
+}
+
+.all-posts-grid .post-card {
+    flex: 0 0 calc(33.333% - 20px);
+    max-width: calc(33.333% - 20px);
+    margin-bottom: 30px;
+}
+
+@media (max-width: 992px) {
+    .posts-grid-home .post-card,
+    .author-posts .post-card,
+    .all-posts-grid .post-card {
+        flex: 0 0 calc(50% - 10px);
+        max-width: calc(50% - 10px);
+    }
+    
+    .authors-grid .author-card {
+        width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .all-authors-page,
+    .all-posts-page {
+        margin-top: 120px;
+    }
+    
+    .author-card {
+        width: 160px;
+    }
+    
+    .authors-grid {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .posts-grid-home .post-card,
+    .author-posts .post-card,
+    .all-posts-grid .post-card {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .carousel-slide {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .author-card {
+        width: 140px;
+    }
+}

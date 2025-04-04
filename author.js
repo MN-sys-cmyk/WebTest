@@ -1,137 +1,169 @@
-// Upravená funkce generateAuthorsCarousel pro fungující odkazy na autory
-function generateAuthorsCarousel() {
-    const carouselTrack = document.getElementById('carousel-track');
-    const indicatorContainer = document.getElementById('carousel-indicator');
+// Upravená funkce pro načtení dat autora podle ID z URL
+function loadAuthorData() {
+    // Získáme ID autora z URL parametru
+    const urlParams = new URLSearchParams(window.location.search);
+    const authorId = urlParams.get('id');
     
-    // Vyčistit obsah
-    carouselTrack.innerHTML = '';
-    indicatorContainer.innerHTML = '';
-    
-    // Rozdělíme autory na skupiny po 3
-    const authorsPerSlide = 3;
-    const slidesNeeded = Math.ceil(authorsData.length / authorsPerSlide);
-    
-    for (let i = 0; i < slidesNeeded; i++) {
-        // Vytvoříme nový slide
-        const slide = document.createElement('div');
-        slide.className = 'carousel-slide';
-        
-        // Přidáme autory do slidu
-        const startIndex = i * authorsPerSlide;
-        const endIndex = Math.min(startIndex + authorsPerSlide, authorsData.length);
-        
-        for (let j = startIndex; j < endIndex; j++) {
-            const author = authorsData[j];
-            slide.innerHTML += `
-                <a href="author.html?id=${author.id}" class="author-card">
-                    <div class="author-image-container">
-                        <img src="${author.image}" alt="${author.name}" class="author-image">
-                    </div>
-                    <h3 class="author-name">${author.name}</h3>
-                    <p class="author-genre">${author.genre}</p>
-                </a>
-            `;
-        }
-        
-        // Přidáme slide do karuselu
-        carouselTrack.appendChild(slide);
-        
-        // Přidáme indikátor
-        const dot = document.createElement('div');
-        dot.className = 'indicator-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => moveAuthorsTo(i);
-        indicatorContainer.appendChild(dot);
+    // Pokud nemáme ID autora, přesměrujeme na hlavní stránku
+    if (!authorId) {
+        console.error('Nebylo zadáno ID autora');
+        return;
     }
     
-    return slidesNeeded;
+    // Najdeme autora podle ID v datech
+    const author = authorsData.find(author => author.id === authorId);
+    
+    // Pokud autor neexistuje, přesměrujeme na hlavní stránku
+    if (!author) {
+        console.error('Autor s ID ' + authorId + ' nebyl nalezen');
+        return;
+    }
+    
+    // Naplníme stránku daty autora
+    populateAuthorPage(author);
+    
+    // Načteme příspěvky autora
+    loadAuthorPosts(author.name);
+    
+    // Inicializujeme tlačítka slovo autora
+    initAuthorWordToggle();
 }
 
-// Upravená funkce generatePostsCarousel pro fungující odkazy na příspěvky
-function generatePostsCarousel() {
-    const postsContainer = document.getElementById('posts-container');
-    const indicatorContainer = document.getElementById('posts-indicator');
+// Funkce pro naplnění stránky daty autora
+function populateAuthorPage(author) {
+    // Nastavíme titulek stránky
+    document.title = author.name + ' - LiterárníKomunita';
     
-    // Vyčistit obsah
-    postsContainer.innerHTML = '';
-    if (indicatorContainer) indicatorContainer.innerHTML = '';
+    // Nastavíme jméno autora
+    const authorNameElement = document.getElementById('authorName');
+    if (authorNameElement) {
+        authorNameElement.textContent = author.name;
+    }
+    
+    // Nastavíme žánr autora
+    const authorGenreElement = document.getElementById('authorGenre');
+    if (authorGenreElement) {
+        authorGenreElement.textContent = author.genre;
+    }
+    
+    // Nastavíme biografii autora
+    const authorBioElement = document.getElementById('authorBio');
+    if (authorBioElement && author.bio) {
+        authorBioElement.textContent = author.bio;
+    }
+    
+    // Nastavíme obrázek autora
+    const authorImageElement = document.getElementById('authorImage');
+    if (authorImageElement && author.image) {
+        authorImageElement.src = author.image;
+        authorImageElement.alt = author.name;
+    }
+}
+
+// Funkce pro načtení příspěvků autora
+function loadAuthorPosts(authorName) {
+    // Zkontrolujeme, zda existuje globální proměnná postsData
+    if (typeof postsData === 'undefined') {
+        console.error('Data příspěvků nejsou k dispozici');
+        return;
+    }
+    
+    // Filtrujeme příspěvky podle jména autora
+    const authorPosts = postsData.filter(post => post.author === authorName);
     
     // Seřadíme příspěvky podle data (nejnovější první)
-    const sortedPosts = [...postsData].sort((a, b) => {
-        // Porovnáváme data ve formátu YYYY-MM-DD
+    authorPosts.sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
     });
     
-    // ZMĚNA: Vytvoříme slidey s příspěvky (1 slide = 1 featured + 3 běžné příspěvky)
-    // Kolik příspěvků zobrazíme na jeden slide
-    const postsPerSlide = 4;
-    const slidesNeeded = Math.ceil(sortedPosts.length / postsPerSlide);
+    // Získáme kontejner pro příspěvky
+    const postsGrid = document.querySelector('.posts-grid');
+    if (!postsGrid) {
+        console.error('Kontejner pro příspěvky nebyl nalezen');
+        return;
+    }
     
-    for (let i = 0; i < slidesNeeded; i++) {
-        // Vytvoříme nový slide
-        const slide = document.createElement('div');
-        slide.className = 'posts-slide';
-        
-        // Získáme příspěvky pro tento slide
-        const startIndex = i * postsPerSlide;
-        const postsForThisSlide = sortedPosts.slice(startIndex, startIndex + postsPerSlide);
-        
-        // První příspěvek bude featured
-        const featuredPost = postsForThisSlide[0];
-        
-        // Vytvoříme featured příspěvek
-        const featuredPostHTML = `
-            <div class="featured-post">
-                <div class="featured-post-image" style="background-image: url('${featuredPost.image}');"></div>
-                <div class="featured-post-content">
+    // Pokud nemá autor žádné příspěvky, zobrazíme zprávu
+    if (authorPosts.length === 0) {
+        postsGrid.innerHTML = '<p>Autor zatím nemá žádné příspěvky.</p>';
+        return;
+    }
+    
+    // Vygenerujeme HTML pro příspěvky
+    let postsHTML = '';
+    
+    authorPosts.forEach(post => {
+        postsHTML += `
+            <div class="post-card">
+                <div class="post-card-image" style="background-image: url('${post.image}');"></div>
+                <div class="post-card-content">
                     <div class="post-meta">
-                        <span class="post-date">${featuredPost.displayDate || featuredPost.date}</span>
-                        <span class="post-category">${featuredPost.category}</span>
+                        <span class="post-date">${post.displayDate || post.date}</span>
+                        <span class="post-category">${post.category}</span>
                     </div>
-                    <h3 class="post-title">${featuredPost.title}</h3>
-                    <p class="post-excerpt">${featuredPost.excerpt}</p>
-                    <a href="post.html?id=${featuredPost.id}" class="read-more">Přečíst celý text</a>
+                    <h3 class="post-title">${post.title}</h3>
+                    <p class="post-excerpt">${post.excerpt}</p>
+                    <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
+                    <div class="author-word-toggle">
+                        <span>Slovo autora</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="author-word-content">
+                        <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
+                    </div>
                 </div>
             </div>
         `;
-        
-        // Ostatní příspěvky v tomto slidu
-        const otherPosts = postsForThisSlide.slice(1);
-        
-        let otherPostsHTML = '<div class="posts-grid">';
-        
-        otherPosts.forEach(post => {
-            otherPostsHTML += `
-                <div class="post-card">
-                    <div class="post-card-image" style="background-image: url('${post.image}');"></div>
-                    <div class="post-card-content">
-                        <div class="post-meta">
-                            <span class="post-date">${post.displayDate || post.date}</span>
-                            <span class="post-category">${post.category}</span>
-                        </div>
-                        <h3 class="post-title">${post.title}</h3>
-                        <p class="post-excerpt">${post.excerpt}</p>
-                        <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
-                    </div>
-                </div>
-            `;
+    });
+    
+    // Vložíme HTML do kontejneru
+    postsGrid.innerHTML = postsHTML;
+}
+
+// Inicializace tlačítka slovo autora
+function initAuthorWordToggle() {
+    const toggleButtons = document.querySelectorAll('.author-word-toggle');
+    
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            const arrow = this.querySelector('.arrow');
+            
+            if(content.style.maxHeight) {
+                content.style.maxHeight = null;
+                arrow.textContent = '▼';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                arrow.textContent = '▲';
+            }
+        });
+    });
+}
+
+// Inicializace stránky po načtení DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Načteme data autora
+    loadAuthorData();
+    
+    // Inicializace mobilního menu
+    initMobileMenu();
+});
+
+// Funkce pro inicializaci mobilního menu (zkopírováno z hlavní stránky)
+function initMobileMenu() {
+    const toggleBtn = document.querySelector('.mobile-menu-toggle');
+    const closeBtn = document.querySelector('.mobile-menu-close');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    
+    if (toggleBtn && closeBtn && mobileMenu) {
+        toggleBtn.addEventListener('click', () => {
+            mobileMenu.style.display = 'block';
+            setTimeout(() => mobileMenu.classList.add('active'), 10);
         });
         
-        otherPostsHTML += '</div>';
-        
-        // Přidáme vše do slidu
-        slide.innerHTML = featuredPostHTML + otherPostsHTML;
-        
-        // Přidáme slide do karuselu
-        postsContainer.appendChild(slide);
-        
-        // Přidáme indikátor, pokud kontejner existuje
-        if (indicatorContainer) {
-            const dot = document.createElement('div');
-            dot.className = 'indicator-dot' + (i === 0 ? ' active' : '');
-            dot.onclick = () => movePostsTo(i);
-            indicatorContainer.appendChild(dot);
-        }
+        closeBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            setTimeout(() => mobileMenu.style.display = 'none', 500);
+        });
     }
-    
-    return slidesNeeded;
 }

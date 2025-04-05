@@ -93,11 +93,19 @@ function loadRelatedPosts(authorName, currentPostId) {
                     <h3 class="post-title">${post.title}</h3>
                     <p class="post-excerpt">${post.excerpt}</p>
                     <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
+                    <div class="author-word-toggle">
+                        <span>Slovo autora</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="author-word-content">
+                        <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
+                    </div>
                 </div>
             </div>
         `;
     });
     
+    // Vložíme HTML do kontejneru
     postsGrid.innerHTML = postsHTML;
 }
 
@@ -131,6 +139,24 @@ function initAuthorWordToggle() {
             }
         });
     }
+    
+    // Initialize toggles for related posts if any
+    const relatedToggleButtons = document.querySelectorAll('.related-posts .author-word-toggle');
+    
+    relatedToggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            const arrow = this.querySelector('.arrow');
+            
+            if(content.style.maxHeight) {
+                content.style.maxHeight = null;
+                arrow.textContent = '▼';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                arrow.textContent = '▲';
+            }
+        });
+    });
 }
 
 // Initialize mobile menu

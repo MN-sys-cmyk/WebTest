@@ -29,6 +29,7 @@ function init() {
 document.addEventListener('DOMContentLoaded', init);
 
 // Generování karuselu autorů
+// Generování karuselu autorů
 function generateAuthorsCarousel() {
     const carouselTrack = document.getElementById('carousel-track');
     const indicatorContainer = document.getElementById('carousel-indicator');

@@ -29,7 +29,6 @@ function init() {
 document.addEventListener('DOMContentLoaded', init);
 
 // Generování karuselu autorů
-// Generování karuselu autorů
 function generateAuthorsCarousel() {
     const carouselTrack = document.getElementById('carousel-track');
     const indicatorContainer = document.getElementById('carousel-indicator');
@@ -80,6 +79,35 @@ function generateAuthorsCarousel() {
     return slidesNeeded;
 }
 
+function adjustAuthorsCarouselArrows() {
+    // Get the carousel track and slides
+    const carouselTrack = document.getElementById('carousel-track');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const prevArrow = document.querySelector('.authors-carousel .carousel-arrow.prev');
+    const nextArrow = document.querySelector('.authors-carousel .carousel-arrow.next');
+    
+    if (!carouselTrack || !slides.length || !prevArrow || !nextArrow) return;
+    
+    // Check if we have fewer authors than the maximum display (4)
+    const currentSlide = slides[0]; // Only need to check the first slide
+    const authorCards = currentSlide.querySelectorAll('.author-card');
+    
+    if (authorCards.length < 4) {
+        // Calculate the available space and center the content
+        const availableWidth = carouselTrack.offsetWidth;
+        const usedWidth = authorCards.length * 200; // Approximate width per author card with margins
+        const emptySpace = availableWidth - usedWidth;
+        
+        if (emptySpace > 0) {
+            // Move arrows closer based on the empty space
+            const arrowAdjustment = Math.min(emptySpace / 2, 100); // Max 100px adjustment
+            
+            // Apply new positions to arrows
+            prevArrow.style.left = `${arrowAdjustment}px`;
+            nextArrow.style.right = `${arrowAdjustment}px`;
+        }
+    }
+}
 // Generování karuselu příspěvků
 function generatePostsCarousel() {
     const postsContainer = document.getElementById('posts-container');
@@ -250,28 +278,44 @@ function moveAuthorsTo(index) {
 
 // Funkce pro pohyb karuselu příspěvků na konkrétní slide
 function movePostsTo(index) {
-    // Zajištění nekonečné cykličnosti
+    // Ensure index stays within bounds
     if (index < 0) {
         index = postSlidesCount - 1;
     } else if (index >= postSlidesCount) {
         index = 0;
     }
     
-    // Aktualizace aktuálního indexu
+    // Update current index
     currentPostSlide = index;
     
-    // Pohyb karuselu
-    const container = document.getElementById('posts-container');
-    if (container) {
-        container.style.transform = `translateX(-${currentPostSlide * 100}%)`;
-    }
+    // Get all posts slides
+    const slides = document.querySelectorAll('.posts-slide');
+    if (!slides.length) return;
     
-    // Aktualizace indikátorů
+    // For each slide, we want to keep the featured post fixed
+    // and only move the smaller posts grid below it
+    slides.forEach((slide, slideIndex) => {
+        // Find the posts grid in this slide
+        const postsGrid = slide.querySelector('.posts-grid');
+        if (!postsGrid) return;
+        
+        // Check if this is the current slide
+        if (slideIndex === currentPostSlide) {
+            // Show this posts grid
+            postsGrid.style.display = 'flex';
+        } else {
+            // Hide other posts grids
+            postsGrid.style.display = 'none';
+        }
+    });
+    
+    // Update indicators
     const dots = document.querySelectorAll('.posts-carousel .indicator-dot');
     dots.forEach((dot, i) => {
         dot.classList.toggle('active', i === currentPostSlide);
     });
 }
+
 
 // Inicializace mobilního menu
 function initMobileMenu() {

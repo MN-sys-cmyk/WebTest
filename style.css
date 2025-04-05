@@ -1163,3 +1163,20 @@ ul {
         max-width: 100%;
     }
 }
+/* Adjust arrow positioning for author carousel */
+.authors-carousel .carousel-arrow {
+    transition: left 0.3s ease, right 0.3s ease;
+}
+
+/* Separate featured post from carousel */
+#featured-post-container {
+    margin-bottom: 40px;
+}
+
+/* Make featured post stand out more */
+.featured-post {
+    background-color: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+}
+

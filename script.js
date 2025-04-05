@@ -18,6 +18,9 @@ function init() {
     // Inicializace karuselu příspěvků
     initPostsCarousel();
     
+    // Přidání okraje mezi featured post a karuselem
+    addMarginToPostsCarousel();
+    
     // Inicializace mobilního menu
     initMobileMenu();
     
@@ -229,11 +232,12 @@ function initAuthorsCarousel() {
 
 // Inicializace karuselu příspěvků
 function initPostsCarousel() {
-    // Zjistíme počet slidů
-    const slides = document.querySelectorAll('.posts-slide');
-    postSlidesCount = slides.length;
+    // Zjistíme počet slidů s příspěvky (počet .posts-grid-home elementů)
+    const postSlides = document.querySelectorAll('.posts-grid-home');
+    postSlidesCount = postSlides.length;
     
-    if (postSlidesCount < 2) return; // Není potřeba karusel pro jeden slide
+    // Pokud nemáme dostatek slidů, není třeba karusel
+    if (postSlidesCount <= 1) return;
     
     // Nastavíme posluchače událostí na tlačítka
     const prevButton = document.querySelector('.posts-carousel .carousel-arrow.prev');
@@ -242,6 +246,17 @@ function initPostsCarousel() {
     if (prevButton && nextButton) {
         prevButton.addEventListener('click', () => movePostsTo(currentPostSlide - 1));
         nextButton.addEventListener('click', () => movePostsTo(currentPostSlide + 1));
+    }
+}
+
+// Přidáme okraj mezi hlavním příspěvkem a karuselem
+function addMarginToPostsCarousel() {
+    const featuredPostContainer = document.getElementById('featured-post-container');
+    const postsCarousel = document.querySelector('.posts-carousel');
+    
+    if (featuredPostContainer && postsCarousel) {
+        // Přidáme spodní okraj k featuredPostContainer
+        featuredPostContainer.style.marginBottom = '50px';
     }
 }
 

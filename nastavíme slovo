@@ -123,6 +123,15 @@ function populatePostPage(post) {
     }
 }
 
+// Přidáme tagy
+const tagsContainer = document.querySelector('.post-tags');
+if (tagsContainer && post.category) {
+    tagsContainer.innerHTML = `
+        <a href="category.html?category=${encodeURIComponent(post.category)}" class="tag">${post.category}</a>
+        <a href="author-category.html?author=${encodeURIComponent(post.author)}" class="tag">${post.author}</a>
+    `;
+}
+
 // Funkce pro naplnění informací o autorovi
 function populateAuthorInfo(author) {
     // Nastavíme obrázek autora

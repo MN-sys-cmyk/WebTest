@@ -75,7 +75,9 @@
 /* Hlavní obrázek příspěvku */
 .post-featured-image {
     width: 100%;
-    margin-bottom: 30px;
+    max-width: 700px;  /* Omezení maximální šířky */
+    max-height: 400px; /* Omezení maximální výšky */
+    margin: 0 auto 30px; /* Centrování obrázku a přidání spodního okraje */
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -83,7 +85,8 @@
 
 .post-featured-image img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover; /* Zachová poměr stran a obrázek vždy správně zakryje prostor */
     display: block;
 }
 
@@ -378,9 +381,10 @@
 }
 
 @media (max-width: 768px) {
-    .post-page {
-        margin-top: 120px;
+    .post-featured-image {
+        max-height: 350px;
     }
+}
     
     .post-header .post-title {
         font-size: 30px;
@@ -402,9 +406,10 @@
 }
 
 @media (max-width: 576px) {
-    .post-header .post-title {
-        font-size: 26px;
+    .post-featured-image {
+        max-height: 300px;
     }
+}
     
     .post-body {
         font-size: 16px;

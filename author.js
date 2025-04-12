@@ -61,12 +61,15 @@ function loadAuthorPosts(authorName) {
     // Seřadíme příspěvky podle data (nejnovější první)
     authorPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
     
+    // Omezíme počet příspěvků na prvních 6 nejnovějších
+    const recentPosts = authorPosts.slice(0, 6);
+    
     // Generujeme HTML pro každý příspěvek
     let postsHTML = '';
     
-    authorPosts.forEach(post => {
+    recentPosts.forEach(post => {
         postsHTML += `
-            <div class="post-card">
+            <div class="post-card author-page-card">
                 <div class="post-card-image" style="background-image: url('${post.image}');"></div>
                 <div class="post-card-content">
                     <div class="post-meta">
@@ -90,6 +93,12 @@ function loadAuthorPosts(authorName) {
     
     // Vložíme HTML do kontejneru
     postsGrid.innerHTML = postsHTML;
+    
+    // Upravíme styl mřížky pro správné zobrazení
+    postsGrid.style.display = 'flex';
+    postsGrid.style.flexWrap = 'wrap';
+    postsGrid.style.gap = '30px';
+    postsGrid.style.justifyContent = 'flex-start';
     
     // Inicializujeme tlačítka pro "slovo autora"
     initAuthorWordToggle();

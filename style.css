@@ -383,12 +383,6 @@ ul {
     background-color: var(--secondary-color);
 }
 
-.posts-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
-}
-
 .featured-post {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -470,12 +464,6 @@ ul {
 
 .read-more:hover::after {
     transform: translateX(0);
-}
-
-.posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
 }
 
 .post-card {
@@ -625,164 +613,27 @@ ul {
     border-bottom: 1px solid var(--light-gray);
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-    .hero-title {
-        font-size: 48px;
-    }
-    
-    .featured-post {
-        grid-template-columns: 1fr;
-    }
-    
-    .featured-post-image {
-        min-height: 300px;
-    }
-}
-
-@media (max-width: 992px) {
-    .main-nav {
-        display: none;
-    }
-    
-    .mobile-menu-toggle {
-        display: block;
-    }
-    
-    .hero-title {
-        font-size: 42px;
-    }
-    
-    .hero-subtitle {
-        font-size: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero {
-        height: 70vh;
-    }
-    
-    .hero-title {
-        font-size: 36px;
-    }
-    
-    .hero-subtitle {
-        font-size: 18px;
-    }
-    
-    .section-title {
-        font-size: 30px;
-    }
-    
-    .featured-post-content {
-        padding: 30px;
-    }
-    
-    .post-title {
-        font-size: 24px;
-    }
-    
-    .carousel-slide {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .author-card {
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 576px) {
-    .hero-content {
-        bottom: 50px;
-    }
-    
-    .hero-title {
-        font-size: 28px;
-    }
-    
-    .hero-subtitle {
-        font-size: 16px;
-    }
-    
-    .section-title {
-        font-size: 24px;
-    }
-}
-/* Úpravy pro karusel textů */
+/* Styly pro karusel příspěvků - plynulé přecházení */
 .posts-carousel {
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 60px;
+    overflow: hidden; /* Skrýt přetékající obsah */
 }
 
-.posts-carousel .carousel-container {
-    overflow: hidden;
-}
-
-.posts-carousel .posts-container {
+.posts-carousel-track {
     display: flex;
     transition: transform 0.5s ease;
-}
-
-.posts-carousel .carousel-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    background-color: white;
-    border-radius: 50%;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.3s ease;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.posts-carousel .carousel-arrow:hover {
-    background-color: var(--accent-color);
-    color: white;
-}
-
-.posts-carousel .carousel-arrow.prev {
-    left: 0;
-}
-
-.posts-carousel .carousel-arrow.next {
-    right: 0;
+    width: 100%;
 }
 
 .posts-slide {
     min-width: 100%;
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
-}
-
-/* Úpravy pro indikátory karuselu textů */
-.posts-carousel .carousel-indicator {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    gap: 10px;
-}
-
-/* Úpravy pro "Zobrazit všechny texty" tlačítko */
-.latest-posts .view-all {
-    text-align: center;
-    margin-top: 40px;
-}
-
-/* Úprava rozložení featured post a ostatních postů */
-.featured-post {
-    margin-bottom: 0; /* Odstraňuje původní margin, který byl nastaven na 50px */
+    justify-content: space-between;
+    gap: 20px;
 }
 
 .posts-grid {
@@ -796,36 +647,6 @@ ul {
     flex: 1;
     min-width: 300px;
     max-width: 32%;
-}
-
-@media (max-width: 992px) {
-    .post-card {
-        max-width: 48%;
-    }
-}
-
-@media (max-width: 768px) {
-    .post-card {
-        max-width: 100%;
-    }
-}
-/* Zabránit označování obsahu při klikání na navigační prvky */
-.carousel-arrow,
-.authors-carousel,
-.posts-carousel,
-.author-card,
-.post-card,
-.featured-post,
-.posts-grid {
-    user-select: none;
-    -webkit-user-select: none;  /* Pro Safari */
-    -moz-user-select: none;     /* Pro Firefox */
-    -ms-user-select: none;      /* Pro IE/Edge */
-}
-
-/* Oprava kurzoru pro navigační šipky */
-.carousel-arrow {
-    cursor: pointer;
 }
 
 /* Styly pro sekci "Slovo autora" */
@@ -889,121 +710,120 @@ ul {
     padding-top: 20px;
 }
 
-@media (max-width: 992px) {
-    .carousel-slide {
-        flex-wrap: wrap;
-    }
-    
-    .author-card {
-        width: 250px;
-        margin-bottom: 20px;
-    }
+.post-page {
+    margin-top: 140px;
+    padding-bottom: 80px;
 }
 
-@media (max-width: 768px) {
-    .author-card {
-        width: 220px;
-    }
+.post-content {
+    max-width: 800px;
+    margin: 0 auto 60px;
 }
 
-@media (max-width: 576px) {
-    .carousel-slide {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .author-card {
-        width: 280px;
-    }
+.post-header {
+    margin-bottom: 30px;
 }
-/* Styly pro sekci "Slovo autora" */
-.author-word-toggle {
+
+.post-header .post-meta {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    margin-top: 15px;
-    background-color: var(--secondary-color);
-    border-radius: 4px;
-    cursor: pointer;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--medium-gray);
+}
+
+.post-header .post-date {
+    margin-right: 15px;
+}
+
+.post-header .post-category {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 2px;
+}
+
+.post-header .post-title {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    font-family: var(--font-heading);
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.author-link {
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.author-link:hover {
+    color: var(--accent-color);
+}
+
+.author-thumbnail {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.author-name {
     font-weight: 600;
+}
+
+.post-featured-image {
+    width: 100%;
+    max-width: 700px;
+    max-height: 400px;
+    margin: 0 auto 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.post-featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.post-body {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+}
+
+.post-body p {
+    margin-bottom: 20px;
+}
+
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag {
+    background-color: var(--secondary-color);
+    padding: 5px 15px;
+    border-radius: 20px;
     font-size: 14px;
     transition: all 0.3s ease;
 }
 
-.author-word-toggle:hover {
-    background-color: var(--light-gray);
-}
-
-.author-word-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    background-color: var(--secondary-color);
-    border-radius: 0 0 4px 4px;
-    margin-top: -5px;
-    padding: 0 15px;
-}
-
-.author-word-content p {
-    padding: 15px 0;
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-.arrow {
-    transition: transform 0.3s ease;
-}
-
-/* Úprava karuselu autorů pro 5 autorů místo 3 */
-.carousel-slide {
-    min-width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.author-card {
-    width: 180px;
+.tag:hover {
+    background-color: var(--accent-color);
+    color: white;
     cursor: pointer;
-    transition: transform 0.3s ease;
-    margin-bottom: 20px;
-}
-
-/* Styly pro stránku s textem */
-.author-word-box {
-    margin: 30px 0;
-    border-top: 1px solid var(--light-gray);
-    padding-top: 20px;
-}
-
-/* Úprava rozložení příspěvků na homepage */
-.posts-grid-home {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-}
-
-.posts-grid-home .post-card {
-    flex: 0 0 calc(33.333% - 14px);
-    max-width: calc(33.333% - 14px);
-}
-
-/* Úprava rozložení příspěvků na stránce autora */
-.author-posts .posts-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    justify-content: flex-start;
-}
-
-.author-posts .post-card {
-    flex: 0 0 calc(33.333% - 20px);
-    max-width: calc(33.333% - 20px);
-    margin-bottom: 20px;
 }
 
 /* Stránka se všemi autory */
@@ -1045,57 +865,6 @@ ul {
     margin-bottom: 30px;
 }
 
-@media (max-width: 992px) {
-    .posts-grid-home .post-card,
-    .author-posts .post-card,
-    .all-posts-grid .post-card {
-        flex: 0 0 calc(50% - 10px);
-        max-width: calc(50% - 10px);
-    }
-    
-    .authors-grid .author-card {
-        width: 200px;
-    }
-}
-
-@media (max-width: 768px) {
-    .all-authors-page,
-    .all-posts-page {
-        margin-top: 120px;
-    }
-    
-    .author-card {
-        width: 160px;
-    }
-    
-    .authors-grid {
-        justify-content: center;
-    }
-}
-
-@media (max-width: 576px) {
-    .posts-grid-home .post-card,
-    .author-posts .post-card,
-    .all-posts-grid .post-card {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-    
-    .carousel-slide {
-    min-width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.author-card {
-    width: 220px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    margin-bottom: 20px;
-}
-
 /* Kategorie a autor kategorie stránky */
 .category-page,
 .author-category-page {
@@ -1119,50 +888,319 @@ ul {
     margin-bottom: 30px;
 }
 
-/* Štítky */
-.post-tags {
+/* Autor detail */
+.author-page {
+    margin-top: 140px;
+    padding-bottom: 80px;
+}
+
+.author-header {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    gap: 50px;
+    margin-bottom: 60px;
+    align-items: center;
 }
 
-.tag {
+.author-image-large {
+    flex: 0 0 300px;
+    height: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.author-image-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.author-info {
+    flex: 1;
+}
+
+.author-info .author-name {
+    font-size: 42px;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    margin-bottom: 15px;
+}
+
+.author-info .author-genre {
+    font-size: 20px;
+    color: var(--medium-gray);
+    margin-bottom: 25px;
+}
+
+.author-social {
+    display: flex;
+    gap: 15px;
+}
+
+.social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     background-color: var(--secondary-color);
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.3s ease;
-    text-decoration: none;
 }
 
-.tag:hover {
+.social-link:hover {
     background-color: var(--accent-color);
-    color: white;
-    cursor: pointer;
+}
+
+.social-link img {
+    width: 20px;
+    height: 20px;
+}
+
+.author-bio {
+    margin-bottom: 60px;
+}
+
+.author-bio .section-title {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.author-bio .section-title::after {
+    left: 0;
+    transform: none;
+}
+
+.bio-content {
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.bio-content p {
+    margin-bottom: 20px;
+}
+
+.author-posts {
+    margin-bottom: 60px;
+}
+
+.author-posts .section-title {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.author-posts .section-title::after {
+    left: 0;
+    transform: none;
+}
+
+/* Responsivní design */
+@media (max-width: 1200px) {
+    .hero-title {
+        font-size: 48px;
+    }
+    
+    .featured-post {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-post-image {
+        min-height: 300px;
+    }
 }
 
 @media (max-width: 992px) {
+    .main-nav {
+        display: none;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .hero-title {
+        font-size: 42px;
+    }
+    
+    .hero-subtitle {
+        font-size: 20px;
+    }
+    
+    .post-card {
+        max-width: 48%;
+    }
+    
+    .posts-grid-home .post-card,
+    .author-posts .post-card,
+    .all-posts-grid .post-card,
     .category-posts-grid .post-card,
     .author-category-posts-grid .post-card {
         flex: 0 0 calc(50% - 15px);
         max-width: calc(50% - 15px);
     }
+    
+    .authors-grid .author-card {
+        width: 200px;
+    }
+    
+    .author-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+    }
+    
+    .author-image-large {
+        flex: 0 0 250px;
+        height: 250px;
+    }
+    
+    .posts-slide .post-card {
+        flex: 0 0 calc(50% - 10px);
+        max-width: calc(50% - 10px);
+    }
+    
+    .carousel-slide {
+        flex-wrap: wrap;
+    }
+    
+    .author-card {
+        width: 250px;
+        margin-bottom: 20px;
+    }
 }
 
 @media (max-width: 768px) {
+    .hero {
+        height: 70vh;
+    }
+    
+    .hero-title {
+        font-size: 36px;
+    }
+    
+    .hero-subtitle {
+        font-size: 18px;
+    }
+    
+    .section-title {
+        font-size: 30px;
+    }
+    
+    .featured-post-content {
+        padding: 30px;
+    }
+    
+    .post-title {
+        font-size: 24px;
+    }
+    
+    .post-page,
+    .all-authors-page,
+    .all-posts-page,
     .category-page,
-    .author-category-page {
+    .author-category-page,
+    .author-page {
         margin-top: 120px;
+    }
+    
+    .author-card {
+        width: 160px;
+    }
+    
+    .authors-grid {
+        justify-content: center;
+    }
+    
+    .post-header .post-title {
+        font-size: 30px;
     }
 }
 
 @media (max-width: 576px) {
+    .hero-content {
+        bottom: 50px;
+    }
+    
+    .hero-title {
+        font-size: 28px;
+    }
+    
+    .hero-subtitle {
+        font-size: 16px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+    }
+    
+    .post-card {
+        max-width: 100%;
+    }
+    
+    .posts-grid-home .post-card,
+    .author-posts .post-card,
+    .all-posts-grid .post-card,
     .category-posts-grid .post-card,
     .author-category-posts-grid .post-card {
         flex: 0 0 100%;
         max-width: 100%;
     }
+    
+    .carousel-slide {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .author-card {
+        width: 280px;
+    }
+    
+    .post-featured-image {
+        max-height: 300px;
+    }
+    
+    .post-body {
+        font-size: 16px;
+    }
+    
+    .posts-slide .post-card {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .comment {
+        flex-direction: column;
+    }
+    
+    .comment-avatar {
+        margin-bottom: 15px;
+        margin-right: 0;
+    }
+    
+    .author-info .author-name {
+        font-size: 32px;
+    }
 }
+
+/* Zabránit označování obsahu při klikání na navigační prvky */
+.carousel-arrow,
+.authors-carousel,
+.posts-carousel,
+.author-card,
+.post-card,
+.featured-post,
+.posts-grid {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
 /* Adjust arrow positioning for author carousel */
 .authors-carousel .carousel-arrow {
     transition: left 0.3s ease, right 0.3s ease;
@@ -1178,5 +1216,211 @@ ul {
     background-color: white;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     margin-bottom: 40px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.featured-post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Komentáře */
+.post-comments {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.post-comments .section-title {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.post-comments .section-title::after {
+    left: 0;
+    transform: none;
+}
+
+.comments-list {
+    margin-bottom: 40px;
+}
+
+.comment {
+    display: flex;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.comment:last-child {
+    border-bottom: none;
+}
+
+.comment-avatar {
+    flex: 0 0 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.comment-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-meta {
+    margin-bottom: 10px;
+}
+
+.comment-author {
+    font-weight: 600;
+    margin-right: 15px;
+}
+
+.comment-date {
+    color: var(--medium-gray);
+    font-size: 14px;
+}
+
+.comment-text {
+    line-height: 1.6;
+}
+
+/* Formulář pro komentáře */
+.comment-form {
+    background-color: var(--secondary-color);
+    padding: 30px;
+    border-radius: 8px;
+}
+
+.comment-form h3 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-family: var(--font-heading);
+}
+
+.comment-form .form-group {
+    margin-bottom: 20px;
+}
+
+.comment-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.comment-form input,
+.comment-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--light-gray);
+    border-radius: 4px;
+    font-family: var(--font-main);
+    font-size: 16px;
+}
+
+.comment-form textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.submit-button {
+    padding: 12px 30px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font-main);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: var(--primary-color);
+}
+
+/* Sdílení příspěvku */
+.post-share {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.share-link {
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.share-link.facebook {
+    background-color: #3b5998;
+    color: white;
+}
+
+.share-link.twitter {
+    background-color: #1da1f2;
+    color: white;
+}
+
+.share-link.email {
+    background-color: var(--medium-gray);
+    color: white;
+}
+
+.share-link:hover {
+    opacity: 0.8;
+}
+
+/* Související příspěvky */
+.related-posts {
+    margin-bottom: 60px;
+}
+
+.related-posts .section-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Patička příspěvku */
+.post-footer {
+    border-top: 1px solid var(--light-gray);
+    padding-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Smooth animations and hover effects */
+.post-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Smooth animation for carousel indicators */
+.indicator-dot {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Additional focus states for accessibility */
+.read-more:focus,
+.view-all-button:focus,
+.author-card:focus,
+.carousel-arrow:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}

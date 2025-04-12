@@ -33,13 +33,15 @@ function loadPostDetails() {
     const authorLinkElement = document.getElementById('authorLink');
     const postImageElement = document.getElementById('postImage');
     const postContentElement = document.getElementById('postContent');
+    const authorWordElement = document.getElementById('authorWord');
     
     if (postDateElement) postDateElement.textContent = post.displayDate || post.date;
     if (postCategoryElement) postCategoryElement.textContent = post.category;
     if (postTitleElement) postTitleElement.textContent = post.title;
     if (authorNameElement) authorNameElement.textContent = post.author;
-    if (postImageElement) postImageElement.src = post.image;
-    if (postContentElement) postContentElement.innerHTML = post.content;
+    if (postImageElement && post.image) postImageElement.src = post.image;
+    if (postContentElement && post.content) postContentElement.innerHTML = formatContent(post.content);
+    if (authorWordElement) authorWordElement.textContent = "Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.";
     
     // Set up author link and image
     if (authorNameElement && authorImageElement && authorLinkElement) {
@@ -48,16 +50,50 @@ function loadPostDetails() {
         
         if (author) {
             authorImageElement.src = author.image;
-            // FIX #5: Update author link to redirect to author page
             authorLinkElement.href = `author.html?id=${author.id}`;
         }
     }
     
+    // Přidáme tagy
+    const tagsContainer = document.querySelector('.post-tags');
+    if (tagsContainer && post.category) {
+        tagsContainer.innerHTML = `
+            <a href="category.html?category=${encodeURIComponent(post.category)}" class="tag">${post.category}</a>
+            <a href="author-category.html?author=${encodeURIComponent(post.author)}" class="tag">${post.author}</a>
+        `;
+    }
+    
     // Load related posts (other posts by the same author)
     loadRelatedPosts(post.author, post.id);
+    
+    // Inicializace tlačítka slovo autora na stránce příspěvku
+    setTimeout(() => {
+        initAuthorWordToggle();
+    }, 100);
+    
+    // Inicializace sdílecích tlačítek
+    initShareButtons();
 }
 
-// FIX #4: Show only three older posts by the same author
+// Pomocná funkce pro formátování obsahu
+function formatContent(content) {
+    if (!content) return '';
+    
+    // Rozdělení obsahu na odstavce
+    const paragraphs = content.split('\n');
+    let formattedContent = '';
+    
+    // Vytvoření HTML pro každý odstavec
+    paragraphs.forEach(paragraph => {
+        if (paragraph.trim() !== '') {
+            formattedContent += `<p>${paragraph}</p>`;
+        }
+    });
+    
+    return formattedContent;
+}
+
+// Funkce pro načtení souvisejících příspěvků
 function loadRelatedPosts(authorName, currentPostId) {
     const postsGrid = document.querySelector('.related-posts .posts-grid');
     if (!postsGrid) return;
@@ -107,6 +143,11 @@ function loadRelatedPosts(authorName, currentPostId) {
     
     // Vložíme HTML do kontejneru
     postsGrid.innerHTML = postsHTML;
+    
+    // Po vložení HTML do souvisejících příspěvků inicializujeme i jejich tlačítka
+    setTimeout(() => {
+        initAuthorWordToggle();
+    }, 100);
 }
 
 // Initialize the page after DOM content is loaded
@@ -114,41 +155,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load post details
     loadPostDetails();
     
-    // Initialize toggle for author's word section
-    initAuthorWordToggle();
-    
     // Initialize mobile menu
     initMobileMenu();
 });
 
 // Initialize author word toggle functionality
 function initAuthorWordToggle() {
-    const toggleButton = document.querySelector('.author-word-toggle');
+    const toggleButtons = document.querySelectorAll('.author-word-toggle');
     
-    if (toggleButton) {
-        toggleButton.addEventListener('click', function() {
-            const content = this.nextElementSibling;
-            const arrow = this.querySelector('.arrow');
-            
-            if(content.style.maxHeight) {
-                content.style.maxHeight = null;
-                arrow.textContent = '▼';
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-                arrow.textContent = '▲';
-            }
-        });
+    if (toggleButtons.length === 0) {
+        console.log('Žádná tlačítka "Slovo autora" nebyla nalezena');
+        return;
     }
     
-    // Initialize toggles for related posts if any
-    const relatedToggleButtons = document.querySelectorAll('.related-posts .author-word-toggle');
-    
-    relatedToggleButtons.forEach(button => {
-        button.addEventListener('click', function() {
+    toggleButtons.forEach(button => {
+        // Odstraníme všechny existující event listenery
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        
+        // Přidáme nový event listener
+        newButton.addEventListener('click', function() {
             const content = this.nextElementSibling;
             const arrow = this.querySelector('.arrow');
             
-            if(content.style.maxHeight) {
+            if (!content || !arrow) {
+                console.error('Chybí element pro obsah nebo šipku');
+                return;
+            }
+            
+            if (content.style.maxHeight) {
                 content.style.maxHeight = null;
                 arrow.textContent = '▼';
             } else {
@@ -175,5 +210,34 @@ function initMobileMenu() {
             mobileMenu.classList.remove('active');
             setTimeout(() => mobileMenu.style.display = 'none', 500);
         });
+    }
+}
+
+// Funkce pro inicializaci tlačítek pro sdílení
+function initShareButtons() {
+    // Získáme aktuální URL stránky
+    const currentUrl = window.location.href;
+    
+    // Získáme titulek stránky
+    const pageTitle = document.title;
+    
+    // Získáme tlačítka pro sdílení
+    const facebookShare = document.querySelector('.share-link.facebook');
+    const twitterShare = document.querySelector('.share-link.twitter');
+    const emailShare = document.querySelector('.share-link.email');
+    
+    // Nastavíme odkazy pro sdílení
+    if (facebookShare) {
+        facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+        facebookShare.target = '_blank';
+    }
+    
+    if (twitterShare) {
+        twitterShare.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(pageTitle)}`;
+        twitterShare.target = '_blank';
+    }
+    
+    if (emailShare) {
+        emailShare.href = `mailto:?subject=${encodeURIComponent(pageTitle)}&body=${encodeURIComponent('Podívej se na tento zajímavý článek: ' + currentUrl)}`;
     }
 }

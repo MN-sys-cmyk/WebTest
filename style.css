@@ -1390,3 +1390,64 @@ header .header-bottom {
 .indicator-dot {
     outline: none !important;
 }
+
+/* Důležité opravy pro funkčnost "Slovo autora" */
+.author-word-toggle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 10px 15px !important;
+    margin-top: 15px !important;
+    background-color: #f1f1f1 !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease !important;
+    width: auto !important;
+    box-sizing: border-box !important;
+}
+
+.author-word-toggle:hover {
+    background-color: #e5e5e5 !important;
+}
+
+.author-word-content {
+    max-height: 0 !important;
+    overflow: hidden !important;
+    transition: max-height 0.3s ease-out !important;
+    background-color: #f1f1f1 !important;
+    border-radius: 0 0 4px 4px !important;
+    margin-top: -5px !important;
+    padding: 0 15px !important;
+    box-sizing: border-box !important;
+}
+
+.author-word-content p {
+    padding: 15px 0 !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+}
+
+/* Zabezpečení, že se rozbalí pouze když je kliknuto */
+.author-word-content.active {
+    max-height: 500px !important; /* Dostatečně velká hodnota pro jakýkoliv obsah */
+}
+
+/* Oprava pro post.html */
+.post-page .author-word-box {
+    margin: 30px 0 !important;
+    padding-top: 20px !important;
+    width: 100% !important;
+}
+
+.post-page .author-word-box .author-word-toggle,
+.post-page .author-word-box .author-word-content {
+    width: 100% !important;
+}
+
+/* Zaručíme, že sociální odkazy ve footeru příspěvku zůstanou viditelné */
+.post-footer .post-share .share-link {
+    display: inline-block !important;
+}

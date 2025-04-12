@@ -111,6 +111,8 @@ function adjustAuthorsCarouselArrows() {
         }
     }
 }
+
+// UPRAVENO: Generování karuselu příspěvků pro plynulé přecházení
 function generatePostsCarousel() {
     const postsContainer = document.getElementById('posts-container');
     const indicatorContainer = document.getElementById('posts-indicator');
@@ -155,6 +157,13 @@ function generatePostsCarousel() {
         </div>
     `;
     
+    // Vytvoříme div pro track příspěvků (podobně jako u autorů)
+    const postsTrack = document.createElement('div');
+    postsTrack.className = 'posts-carousel-track';
+    postsTrack.style.display = 'flex';
+    postsTrack.style.transition = 'transform 0.5s ease';
+    postsContainer.appendChild(postsTrack);
+    
     // Zbývající příspěvky rozdělíme do slidů po 3
     const remainingPosts = sortedPosts.slice(1);
     const postsPerSlide = 3;
@@ -167,40 +176,47 @@ function generatePostsCarousel() {
         
         // Vytvoříme nový slide
         const slide = document.createElement('div');
-        slide.className = 'posts-grid posts-grid-home';
-        if (i !== 0) {
-            slide.style.display = 'none'; // Skryjeme všechny slidey kromě prvního
-        }
+        slide.className = 'posts-slide';
+        slide.style.minWidth = '100%';
+        slide.style.display = 'flex';
+        slide.style.flexWrap = 'wrap';
+        slide.style.justifyContent = 'space-between';
+        slide.style.gap = '20px';
         
         // Přidáme příspěvky do slidu
         postsForThisSlide.forEach(post => {
-            slide.innerHTML += `
-                <div class="post-card">
-                    <div class="post-card-image" style="background-image: url('${post.image}');"></div>
-                    <div class="post-card-content">
-                        <div class="post-meta">
-                            <span class="post-date">${post.displayDate || post.date}</span>
-                            <span class="post-category">${post.category}</span>
-                        </div>
-                        <h3 class="post-title">${post.title}</h3>
-                        <p class="post-excerpt">${post.excerpt}</p>
-                        <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
-                        <div class="author-word-toggle">
-                            <span>Slovo autora</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="author-word-content">
-                            <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
-                        </div>
+            const postCard = document.createElement('div');
+            postCard.className = 'post-card';
+            postCard.style.flex = '0 0 calc(33.333% - 14px)';
+            postCard.style.maxWidth = 'calc(33.333% - 14px)';
+            
+            postCard.innerHTML = `
+                <div class="post-card-image" style="background-image: url('${post.image}');"></div>
+                <div class="post-card-content">
+                    <div class="post-meta">
+                        <span class="post-date">${post.displayDate || post.date}</span>
+                        <span class="post-category">${post.category}</span>
+                    </div>
+                    <h3 class="post-title">${post.title}</h3>
+                    <p class="post-excerpt">${post.excerpt}</p>
+                    <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
+                    <div class="author-word-toggle">
+                        <span>Slovo autora</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="author-word-content">
+                        <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
                     </div>
                 </div>
             `;
+            
+            slide.appendChild(postCard);
         });
         
-        // Přidáme slide do karuselu
-        postsContainer.appendChild(slide);
+        // Přidáme slide do tracku
+        postsTrack.appendChild(slide);
         
-        // Přidáme indikátor, pokud kontejner existuje
+        // Přidáme indikátor
         if (indicatorContainer) {
             const dot = document.createElement('div');
             dot.className = 'indicator-dot' + (i === 0 ? ' active' : '');
@@ -209,7 +225,47 @@ function generatePostsCarousel() {
         }
     }
     
+    // Přizpůsobíme responsivní design pro mobilní zařízení
+    adjustPostsCarouselResponsive(postsTrack);
+    
     return slidesNeeded;
+}
+
+// Funkce pro přizpůsobení responsivního designu karuselu příspěvků
+function adjustPostsCarouselResponsive(postsTrack) {
+    if (!postsTrack) return;
+    
+    const postCards = postsTrack.querySelectorAll('.post-card');
+    
+    const adjustLayout = () => {
+        const viewportWidth = window.innerWidth;
+        
+        if (viewportWidth <= 992 && viewportWidth > 576) {
+            // Pro tablety
+            postCards.forEach(card => {
+                card.style.flex = '0 0 calc(50% - 10px)';
+                card.style.maxWidth = 'calc(50% - 10px)';
+            });
+        } else if (viewportWidth <= 576) {
+            // Pro mobilní telefony
+            postCards.forEach(card => {
+                card.style.flex = '0 0 100%';
+                card.style.maxWidth = '100%';
+            });
+        } else {
+            // Pro desktopy
+            postCards.forEach(card => {
+                card.style.flex = '0 0 calc(33.333% - 14px)';
+                card.style.maxWidth = 'calc(33.333% - 14px)';
+            });
+        }
+    };
+    
+    // Nastavíme počáteční rozložení
+    adjustLayout();
+    
+    // Přidáme posluchač události pro změnu velikosti okna
+    window.addEventListener('resize', adjustLayout);
 }
 
 // Inicializace karuselu autorů
@@ -230,10 +286,13 @@ function initAuthorsCarousel() {
     }
 }
 
-// Inicializace karuselu příspěvků
+// UPRAVENO: Inicializace karuselu příspěvků pro plynulé přecházení
 function initPostsCarousel() {
-    // Zjistíme počet slidů s příspěvky (počet .posts-grid-home elementů)
-    const postSlides = document.querySelectorAll('.posts-grid-home');
+    // Zjistíme počet slidů s příspěvky
+    const postsTrack = document.querySelector('.posts-carousel-track');
+    if (!postsTrack) return;
+    
+    const postSlides = postsTrack.querySelectorAll('.posts-slide');
     postSlidesCount = postSlides.length;
     
     // Pokud nemáme dostatek slidů, není třeba karusel
@@ -285,7 +344,7 @@ function moveAuthorsTo(index) {
     });
 }
 
-// Funkce pro pohyb karuselu příspěvků na konkrétní slide
+// UPRAVENO: Funkce pro pohyb karuselu příspěvků na konkrétní slide (plynulý pohyb)
 function movePostsTo(index) {
     // Zajištění nekonečné cykličnosti
     if (index < 0) {
@@ -297,18 +356,11 @@ function movePostsTo(index) {
     // Aktualizace aktuálního indexu
     currentPostSlide = index;
     
-    // Získáme všechny posty v karuselu (ne featured post, který zůstává stabilní)
-    const postGroups = document.querySelectorAll('.posts-grid-home');
-    if (!postGroups.length) return;
-    
-    // Skryjeme všechny skupiny postů
-    postGroups.forEach((group, i) => {
-        if (i === currentPostSlide) {
-            group.style.display = 'flex';
-        } else {
-            group.style.display = 'none';
-        }
-    });
+    // Pohyb karuselu příspěvků podobně jako u autorů
+    const track = document.querySelector('.posts-carousel-track');
+    if (track) {
+        track.style.transform = `translateX(-${currentPostSlide * 100}%)`;
+    }
     
     // Aktualizace indikátorů
     const dots = document.querySelectorAll('#posts-indicator .indicator-dot');

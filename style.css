@@ -1193,3 +1193,72 @@ ul {
 .indicator-dot {
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
+
+/* 1. Důkladnější skrytí spodní části hlavičky */
+.header-bottom,
+header .header-bottom {
+    display: none !important; 
+    height: 0 !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Upravení paddingu pro header, aby tam nebyl prázdný prostor */
+.header, header {
+    padding-bottom: 0 !important;
+}
+
+/* 2. Důkladnější skrytí sociálních ikon */
+.author-social,
+.author-header .author-social,
+.author-info .author-social {
+    display: none !important;
+    height: 0 !important;
+    visibility: hidden !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Zastřešující oprava pro všechny sociální ikony */
+.social-link, 
+.social-icon,
+[class*="social-"] {
+    display: none !important;
+}
+
+/* 3. Zabránění označování textu a obsahu v karuselech */
+.carousel-container,
+.carousel-track,
+.carousel-slide,
+.posts-carousel,
+.posts-carousel-track,
+.posts-slide,
+.carousel-arrow,
+.indicator-dot,
+.author-card,
+.post-card,
+.featured-post,
+.read-more,
+.author-word-toggle,
+.post-card-image,
+.author-image-container,
+.author-image {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+}
+
+/* Zabránění zobrazení modrého ohraničení (outline) při kliknutí */
+.carousel-container *,
+.posts-carousel *,
+.author-card,
+.post-card,
+.carousel-arrow,
+.indicator-dot {
+    outline: none !important;
+}

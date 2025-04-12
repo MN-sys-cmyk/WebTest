@@ -66,10 +66,10 @@ function loadPostDetails() {
     // Load related posts (other posts by the same author)
     loadRelatedPosts(post.author, post.id);
     
-    // Inicializace tlačítka slovo autora na stránce příspěvku
-    setTimeout(() => {
-        initAuthorWordToggle();
-    }, 100);
+    // Inicializace tlačítka slovo autora na stránce příspěvku - použijeme setTimeout pro lepší načasování
+    setTimeout(function() {
+        setupAuthorWordToggle();
+    }, 300);
     
     // Inicializace sdílecích tlačítek
     initShareButtons();
@@ -145,9 +145,46 @@ function loadRelatedPosts(authorName, currentPostId) {
     postsGrid.innerHTML = postsHTML;
     
     // Po vložení HTML do souvisejících příspěvků inicializujeme i jejich tlačítka
-    setTimeout(() => {
-        initAuthorWordToggle();
-    }, 100);
+    setTimeout(function() {
+        setupAuthorWordToggle();
+    }, 300);
+}
+
+// Přepracovaná direktní funkce pro nastavení "Slovo autora"
+function setupAuthorWordToggle() {
+    // Najít všechna tlačítka "Slovo autora"
+    const toggles = document.querySelectorAll('.author-word-toggle');
+    
+    // Pro každé tlačítko nastavíme událost kliknutí
+    toggles.forEach(toggle => {
+        // Odstraníme existující posluchače událostí pomocí klonování a nahrazení prvku
+        const newToggle = toggle.cloneNode(true);
+        toggle.parentNode.replaceChild(newToggle, toggle);
+        
+        // Přidáme nový posluchač události
+        newToggle.addEventListener('click', function() {
+            // Najdeme související obsah - prvek hned za tlačítkem
+            const content = this.nextElementSibling;
+            // Najdeme šipku uvnitř tlačítka
+            const arrow = this.querySelector('.arrow');
+            
+            // Pokud jsou prvky nalezeny
+            if (content && arrow) {
+                // Přepínáme podle aktuálního stavu
+                if (content.style.maxHeight) {
+                    // Pokud je obsah zobrazen, skryjeme ho
+                    content.style.maxHeight = null;
+                    arrow.textContent = '▼';
+                } else {
+                    // Pokud je obsah skryt, zobrazíme ho
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    arrow.textContent = '▲';
+                }
+            }
+        });
+    });
+    
+    console.log('Nastaveno ' + toggles.length + ' tlačítek "Slovo autora"');
 }
 
 // Initialize the page after DOM content is loaded
@@ -157,42 +194,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize mobile menu
     initMobileMenu();
+    
+    // Přidáme přímé nastavení po načtení DOM
+    setTimeout(function() {
+        setupAuthorWordToggle();
+    }, 500);
 });
-
-// Initialize author word toggle functionality
-function initAuthorWordToggle() {
-    const toggleButtons = document.querySelectorAll('.author-word-toggle');
-    
-    if (toggleButtons.length === 0) {
-        console.log('Žádná tlačítka "Slovo autora" nebyla nalezena');
-        return;
-    }
-    
-    toggleButtons.forEach(button => {
-        // Odstraníme všechny existující event listenery
-        const newButton = button.cloneNode(true);
-        button.parentNode.replaceChild(newButton, button);
-        
-        // Přidáme nový event listener
-        newButton.addEventListener('click', function() {
-            const content = this.nextElementSibling;
-            const arrow = this.querySelector('.arrow');
-            
-            if (!content || !arrow) {
-                console.error('Chybí element pro obsah nebo šipku');
-                return;
-            }
-            
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-                arrow.textContent = '▼';
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-                arrow.textContent = '▲';
-            }
-        });
-    });
-}
 
 // Initialize mobile menu
 function initMobileMenu() {

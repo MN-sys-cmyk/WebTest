@@ -75,23 +75,14 @@ ul {
     color: var(--accent-color);
 }
 
+/* Skryjeme jazykový přepínač */
 .language-switcher {
-    display: flex;
-    gap: 10px;
+    display: none;
 }
 
-.language-link {
-    text-transform: uppercase;
-    font-size: 14px;
-    padding: 5px;
-}
-
-.language-link.active, .language-link:hover {
-    color: var(--accent-color);
-}
-
+/* Odstraníme spodní panel pod hlavičkou */
 .header-bottom {
-    padding: 15px 0;
+    display: none;
 }
 
 .main-nav ul {
@@ -389,6 +380,12 @@ ul {
     margin-bottom: 50px;
     background-color: white;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
 .featured-post-image {
@@ -470,6 +467,12 @@ ul {
     background-color: white;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
 .post-card-image {
@@ -932,9 +935,9 @@ ul {
     margin-bottom: 25px;
 }
 
+/* Skryjeme sociální ikony na stránce autora */
 .author-social {
-    display: flex;
-    gap: 15px;
+    display: none;
 }
 
 .social-link {
@@ -994,234 +997,19 @@ ul {
     transform: none;
 }
 
-/* Responsivní design */
-@media (max-width: 1200px) {
-    .hero-title {
-        font-size: 48px;
-    }
-    
-    .featured-post {
-        grid-template-columns: 1fr;
-    }
-    
-    .featured-post-image {
-        min-height: 300px;
-    }
+/* Upravené CSS pro karty příspěvků na stránce autora */
+.author-posts .posts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: flex-start;
 }
 
-@media (max-width: 992px) {
-    .main-nav {
-        display: none;
-    }
-    
-    .mobile-menu-toggle {
-        display: block;
-    }
-    
-    .hero-title {
-        font-size: 42px;
-    }
-    
-    .hero-subtitle {
-        font-size: 20px;
-    }
-    
-    .post-card {
-        max-width: 48%;
-    }
-    
-    .posts-grid-home .post-card,
-    .author-posts .post-card,
-    .all-posts-grid .post-card,
-    .category-posts-grid .post-card,
-    .author-category-posts-grid .post-card {
-        flex: 0 0 calc(50% - 15px);
-        max-width: calc(50% - 15px);
-    }
-    
-    .authors-grid .author-card {
-        width: 200px;
-    }
-    
-    .author-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 30px;
-    }
-    
-    .author-image-large {
-        flex: 0 0 250px;
-        height: 250px;
-    }
-    
-    .posts-slide .post-card {
-        flex: 0 0 calc(50% - 10px);
-        max-width: calc(50% - 10px);
-    }
-    
-    .carousel-slide {
-        flex-wrap: wrap;
-    }
-    
-    .author-card {
-        width: 250px;
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero {
-        height: 70vh;
-    }
-    
-    .hero-title {
-        font-size: 36px;
-    }
-    
-    .hero-subtitle {
-        font-size: 18px;
-    }
-    
-    .section-title {
-        font-size: 30px;
-    }
-    
-    .featured-post-content {
-        padding: 30px;
-    }
-    
-    .post-title {
-        font-size: 24px;
-    }
-    
-    .post-page,
-    .all-authors-page,
-    .all-posts-page,
-    .category-page,
-    .author-category-page,
-    .author-page {
-        margin-top: 120px;
-    }
-    
-    .author-card {
-        width: 160px;
-    }
-    
-    .authors-grid {
-        justify-content: center;
-    }
-    
-    .post-header .post-title {
-        font-size: 30px;
-    }
-}
-
-@media (max-width: 576px) {
-    .hero-content {
-        bottom: 50px;
-    }
-    
-    .hero-title {
-        font-size: 28px;
-    }
-    
-    .hero-subtitle {
-        font-size: 16px;
-    }
-    
-    .section-title {
-        font-size: 24px;
-    }
-    
-    .post-card {
-        max-width: 100%;
-    }
-    
-    .posts-grid-home .post-card,
-    .author-posts .post-card,
-    .all-posts-grid .post-card,
-    .category-posts-grid .post-card,
-    .author-category-posts-grid .post-card {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-    
-    .carousel-slide {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .author-card {
-        width: 280px;
-    }
-    
-    .post-featured-image {
-        max-height: 300px;
-    }
-    
-    .post-body {
-        font-size: 16px;
-    }
-    
-    .posts-slide .post-card {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-    
-    .post-footer {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .comment {
-        flex-direction: column;
-    }
-    
-    .comment-avatar {
-        margin-bottom: 15px;
-        margin-right: 0;
-    }
-    
-    .author-info .author-name {
-        font-size: 32px;
-    }
-}
-
-/* Zabránit označování obsahu při klikání na navigační prvky */
-.carousel-arrow,
-.authors-carousel,
-.posts-carousel,
-.author-card,
-.post-card,
-.featured-post,
-.posts-grid {
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
-/* Adjust arrow positioning for author carousel */
-.authors-carousel .carousel-arrow {
-    transition: left 0.3s ease, right 0.3s ease;
-}
-
-/* Separate featured post from carousel */
-#featured-post-container {
-    margin-bottom: 40px;
-}
-
-/* Make featured post stand out more */
-.featured-post {
-    background-color: white;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    margin-bottom: 40px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.featured-post:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+/* Základní nastavení pro karty - 3 vedle sebe */
+.author-page-card {
+    flex: 0 0 calc(33.333% - 20px);
+    max-width: calc(33.333% - 20px);
+    margin-bottom: 20px;
 }
 
 /* Komentáře */
@@ -1401,26 +1189,7 @@ ul {
     gap: 20px;
 }
 
-/* Smooth animations and hover effects */
-.post-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.post-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-
 /* Smooth animation for carousel indicators */
 .indicator-dot {
     transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-/* Additional focus states for accessibility */
-.read-more:focus,
-.view-all-button:focus,
-.author-card:focus,
-.carousel-arrow:focus {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
 }

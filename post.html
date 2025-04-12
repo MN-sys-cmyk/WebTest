@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Název příspěvku - LiterárníKomunita</title>
+    <title>Detail příspěvku - LiterárníKomunita</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=1.5">
-    <link rel="stylesheet" href="post.css?v=1.2">
+    <link rel="stylesheet" href="style.css?v=1.6">
+    <link rel="stylesheet" href="post.css?v=1.3">
 </head>
 <body>
     <header class="header">
@@ -28,20 +28,18 @@
         <button class="mobile-menu-close">✕</button>
     </div>
     
-    <!-- Hlavní obsah stránky příspěvku -->
     <main class="post-page">
         <div class="container">
-            <!-- Hlavička příspěvku -->
             <article class="post-content">
                 <header class="post-header">
                     <div class="post-meta">
-                        <span class="post-date" id="postDate">Datum</span>
+                        <span class="post-date" id="postDate">1. března 2025</span>
                         <span class="post-category" id="postCategory">Kategorie</span>
                     </div>
                     <h1 class="post-title" id="postTitle">Název příspěvku</h1>
                     <div class="post-author">
-                        <a href="#" id="authorLink" class="author-link">
-                            <img src="image5.png" alt="Autor" id="authorImage" class="author-thumbnail">
+                        <a href="#" class="author-link" id="authorLink">
+                            <img src="image5.png" alt="Jméno autora" class="author-thumbnail" id="authorImage">
                             <span class="author-name" id="authorName">Jméno autora</span>
                         </a>
                     </div>
@@ -52,7 +50,9 @@
                 </div>
                 
                 <div class="post-body" id="postContent">
-                    <p>Obsah příspěvku bude načten dynamicky z dat.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras porttitor metus quis tincidunt lobortis. Integer condimentum eros id metus bibendum, vel tempor odio faucibus. Praesent malesuada, nibh eget tincidunt ullamcorper, dolor elit feugiat neque, sed efficitur nulla nunc vel metus.</p>
+                    
+                    <p>Etiam sit amet est vel nisl interdum iaculis. Nulla facilisi. Aenean a justo justo. Donec at vestibulum nibh, vel ornare nisl. Donec euismod, justo vel elementum iaculis, nisl ipsum feugiat odio, non pulvinar est lectus at ligula. Morbi cursus orci ut elementum maximus. Fusce id vehicula neque.</p>
                 </div>
                 
                 <div class="author-word-box">
@@ -64,9 +64,20 @@
                         <p id="authorWord">Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
                     </div>
                 </div>
+                
+                <footer class="post-footer">
+                    <div class="post-tags">
+                        <!-- Tagy budou generovány dynamicky -->
+                    </div>
+                    
+                    <div class="post-share">
+                        <a href="#" class="share-link facebook">Facebook</a>
+                        <a href="#" class="share-link twitter">Twitter</a>
+                        <a href="#" class="share-link email">Email</a>
+                    </div>
+                </footer>
             </article>
             
-            <!-- Související příspěvky -->
             <section class="related-posts">
                 <h2 class="section-title">Související příspěvky</h2>
                 
@@ -74,11 +85,88 @@
                     <!-- Související příspěvky budou generovány dynamicky -->
                 </div>
             </section>
+            
+            <section class="post-comments">
+                <h2 class="section-title">Komentáře</h2>
+                
+                <div class="comments-list">
+                    <div class="comment">
+                        <div class="comment-avatar">
+                            <img src="avatar1.png" alt="Jan Novák">
+                        </div>
+                        <div class="comment-content">
+                            <div class="comment-meta">
+                                <span class="comment-author">Jan Novák</span>
+                                <span class="comment-date">28. února 2025</span>
+                            </div>
+                            <p class="comment-text">Fascinující text, který přináší nový pohled na současnou literaturu. Oceňuji autorův přístup k tématu a hloubku analýzy.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="comment">
+                        <div class="comment-avatar">
+                            <img src="avatar2.png" alt="Marie Svobodová">
+                        </div>
+                        <div class="comment-content">
+                            <div class="comment-meta">
+                                <span class="comment-author">Marie Svobodová</span>
+                                <span class="comment-date">27. února 2025</span>
+                            </div>
+                            <p class="comment-text">Velmi zajímavý text s originálním stylem. Těším se na další příspěvky tohoto autora!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <form class="comment-form">
+                    <h3>Přidat komentář</h3>
+                    
+                    <div class="form-group">
+                        <label for="name">Jméno</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comment">Komentář</label>
+                        <textarea id="comment" name="comment" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-button">Odeslat komentář</button>
+                </form>
+            </section>
         </div>
     </main>
     
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">Literární<span>Komunita</span></div>
+                    <p class="footer-description">Platforma propojující autory, čtenáře a všechny milovníky literatury. Objevujte současnou českou literární scénu.</p>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Kontakt</h3>
+                    <ul class="footer-links">
+                        <li>info@literarnikomunita.cz</li>
+                        <li>+420 123 456 789</li>
+                        <li>Literární 123, Praha 1</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                © 2025 LiterárníKomunita. Všechna práva vyhrazena.
+            </div>
+        </div>
+    </footer>
+    
     <script src="data.js?v=1.2"></script>
-    <script src="script.js?v=1.4"></script>
-    <script src="post.js?v=1.2"></script>
+    <script src="script.js?v=1.5"></script>
+    <script src="post.js?v=1.3"></script>
 </body>
 </html>

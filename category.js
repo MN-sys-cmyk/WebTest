@@ -88,5 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Načteme příspěvky podle kategorie
     loadCategoryPosts();
     
+    // Inicializace tlačítka slovo autora
+    initAuthorWordToggle();
+    
+    // Inicializace mobilního menu
+    initMobileMenu();
 });
-}

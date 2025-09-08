@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=1.6">
-    <link rel="stylesheet" href="post.css?v=1.3">
 </head>
 <body>
     <header class="header">
@@ -60,15 +59,11 @@
                         <span>Slovo autora</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div class="author-word-content">
-                        <p id="authorWord">Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
-                    </div>
                 </div>
                 
                 <footer class="post-footer">
                     <div class="post-tags">
-                        <!-- Tagy budou generovány dynamicky -->
-                    </div>
+                        </div>
                     
                     <div class="post-share">
                         <a href="#" class="share-link facebook">Facebook</a>
@@ -82,35 +77,19 @@
                 <h2 class="section-title">Související příspěvky</h2>
                 
                 <div class="posts-grid">
-                    <!-- Související příspěvky budou generovány dynamicky -->
-                </div>
+                    </div>
             </section>
         </div>
     </main>
-    
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div>
-                    <div class="footer-logo">Literární<span>Komunita</span></div>
-                    <p class="footer-description">Platforma propojující autory, čtenáře a všechny milovníky literatury. Objevujte současnou českou literární scénu.</p>
+
+    <div class="modal-overlay" id="authorWordModalOverlay">
+        <div class="modal" id="authorWordModal">
+            <button class="modal-close" id="modalCloseButton">✕</button>
+            <h3 class="modal-title">Slovo autora</h3>
+            <div class="modal-content" id="modalContent">
                 </div>
-                
-                <div>
-                    <h3 class="footer-heading">Kontakt</h3>
-                    <ul class="footer-links">
-                        <li>info@literarnikomunita.cz</li>
-                        <li>+420 123 456 789</li>
-                        <li>Literární 123, Praha 1</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                © 2025 LiterárníKomunita. Všechna práva vyhrazena.
-            </div>
         </div>
-    </footer>
+    </div>
     
     <script src="data.js?v=1.2"></script>
     <script src="script.js?v=1.5"></script>

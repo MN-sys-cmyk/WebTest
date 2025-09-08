@@ -41,4 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializace mobilního menu
     initMobileMenu();
+    
+    // Inicializace tlačítek pro "slovo autora"
+    initAuthorWordToggle();
 });

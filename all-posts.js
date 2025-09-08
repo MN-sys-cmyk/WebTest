@@ -40,7 +40,7 @@ function loadAllPosts() {
                             <span>Slovo autora</span>
                             <span class="arrow">▼</span>
                         </div>
-                        <div style="display: none;"><p id="authorWord">${post.excerpt}</p></div>
+                        <div style="display: none;"><p class="authorWordText">${post.excerpt}</p></div>
                     </div>
                 </div>
             </div>
@@ -49,8 +49,8 @@ function loadAllPosts() {
     
     // Vložíme HTML do kontejneru
     postsGrid.innerHTML = postsHTML;
-    
-    // Inicializace tlačítka slovo autora
+
+    // Inicializace tlačítek slovo autora
     initAuthorWordToggle();
 }
 

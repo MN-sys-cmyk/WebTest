@@ -204,9 +204,9 @@ const postsData = [
         date: "2024-03-23", // Standard ISO formát (YYYY-MM-DD)
         displayDate: "23. března 2024", // Pro zobrazení
         category: "Povídka",
-        excerpt: "Jan Novák v této ukázce z připravované knihy kombinuje autobiografické prvky s fikcí. Přemýšlí, jak citlivě pracovat s reálnými zážitky, aniž by narušil soukromí skutečných osob.",
+        excerpt: "asdasdasdasdddsdsdasdasxcyxasdca.",
         image: "book4.png",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras porttitor metus quis tincidunt lobortis. Integer condimentum eros id metus bibendum, vel tempor odio faucibus. Praesent malesuada, nibh eget tincidunt ullamcorper, dolor elit feugiat neque, sed efficitur nulla nunc vel metus. Etiam sit amet est vel nisl interdum iaculis. Nulla facilisi. Aenean a justo justo. Donec at vestibulum nibh, vel ornare nisl. Donec euismod, justo vel elementum iaculis, nisl ipsum feugiat odio, non pulvinar est lectus at ligula. Morbi cursus orci ut elementum maximus. Fusce id vehicula neque."
+        content: "Lorem isdsdsdsdpsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras porttitor metus quis tincidunt lobortis. Integer condimentum eros id metus bibendum, vel tempor odio faucibus. Praesent malesuada, nibh eget tincidunt ullamcorper, dolor elit feugiat neque, sed efficitur nulla nunc vel metus. Etiam sit amet est vel nisl interdum iaculis. Nulla facilisi. Aenean a justo justo. Donec at vestibulum nibh, vel ornare nisl. Donec euismod, justo vel elementum iaculis, nisl ipsum feugiat odio, non pulvinar est lectus at ligula. Morbi cursus orci ut elementum maximus. Fusce id vehicula neque."
     },
     {
         id: 2,

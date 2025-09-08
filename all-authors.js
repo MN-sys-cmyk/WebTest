@@ -39,25 +39,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Načteme všechny autory
     loadAllAuthors();
     
-    // Inicializace mobilního menu
-    initMobileMenu();
 });
-
-// Funkce pro inicializaci mobilního menu
-function initMobileMenu() {
-    const toggleBtn = document.querySelector('.mobile-menu-toggle');
-    const closeBtn = document.querySelector('.mobile-menu-close');
-    const mobileMenu = document.querySelector('.mobile-menu');
-    
-    if (toggleBtn && closeBtn && mobileMenu) {
-        toggleBtn.addEventListener('click', () => {
-            mobileMenu.style.display = 'block';
-            setTimeout(() => mobileMenu.classList.add('active'), 10);
-        });
-        
-        closeBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('active');
-            setTimeout(() => mobileMenu.style.display = 'none', 500);
-        });
-    }
-}

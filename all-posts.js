@@ -1,6 +1,5 @@
 // JavaScript pro stránku se všemi texty
 
-// Funkce pro načtení všech příspěvků
 function loadAllPosts() {
     if (typeof postsData === 'undefined') {
         console.error('Data příspěvků nejsou k dispozici');
@@ -45,7 +44,6 @@ function loadAllPosts() {
     
     postsGrid.innerHTML = postsHTML;
 
-    // Inicializace tlačítka slovo autora
     initAuthorWordToggle();
 }
 

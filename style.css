@@ -75,12 +75,10 @@ ul {
     color: var(--accent-color);
 }
 
-/* Skryjeme jazykový přepínač */
 .language-switcher {
     display: none;
 }
 
-/* Odstraníme spodní panel pod hlavičkou */
 .header-bottom {
     display: none;
 }
@@ -707,12 +705,6 @@ ul {
 }
 
 /* Styly pro stránku s textem */
-.author-word-box {
-    margin: 30px 0;
-    border-top: 1px solid var(--light-gray);
-    padding-top: 20px;
-}
-
 .post-page {
     margin-top: 140px;
     padding-bottom: 80px;
@@ -935,9 +927,9 @@ ul {
     margin-bottom: 25px;
 }
 
-/* Skryjeme sociální ikony na stránce autora */
 .author-social {
-    display: none;
+    display: flex;
+    gap: 15px;
 }
 
 .social-link {
@@ -960,6 +952,7 @@ ul {
     height: 20px;
 }
 
+/* Biografie autora */
 .author-bio {
     margin-bottom: 60px;
 }
@@ -983,6 +976,7 @@ ul {
     margin-bottom: 20px;
 }
 
+/* Nejnovější příspěvky autora */
 .author-posts {
     margin-bottom: 60px;
 }
@@ -1189,265 +1183,118 @@ ul {
     gap: 20px;
 }
 
-/* Smooth animation for carousel indicators */
-.indicator-dot {
-    transition: transform 0.3s ease, background-color 0.3s ease;
+/* Modal Window - New Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* 1. Důkladnější skrytí spodní části hlavičky */
-.header-bottom,
-header .header-bottom {
-    display: none !important; 
-    height: 0 !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: hidden !important;
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
 }
 
-/* Upravení paddingu pro header, aby tam nebyl prázdný prostor */
-.header, header {
-    padding-bottom: 0 !important;
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 2001;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -60%);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
 }
 
-/* 2. Důkladnější skrytí sociálních ikon */
-.author-social,
-.author-header .author-social,
-.author-info .author-social {
-    display: none !important;
-    height: 0 !important;
-    visibility: hidden !important;
-    overflow: hidden !important;
-    margin: 0 !important;
-    padding: 0 !important;
+.modal.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%);
 }
 
-/* Zastřešující oprava pro všechny sociální ikony */
-.social-link, 
-.social-icon,
-[class*="social-"] {
-    display: none !important;
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--medium-gray);
+    cursor: pointer;
+    background: none;
+    border: none;
+    line-height: 1;
 }
 
-/* 3. Zabránění označování textu a obsahu v karuselech */
-.carousel-container,
-.carousel-track,
-.carousel-slide,
-.posts-carousel,
-.posts-carousel-track,
-.posts-slide,
-.carousel-arrow,
-.indicator-dot,
-.author-card,
-.post-card,
-.featured-post,
-.read-more,
-.author-word-toggle,
-.post-card-image,
-.author-image-container,
-.author-image {
-    user-select: none !important;
-    -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
+.modal-close:hover {
+    color: var(--primary-color);
 }
 
-/* Zabránění zobrazení modrého ohraničení (outline) při kliknutí */
-.carousel-container *,
-.posts-carousel *,
-.author-card,
-.post-card,
-.carousel-arrow,
-.indicator-dot {
-    outline: none !important;
+.modal-content {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-top: 20px;
 }
 
-/* Opravy pro funkčnost "Slovo autora" */
-.author-word-toggle {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 10px 15px !important;
-    margin-top: 15px !important;
-    background-color: var(--secondary-color) !important;
-    border-radius: 4px !important;
-    cursor: pointer !important;
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    transition: all 0.3s ease !important;
-    width: auto !important;
-    box-sizing: border-box !important;
+.modal-title {
+    font-size: 24px;
+    font-family: var(--font-heading);
+    font-weight: 700;
 }
 
-.author-word-toggle:hover {
-    background-color: var(--light-gray) !important;
+
+/* Responsivní design */
+@media (max-width: 992px) {
+    .post-header .post-title {
+        font-size: 36px;
+    }
 }
 
-.author-word-content {
-    max-height: 0 !important;
-    overflow: hidden !important;
-    transition: max-height 0.3s ease-out !important;
-    background-color: var(--secondary-color) !important;
-    border-radius: 0 0 4px 4px !important;
-    margin-top: -5px !important;
-    padding: 0 15px !important;
-    width: auto !important;
-    box-sizing: border-box !important;
+@media (max-width: 768px) {
+    .post-featured-image {
+        max-height: 350px;
+    }
+    
+    .post-header .post-title {
+        font-size: 30px;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .comment {
+        flex-direction: column;
+    }
+    
+    .comment-avatar {
+        margin-bottom: 15px;
+        margin-right: 0;
+    }
 }
 
-.author-word-content p {
-    padding: 15px 0 !important;
-    margin: 0 !important;
-    font-size: 14px !important;
-    line-height: 1.6 !important;
-}
-
-/* Oprava pro hlavní stránku příspěvku */
-.post-page .author-word-box .author-word-toggle,
-.post-page .author-word-box .author-word-content {
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-.post-page .author-word-box {
-    margin: 30px 0 !important;
-    border-top: 1px solid var(--light-gray) !important;
-    padding-top: 20px !important;
-    width: 100% !important;
-}
-
-/* Důkladnější skrytí spodní části hlavičky */
-.header-bottom,
-header .header-bottom {
-    display: none !important; 
-    height: 0 !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-}
-
-/* Upravení paddingu pro header, aby tam nebyl prázdný prostor */
-.header, header {
-    padding-bottom: 0 !important;
-}
-
-/* Důkladnější skrytí sociálních ikon */
-.author-social,
-.author-header .author-social,
-.author-info .author-social {
-    display: none !important;
-    height: 0 !important;
-    visibility: hidden !important;
-    overflow: hidden !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-/* Zastřešující oprava pro všechny sociální ikony */
-.social-link, 
-.social-icon,
-[class*="social-"] {
-    display: none !important;
-}
-
-/* Výjimka pro sdílecí odkazy v detailu příspěvku */
-.post-share .share-link {
-    display: inline-block !important;
-}
-
-/* Zabránění označování textu a obsahu v karuselech */
-.carousel-container,
-.carousel-track,
-.carousel-slide,
-.posts-carousel,
-.posts-carousel-track,
-.posts-slide,
-.carousel-arrow,
-.indicator-dot,
-.author-card,
-.post-card,
-.featured-post,
-.read-more,
-.author-word-toggle,
-.post-card-image,
-.author-image-container,
-.author-image {
-    user-select: none !important;
-    -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-}
-
-/* Zabránění zobrazení modrého ohraničení (outline) při kliknutí */
-.carousel-container *,
-.posts-carousel *,
-.author-card,
-.post-card,
-.carousel-arrow,
-.indicator-dot {
-    outline: none !important;
-}
-
-/* Důležité opravy pro funkčnost "Slovo autora" */
-.author-word-toggle {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 10px 15px !important;
-    margin-top: 15px !important;
-    background-color: #f1f1f1 !important;
-    border-radius: 4px !important;
-    cursor: pointer !important;
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    transition: all 0.3s ease !important;
-    width: auto !important;
-    box-sizing: border-box !important;
-}
-
-.author-word-toggle:hover {
-    background-color: #e5e5e5 !important;
-}
-
-.author-word-content {
-    max-height: 0 !important;
-    overflow: hidden !important;
-    transition: max-height 0.3s ease-out !important;
-    background-color: #f1f1f1 !important;
-    border-radius: 0 0 4px 4px !important;
-    margin-top: -5px !important;
-    padding: 0 15px !important;
-    box-sizing: border-box !important;
-}
-
-.author-word-content p {
-    padding: 15px 0 !important;
-    margin: 0 !important;
-    font-size: 14px !important;
-    line-height: 1.6 !important;
-}
-
-/* Zabezpečení, že se rozbalí pouze když je kliknuto */
-.author-word-content.active {
-    max-height: 500px !important; /* Dostatečně velká hodnota pro jakýkoliv obsah */
-}
-
-/* Oprava pro post.html */
-.post-page .author-word-box {
-    margin: 30px 0 !important;
-    padding-top: 20px !important;
-    width: 100% !important;
-}
-
-.post-page .author-word-box .author-word-toggle,
-.post-page .author-word-box .author-word-content {
-    width: 100% !important;
-}
-
-/* Zaručíme, že sociální odkazy ve footeru příspěvku zůstanou viditelné */
-.post-footer .post-share .share-link {
-    display: inline-block !important;
+@media (max-width: 576px) {
+    .post-featured-image {
+        max-height: 300px;
+    }
+    
+    .post-body {
+        font-size: 16px;
+    }
 }

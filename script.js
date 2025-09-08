@@ -20,9 +20,6 @@ function init() {
     
     // Přidání okraje mezi featured post a karuselem
     addMarginToPostsCarousel();
-    
-    // Inicializace tlačítek slovo autora
-    // Tuto funkci nyní voláme v každém JS souboru, kde jsou generovány příspěvky
 }
 
 // Spuštění po načtení stránky
@@ -77,6 +74,32 @@ function generateAuthorsCarousel() {
     return slidesNeeded;
 }
 
+// Funkce pro přizpůsobení responsivního designu karuselu autorů
+function adjustAuthorsCarouselArrows() {
+    const carouselTrack = document.getElementById('carousel-track');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const prevArrow = document.querySelector('.authors-carousel .carousel-arrow.prev');
+    const nextArrow = document.querySelector('.authors-carousel .carousel-arrow.next');
+    
+    if (!carouselTrack || !slides.length || !prevArrow || !nextArrow) return;
+    
+    const currentSlide = slides[0];
+    const authorCards = currentSlide.querySelectorAll('.author-card');
+    
+    if (authorCards.length < 4) {
+        const availableWidth = carouselTrack.offsetWidth;
+        const usedWidth = authorCards.length * 200;
+        const emptySpace = availableWidth - usedWidth;
+        
+        if (emptySpace > 0) {
+            const arrowAdjustment = Math.min(emptySpace / 2, 100);
+            
+            prevArrow.style.left = `${arrowAdjustment}px`;
+            nextArrow.style.right = `${arrowAdjustment}px`;
+        }
+    }
+}
+
 // Generování karuselu příspěvků pro plynulé přecházení
 function generatePostsCarousel() {
     const postsContainer = document.getElementById('posts-container');
@@ -111,7 +134,7 @@ function generatePostsCarousel() {
                         <span>Slovo autora</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div style="display: none;"><p id="authorWord">${featuredPost.excerpt}</p></div>
+                    <div style="display: none;"><p class="authorWordText">${featuredPost.excerpt}</p></div>
                 </div>
             </div>
         </div>
@@ -179,7 +202,6 @@ function generatePostsCarousel() {
     return slidesNeeded;
 }
 
-// Funkce pro přizpůsobení responsivního designu karuselu příspěvků
 function adjustPostsCarouselResponsive(postsTrack) {
     if (!postsTrack) return;
     
@@ -210,7 +232,6 @@ function adjustPostsCarouselResponsive(postsTrack) {
     window.addEventListener('resize', adjustLayout);
 }
 
-// Inicializace karuselu autorů
 function initAuthorsCarousel() {
     const slides = document.querySelectorAll('.carousel-slide');
     slidesCount = slides.length;
@@ -226,7 +247,6 @@ function initAuthorsCarousel() {
     }
 }
 
-// Přidáme okraj mezi hlavním příspěvkem a karuselem
 function addMarginToPostsCarousel() {
     const featuredPostContainer = document.getElementById('featured-post-container');
     const postsCarousel = document.querySelector('.posts-carousel');
@@ -236,7 +256,6 @@ function addMarginToPostsCarousel() {
     }
 }
 
-// Funkce pro pohyb karuselu autorů na konkrétní slide
 function moveAuthorsTo(index) {
     if (index < 0) {
         index = slidesCount - 1;
@@ -257,7 +276,6 @@ function moveAuthorsTo(index) {
     });
 }
 
-// Funkce pro pohyb karuselu příspěvků na konkrétní slide (plynulý pohyb)
 function movePostsTo(index) {
     if (index < 0) {
         index = postSlidesCount - 1;

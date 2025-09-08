@@ -36,15 +36,9 @@ function loadAllAuthors() {
 
 // Inicializace stránky po načtení DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Load post details
-    loadPostDetails();
+    // Načteme všechny autory
+    loadAllAuthors();
     
     // Inicializace mobilního menu
     initMobileMenu();
-    
-    // Inicializace formuláře komentářů
-    initCommentForm();
-    
-    // Inicializace tlačítek pro sdílení
-    initShareButtons();
 });

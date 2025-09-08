@@ -102,8 +102,13 @@ function loadAuthorPosts(authorName) {
 }
 
 
-// Inicializace stránky po načtení DOM
 document.addEventListener('DOMContentLoaded', function() {
     // Načteme detail autora
     loadAuthorDetails();
+    
+    // Inicializace mobilního menu
+    initMobileMenu();
+    
+    // Inicializace tlačítek pro "slovo autora"
+    initAuthorWordToggle();
 });

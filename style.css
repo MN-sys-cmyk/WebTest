@@ -75,10 +75,12 @@ ul {
     color: var(--accent-color);
 }
 
+/* Skryjeme jazykový přepínač */
 .language-switcher {
     display: none;
 }
 
+/* Odstraníme spodní panel pod hlavičkou */
 .header-bottom {
     display: none;
 }
@@ -1297,4 +1299,6 @@ ul {
     .post-body {
         font-size: 16px;
     }
+}
+
 }

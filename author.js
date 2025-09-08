@@ -83,9 +83,6 @@ function loadAuthorPosts(authorName) {
                         <span>Slovo autora</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div class="author-word-content">
-                        <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
-                    </div>
                 </div>
             </div>
         `;

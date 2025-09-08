@@ -39,9 +39,6 @@ function loadAllPosts() {
                         <span>Slovo autora</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div class="author-word-content">
-                        <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
-                    </div>
                 </div>
             </div>
         `;
@@ -49,6 +46,9 @@ function loadAllPosts() {
     
     // Vložíme HTML do kontejneru
     postsGrid.innerHTML = postsHTML;
+    
+    // Inicializace tlačítka slovo autora
+    initAuthorWordToggle();
 }
 
 // Inicializace stránky po načtení DOM
@@ -58,7 +58,4 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializace mobilního menu
     initMobileMenu();
-    
-    // Inicializace tlačítka slovo autora
-    initAuthorWordToggle();
 });

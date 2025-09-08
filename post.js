@@ -33,6 +33,7 @@ function loadPostDetails() {
     const authorLinkElement = document.getElementById('authorLink');
     const postImageElement = document.getElementById('postImage');
     const postContentElement = document.getElementById('postContent');
+
     const authorWordElement = document.getElementById('authorWord');
     
     if (postDateElement) postDateElement.textContent = post.displayDate || post.date;
@@ -42,10 +43,9 @@ function loadPostDetails() {
     if (postImageElement && post.image) postImageElement.src = post.image;
     if (postContentElement && post.content) postContentElement.innerHTML = formatContent(post.content);
 
-    // This is the key change: set the content of the modal
-    const modalContent = document.getElementById('modalContent');
-    if (modalContent) {
-        modalContent.textContent = post.excerpt;
+    // Ensure the text from the post's excerpt is set in the hidden paragraph
+    if (authorWordElement) {
+        authorWordElement.textContent = post.excerpt;
     }
     
     // Set up author link and image
@@ -84,7 +84,7 @@ function loadPostDetails() {
 function formatContent(content) {
     if (!content) return '';
     
-    // Rozdělení obsahu na odstavce
+    // Rozdělíme obsah na odstavce
     const paragraphs = content.split('\n');
     let formattedContent = '';
     

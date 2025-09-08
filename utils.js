@@ -31,9 +31,9 @@ function initAuthorWordToggle() {
 
     toggleButtons.forEach(button => {
         button.addEventListener('click', function() {
-            let textToShow = "Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.";
+            let textToShow = "";
             
-            // Check if it's on a post list page
+            // Check if the button is inside a post card (for list pages)
             const postCard = this.closest('.post-card');
             if (postCard) {
                 const excerpt = postCard.querySelector('.post-excerpt');
@@ -41,7 +41,7 @@ function initAuthorWordToggle() {
                     textToShow = excerpt.textContent;
                 }
             }
-            // Check if it's on a single post page
+            // Otherwise, get the content from the specific element on the single post page
             else {
                 const authorWordElement = document.getElementById('authorWord');
                 if (authorWordElement) {

@@ -759,13 +759,21 @@ ul {
     transition: color 0.3s ease;
 }
 
+.author-link img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
 .author-link:hover {
     color: var(--accent-color);
 }
 
 .author-thumbnail {
-    width: 10px; /* Zmenšená šířka */
-    height: 10px; /* Zmenšená výška */
+    width: 60px; /* Zmenšená šířka */
+    height: 60px; /* Zmenšená výška */
     border-radius: 50%; /* Zajištění zaobleného tvaru */
     object-fit: cover;
     margin-right: 15px;

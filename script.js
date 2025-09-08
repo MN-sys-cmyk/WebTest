@@ -6,27 +6,17 @@ let postSlidesCount = 0;
 
 // Funkce pro inicializaci
 function init() {
-    // Generování autorů
     slidesCount = generateAuthorsCarousel();
-    
-    // Generování příspěvků
     postSlidesCount = generatePostsCarousel();
-    
-    // Inicializace karuselu autorů
     initAuthorsCarousel();
-    
-    // Inicializace karuselu příspěvků
     initPostsCarousel();
-    
-    // Přidání okraje mezi featured post a karuselem
     addMarginToPostsCarousel();
 }
 
-// Spuštění po načtení stránky
 document.addEventListener('DOMContentLoaded', function() {
     init();
     initMobileMenu();
-    initAuthorWordToggle(); // Inicializace na hlavní stránce
+    initAuthorWordToggle();
 });
 
 // Generování karuselu autorů
@@ -72,32 +62,6 @@ function generateAuthorsCarousel() {
     }
     
     return slidesNeeded;
-}
-
-// Funkce pro přizpůsobení responsivního designu karuselu autorů
-function adjustAuthorsCarouselArrows() {
-    const carouselTrack = document.getElementById('carousel-track');
-    const slides = document.querySelectorAll('.carousel-slide');
-    const prevArrow = document.querySelector('.authors-carousel .carousel-arrow.prev');
-    const nextArrow = document.querySelector('.authors-carousel .carousel-arrow.next');
-    
-    if (!carouselTrack || !slides.length || !prevArrow || !nextArrow) return;
-    
-    const currentSlide = slides[0];
-    const authorCards = currentSlide.querySelectorAll('.author-card');
-    
-    if (authorCards.length < 4) {
-        const availableWidth = carouselTrack.offsetWidth;
-        const usedWidth = authorCards.length * 200;
-        const emptySpace = availableWidth - usedWidth;
-        
-        if (emptySpace > 0) {
-            const arrowAdjustment = Math.min(emptySpace / 2, 100);
-            
-            prevArrow.style.left = `${arrowAdjustment}px`;
-            nextArrow.style.right = `${arrowAdjustment}px`;
-        }
-    }
 }
 
 // Generování karuselu příspěvků pro plynulé přecházení
@@ -202,6 +166,7 @@ function generatePostsCarousel() {
     return slidesNeeded;
 }
 
+// Funkce pro přizpůsobení responsivního designu karuselu příspěvků
 function adjustPostsCarouselResponsive(postsTrack) {
     if (!postsTrack) return;
     
@@ -232,6 +197,7 @@ function adjustPostsCarouselResponsive(postsTrack) {
     window.addEventListener('resize', adjustLayout);
 }
 
+// Inicializace karuselu autorů
 function initAuthorsCarousel() {
     const slides = document.querySelectorAll('.carousel-slide');
     slidesCount = slides.length;
@@ -244,6 +210,24 @@ function initAuthorsCarousel() {
     if (prevButton && nextButton) {
         prevButton.addEventListener('click', () => moveAuthorsTo(currentSlide - 1));
         nextButton.addEventListener('click', () => moveAuthorsTo(currentSlide + 1));
+    }
+}
+
+function initPostsCarousel() {
+    const postsTrack = document.querySelector('.posts-carousel-track');
+    if (!postsTrack) return;
+    
+    const postSlides = postsTrack.querySelectorAll('.posts-slide');
+    postSlidesCount = postSlides.length;
+    
+    if (postSlidesCount <= 1) return;
+    
+    const prevButton = document.querySelector('.posts-carousel .carousel-arrow.prev');
+    const nextButton = document.querySelector('.posts-carousel .carousel-arrow.next');
+    
+    if (prevButton && nextButton) {
+        prevButton.addEventListener('click', () => movePostsTo(currentPostSlide - 1));
+        nextButton.addEventListener('click', () => movePostsTo(currentPostSlide + 1));
     }
 }
 
@@ -294,4 +278,12 @@ function movePostsTo(index) {
     dots.forEach((dot, i) => {
         dot.classList.toggle('active', i === currentPostSlide);
     });
+}
+
+function moveCarousel(direction) {
+    moveAuthorsTo(currentSlide + direction);
+}
+
+function goToSlide(index) {
+    moveAuthorsTo(index);
 }

@@ -166,7 +166,6 @@ function generatePostsCarousel() {
     return slidesNeeded;
 }
 
-// Funkce pro přizpůsobení responsivního designu karuselu příspěvků
 function adjustPostsCarouselResponsive(postsTrack) {
     if (!postsTrack) return;
     
@@ -197,7 +196,6 @@ function adjustPostsCarouselResponsive(postsTrack) {
     window.addEventListener('resize', adjustLayout);
 }
 
-// Inicializace karuselu autorů
 function initAuthorsCarousel() {
     const slides = document.querySelectorAll('.carousel-slide');
     slidesCount = slides.length;

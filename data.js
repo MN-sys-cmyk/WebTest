@@ -175,8 +175,8 @@ const authorsData = [
         }
     },
     {
-        id: "nova-autorka",
-        name: "Nová Autorka",
+        id: "novaaa-autorkaaaa",
+        name: "Nová Autorka testovací",
         image: "image8.png",
         genre: "Sci-fi, povídky",
         bio: "Nová Autorka je nadaná spisovatelka, která se specializuje na sci-fi povídky. Její díla se vyznačují nečekanými zvraty a futuristickými koncepty. V současnosti připravuje svou první knihu.",
@@ -287,8 +287,8 @@ const postsData = [
     },
     {
         id: 9,
-        title: "Tajemství staré knihovny",
-        author: "Nová Autorka",
+        title: "Tajemství staré knihovny blabla",
+        author: "Nová Autorka testovací",
         date: "2025-09-08",
         displayDate: "8. září 2025",
         category: "Povídka",

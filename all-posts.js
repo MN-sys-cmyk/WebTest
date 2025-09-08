@@ -53,15 +53,12 @@ function loadAllPosts() {
 
 // Inicializace stránky po načtení DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Load post details
-    loadPostDetails();
+    // Načteme všechny příspěvky
+    loadAllPosts();
     
     // Inicializace mobilního menu
     initMobileMenu();
     
-    // Inicializace formuláře komentářů
-    initCommentForm();
-    
-    // Inicializace tlačítek pro sdílení
-    initShareButtons();
+    // Inicializace tlačítka slovo autora
+    initAuthorWordToggle();
 });

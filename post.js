@@ -155,8 +155,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load post details
     loadPostDetails();
     
-    // Přidáme přímé nastavení po načtení DOM
-    setTimeout(function() {
-        initAuthorWordToggle();
-    }, 500);
+    // Inicializace mobilního menu
+    initMobileMenu();
+    
+    // Inicializace formuláře komentářů
+    initCommentForm();
+    
+    // Inicializace tlačítek pro sdílení
+    initShareButtons();
 });

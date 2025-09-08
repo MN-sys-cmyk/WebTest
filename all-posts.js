@@ -35,9 +35,12 @@ function loadAllPosts() {
                     <h3 class="post-title">${post.title}</h3>
                     <p class="post-excerpt">${post.excerpt}</p>
                     <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
-                    <div class="author-word-toggle">
-                        <span>Slovo autora</span>
-                        <span class="arrow">▼</span>
+                    <div class="author-word-box">
+                        <div class="author-word-toggle">
+                            <span>Slovo autora</span>
+                            <span class="arrow">▼</span>
+                        </div>
+                        <div style="display: none;"><p id="authorWord">${post.excerpt}</p></div>
                     </div>
                 </div>
             </div>

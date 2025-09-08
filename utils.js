@@ -23,7 +23,7 @@ function initAuthorWordToggle() {
     const modalOverlay = document.getElementById('authorWordModalOverlay');
     const modalContent = document.getElementById('modalContent');
     const modalCloseButton = document.getElementById('modalCloseButton');
-    
+
     if (!modalOverlay || !modalContent || !modalCloseButton) {
         console.error("Modal elements not found. 'Slovo autora' button will not work correctly.");
         return;
@@ -32,7 +32,7 @@ function initAuthorWordToggle() {
     toggleButtons.forEach(button => {
         button.addEventListener('click', function() {
             let textToShow = "";
-            
+
             // Check if the button is inside a post card (for list pages)
             const postCard = this.closest('.post-card');
             if (postCard) {

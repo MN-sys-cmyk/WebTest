@@ -764,8 +764,8 @@ ul {
 }
 
 .author-thumbnail {
-    width: 60px; /* Zmenšená šířka */
-    height: 60px; /* Zmenšená výška */
+    width: 30px; /* Zmenšená šířka */
+    height: 30px; /* Zmenšená výška */
     border-radius: 50%; /* Zajištění zaobleného tvaru */
     object-fit: cover;
     margin-right: 15px;

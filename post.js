@@ -137,6 +137,7 @@ function loadRelatedPosts(authorName, currentPostId) {
                         <span>Slovo autora</span>
                         <span class="arrow">▼</span>
                     </div>
+                    <div style="display: none;"><p class="authorWordText">${post.excerpt}</p></div>
                 </div>
             </div>
         `;

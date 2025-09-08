@@ -71,9 +71,6 @@ function loadAuthorCategoryPosts() {
                         <span>Slovo autora</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div class="author-word-content">
-                        <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
-                    </div>
                 </div>
             </div>
         `;
@@ -90,4 +87,7 @@ function loadAuthorCategoryPosts() {
 document.addEventListener('DOMContentLoaded', function() {
     // Načteme příspěvky podle autora
     loadAuthorCategoryPosts();
+    
+    // Inicializace mobilního menu
+    initMobileMenu();
 });

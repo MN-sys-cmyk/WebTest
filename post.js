@@ -41,7 +41,12 @@ function loadPostDetails() {
     if (authorNameElement) authorNameElement.textContent = post.author;
     if (postImageElement && post.image) postImageElement.src = post.image;
     if (postContentElement && post.content) postContentElement.innerHTML = formatContent(post.content);
-    if (authorWordElement) authorWordElement.textContent = "Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.";
+
+    // This is the key change: set the content of the modal
+    const modalContent = document.getElementById('modalContent');
+    if (modalContent) {
+        modalContent.textContent = post.excerpt;
+    }
     
     // Set up author link and image
     if (authorNameElement && authorImageElement && authorLinkElement) {
@@ -66,7 +71,7 @@ function loadPostDetails() {
     // Load related posts (other posts by the same author)
     loadRelatedPosts(post.author, post.id);
     
-    // Inicializace tlačítek slovo autora na stránce příspěvku - použijeme setTimeout pro lepší načasování
+    // Inicializace tlačítka slovo autora na stránce příspěvku - použijeme setTimeout pro lepší načasování
     setTimeout(function() {
         initAuthorWordToggle();
     }, 300);
@@ -133,9 +138,6 @@ function loadRelatedPosts(authorName, currentPostId) {
                         <span>Slovo autora</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div class="author-word-content">
-                        <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
-                    </div>
                 </div>
             </div>
         `;
@@ -164,18 +166,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializace tlačítek pro sdílení
     initShareButtons();
 });
-
-// A small helper function for formatContent that I noticed was missing and could be useful.
-function formatContent(content) {
-    if (!content) return '';
-    const paragraphs = content.split('\n');
-    let formattedContent = '';
-    paragraphs.forEach(paragraph => {
-        if (paragraph.trim() !== '') {
-            formattedContent += `<p>${paragraph}</p>`;
-        }
-    });
-    return formattedContent;
-}
-
-// initAuthorWordToggle, initMobileMenu, initCommentForm, addComment, initShareButtons are now in utils.js

@@ -653,20 +653,24 @@ ul {
 
 /* Styly pro sekci "Slovo autora" */
 .author-word-toggle {
-    display: inline-flex; /* Změna na inline-flex pro zmenšení */
-    align-items: center;
-    padding: 5px 10px; /* Zmenšení vnitřního odsazení */
+    display: inline-block;
+    padding: 0; /* Odstraníme odsazení */
     margin-top: 15px;
-    background-color: var(--secondary-color);
-    border-radius: 4px;
+    background-color: transparent; /* Odstraníme šedé pozadí */
+    border: none; /* Odstraníme případný rámeček */
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;
-    transition: all 0.3s ease;
+    color: var(--text-color); /* Nastavíme původní barvu textu */
+    transition: color 0.3s ease; /* Přidáme přechod pro barvu */
+}
+
+.author-word-toggle:hover {
+    color: var(--accent-color); /* Po najetí změníme barvu na oranžovou */
 }
 
 .author-word-toggle .arrow {
-    display: none; /* Skryje šipku */
+    display: none;
 }
 
 .author-word-content {

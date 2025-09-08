@@ -635,21 +635,20 @@ ul {
     min-width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: flex-start; /* OPRAVENO: Zarovnání prvků doleva */
+    gap: 30px; /* OPRAVENO: Konsistentní mezera */
 }
 
 .posts-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
-    justify-content: space-between;
+    justify-content: flex-start; /* OPRAVENO: Zarovnání prvků doleva */
 }
 
 .post-card {
-    flex: 1;
-    min-width: 300px;
-    max-width: 32%;
+    flex: 1 1 300px; /* OPRAVENO: Flexibilní šířka pro správné zarovnání */
+    max-width: calc(33.333% - 20px); /* OPRAVENO: Správný výpočet šířky */
 }
 
 /* Styly pro sekci "Slovo autora" */
@@ -929,9 +928,9 @@ ul {
     margin-bottom: 25px;
 }
 
+/* Skryjeme sociální ikony na stránce autora */
 .author-social {
-    display: flex;
-    gap: 15px;
+    display: none;
 }
 
 .social-link {

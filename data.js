@@ -51,6 +51,11 @@ const authorsData = [
                 title: "Mezi řádky",
                 description: "Experimentální básnická sbírka kombinující text a vizuální prvky."
             }
+            {
+                year: "2034",
+                title: "Mezi pařátky",
+                description: "Experimentální básnická blablablabla."
+            }
         ],
         social: {
             facebook: "#",

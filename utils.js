@@ -17,22 +17,46 @@ function initMobileMenu() {
     }
 }
 
-// Function to initialize the "Slovo autora" toggle button
+// Function to initialize the modal for "Slovo autora" across all pages
 function initAuthorWordToggle() {
     const toggleButtons = document.querySelectorAll('.author-word-toggle');
+    const modalOverlay = document.getElementById('authorWordModalOverlay');
+    const modalContent = document.getElementById('modalContent');
+    const modalCloseButton = document.getElementById('modalCloseButton');
     
+    if (!modalOverlay || !modalContent || !modalCloseButton) {
+        console.error("Modal elements not found. 'Slovo autora' button will not work correctly.");
+        return;
+    }
+
     toggleButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const content = this.nextElementSibling;
-            const arrow = this.querySelector('.arrow');
-            
-            if(content.style.maxHeight) {
-                content.style.maxHeight = null;
-                arrow.textContent = '▼';
+            const postCard = this.closest('.post-card');
+            if (postCard) {
+                const excerpt = postCard.querySelector('.post-excerpt');
+                if (excerpt) {
+                    modalContent.textContent = excerpt.textContent;
+                } else {
+                    modalContent.textContent = "Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.";
+                }
             } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-                arrow.textContent = '▲';
+                modalContent.textContent = "Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.";
             }
+
+            modalOverlay.classList.add('visible');
+            document.body.style.overflow = 'hidden';
         });
+    });
+
+    modalCloseButton.addEventListener('click', function() {
+        modalOverlay.classList.remove('visible');
+        document.body.style.overflow = '';
+    });
+
+    modalOverlay.addEventListener('click', function(e) {
+        if (e.target === modalOverlay) {
+            modalOverlay.classList.remove('visible');
+            document.body.style.overflow = '';
+        }
     });
 }

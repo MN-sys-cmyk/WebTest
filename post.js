@@ -68,7 +68,8 @@ function loadPostDetails() {
     
     // Inicializace tlačítka slovo autora na stránce příspěvku - použijeme setTimeout pro lepší načasování
     setTimeout(function() {
-        initAuthorWordToggle();
+        initAuthorWordModal();
+        setupAuthorWordToggle();
     }, 300);
     
     // Inicializace sdílecích tlačítek
@@ -164,3 +165,147 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializace tlačítek pro sdílení
     initShareButtons();
 });
+
+
+// Funkce pro inicializaci tlačítek slovo autora (zobrazí modal) na stránce s jedním příspěvkem
+function initAuthorWordModal() {
+    const toggleButton = document.querySelector('.post-page .author-word-toggle');
+    const modalOverlay = document.getElementById('authorWordModalOverlay');
+    const modalCloseButton = document.getElementById('modalCloseButton');
+    const modalContent = document.getElementById('modalContent');
+    const authorWordElement = document.getElementById('authorWord');
+
+    if (toggleButton && modalOverlay && modalCloseButton && modalContent && authorWordElement) {
+        toggleButton.addEventListener('click', function() {
+            modalContent.textContent = authorWordElement.textContent;
+            modalOverlay.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        });
+
+        modalCloseButton.addEventListener('click', function() {
+            modalOverlay.classList.remove('visible');
+            document.body.style.overflow = '';
+        });
+
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('visible');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+}
+
+// Funkce pro inicializaci tlačítek "Slovo autora" pro ostatní stránky (např. hlavní stránka, stránka s autorem, atd.)
+function setupAuthorWordToggle() {
+    const toggleButtons = document.querySelectorAll('.author-word-toggle');
+    
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            const arrow = this.querySelector('.arrow');
+            
+            if(content.style.maxHeight) {
+                content.style.maxHeight = null;
+                arrow.textContent = '▼';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                arrow.textContent = '▲';
+            }
+        });
+    });
+}
+
+// Pomocná funkce pro inicializaci mobilního menu
+function initMobileMenu() {
+    const toggleBtn = document.querySelector('.mobile-menu-toggle');
+    const closeBtn = document.querySelector('.mobile-menu-close');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    
+    if (toggleBtn && closeBtn && mobileMenu) {
+        toggleBtn.addEventListener('click', () => {
+            mobileMenu.style.display = 'block';
+            setTimeout(() => mobileMenu.classList.add('active'), 10);
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            setTimeout(() => mobileMenu.style.display = 'none', 500);
+        });
+    }
+}
+
+
+// Funkce pro inicializaci sdílecích tlačítek
+function initShareButtons() {
+    const currentUrl = window.location.href;
+    const pageTitle = document.title;
+    const facebookShare = document.querySelector('.share-link.facebook');
+    const twitterShare = document.querySelector('.share-link.twitter');
+    const emailShare = document.querySelector('.share-link.email');
+
+    if (facebookShare) {
+        facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+        facebookShare.target = '_blank';
+    }
+    
+    if (twitterShare) {
+        twitterShare.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(pageTitle)}`;
+        twitterShare.target = '_blank';
+    }
+    
+    if (emailShare) {
+        emailShare.href = `mailto:?subject=${encodeURIComponent(pageTitle)}&body=${encodeURIComponent('Podívej se na tento zajímavý článek: ' + currentUrl)}`;
+    }
+}
+
+// Funkce pro inicializaci formuláře komentářů
+function initCommentForm() {
+    const commentForm = document.querySelector('.comment-form');
+    if (commentForm) {
+        commentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const comment = document.getElementById('comment').value;
+            
+            console.log('Nový komentář:', { name, email, comment });
+            
+            addComment(name, comment);
+            
+            commentForm.reset();
+            
+            alert('Děkujeme za váš komentář!');
+        });
+    }
+}
+
+// Funkce pro přidání komentáře do stránky
+function addComment(name, text) {
+    const commentsList = document.querySelector('.comments-list');
+    if (commentsList) {
+        const today = new Date();
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        const formattedDate = today.toLocaleDateString('cs-CZ', options);
+        
+        const commentHTML = `
+            <div class="comment">
+                <div class="comment-avatar">
+                    <img src="avatar-default.png" alt="${name}">
+                </div>
+                
+                <div class="comment-content">
+                    <div class="comment-meta">
+                        <span class="comment-author">${name}</span>
+                        <span class="comment-date">${formattedDate}</span>
+                    </div>
+        
+                    <p class="comment-text">${text}</p>
+                </div>
+            </div>
+        `;
+        
+        commentsList.insertAdjacentHTML('afterbegin', commentHTML);
+    }
+}

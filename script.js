@@ -141,11 +141,14 @@ function generatePostsCarousel() {
                     <span class="post-category">${featuredPost.category}</span>
                 </div>
                 <h3 class="post-title">${featuredPost.title}</h3>
-                <p class="post-excerpt">${featuredPost.excerpt}</p>
-                <a href="post.html?id=${featuredPost.id}" class="read-more">Přečíst celý text</a>
-                <div class="author-word-toggle">
-                    <span>Slovo autora</span>
-                    <span class="arrow">▼</span>
+                <p class="post-excerpt">${post.excerpt}</p>
+                <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
+                <div class="author-word-box">
+                    <div class="author-word-toggle">
+                        <span>Slovo autora</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div style="display: none;"><p id="authorWord">${post.excerpt}</p></div>
                 </div>
                 <div class="author-word-content" style="display: none;">
                     <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>

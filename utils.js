@@ -31,18 +31,25 @@ function initAuthorWordToggle() {
 
     toggleButtons.forEach(button => {
         button.addEventListener('click', function() {
+            let textToShow = "Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.";
+            
+            // Check if it's on a post list page
             const postCard = this.closest('.post-card');
             if (postCard) {
                 const excerpt = postCard.querySelector('.post-excerpt');
                 if (excerpt) {
-                    modalContent.textContent = excerpt.textContent;
-                } else {
-                    modalContent.textContent = "Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.";
+                    textToShow = excerpt.textContent;
                 }
-            } else {
-                modalContent.textContent = "Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.";
+            }
+            // Check if it's on a single post page
+            else {
+                const authorWordElement = document.getElementById('authorWord');
+                if (authorWordElement) {
+                    textToShow = authorWordElement.textContent;
+                }
             }
 
+            modalContent.textContent = textToShow;
             modalOverlay.classList.add('visible');
             document.body.style.overflow = 'hidden';
         });

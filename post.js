@@ -68,7 +68,7 @@ function loadPostDetails() {
     
     // Inicializace tlačítka slovo autora na stránce příspěvku - použijeme setTimeout pro lepší načasování
     setTimeout(function() {
-        setupAuthorWordToggle();
+        initAuthorWordToggle();
     }, 300);
     
     // Inicializace sdílecích tlačítek
@@ -150,43 +150,6 @@ function loadRelatedPosts(authorName, currentPostId) {
     }, 300);
 }
 
-// Přepracovaná direktní funkce pro nastavení "Slovo autora"
-function setupAuthorWordToggle() {
-    // Najít všechna tlačítka "Slovo autora"
-    const toggles = document.querySelectorAll('.author-word-toggle');
-    
-    // Pro každé tlačítko nastavíme událost kliknutí
-    toggles.forEach(toggle => {
-        // Odstraníme existující posluchače událostí pomocí klonování a nahrazení prvku
-        const newToggle = toggle.cloneNode(true);
-        toggle.parentNode.replaceChild(newToggle, toggle);
-        
-        // Přidáme nový posluchač události
-        newToggle.addEventListener('click', function() {
-            // Najdeme související obsah - prvek hned za tlačítkem
-            const content = this.nextElementSibling;
-            // Najdeme šipku uvnitř tlačítka
-            const arrow = this.querySelector('.arrow');
-            
-            // Pokud jsou prvky nalezeny
-            if (content && arrow) {
-                // Přepínáme podle aktuálního stavu
-                if (content.style.maxHeight) {
-                    // Pokud je obsah zobrazen, skryjeme ho
-                    content.style.maxHeight = null;
-                    arrow.textContent = '▼';
-                } else {
-                    // Pokud je obsah skryt, zobrazíme ho
-                    content.style.maxHeight = content.scrollHeight + "px";
-                    arrow.textContent = '▲';
-                }
-            }
-        });
-    });
-    
-    console.log('Nastaveno ' + toggles.length + ' tlačítek "Slovo autora"');
-}
-
 // Initialize the page after DOM content is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Load post details
@@ -194,35 +157,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Přidáme přímé nastavení po načtení DOM
     setTimeout(function() {
-        setupAuthorWordToggle();
+        initAuthorWordToggle();
     }, 500);
 });
-
-// Funkce pro inicializaci tlačítek pro sdílení
-function initShareButtons() {
-    // Získáme aktuální URL stránky
-    const currentUrl = window.location.href;
-    
-    // Získáme titulek stránky
-    const pageTitle = document.title;
-    
-    // Získáme tlačítka pro sdílení
-    const facebookShare = document.querySelector('.share-link.facebook');
-    const twitterShare = document.querySelector('.share-link.twitter');
-    const emailShare = document.querySelector('.share-link.email');
-    
-    // Nastavíme odkazy pro sdílení
-    if (facebookShare) {
-        facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
-        facebookShare.target = '_blank';
-    }
-    
-    if (twitterShare) {
-        twitterShare.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(pageTitle)}`;
-        twitterShare.target = '_blank';
-    }
-    
-    if (emailShare) {
-        emailShare.href = `mailto:?subject=${encodeURIComponent(pageTitle)}&body=${encodeURIComponent('Podívej se na tento zajímavý článek: ' + currentUrl)}`;
-    }
-}

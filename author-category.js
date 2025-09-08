@@ -72,7 +72,7 @@ function loadAuthorCategoryPosts() {
                             <span>Slovo autora</span>
                             <span class="arrow">▼</span>
                         </div>
-                        <div style="display: none;"><p id="authorWord">${post.excerpt}</p></div>
+                        <div style="display: none;"><p class="authorWordText">${post.excerpt}</p></div>
                     </div>
                 </div>
             </div>
@@ -81,16 +81,13 @@ function loadAuthorCategoryPosts() {
     
     // Vložíme HTML do kontejneru
     postsGrid.innerHTML = postsHTML;
-    
+
     // Inicializujeme tlačítka slovo autora
     initAuthorWordToggle();
 }
 
 // Inicializace stránky po načtení DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Načteme příspěvky podle autora
     loadAuthorCategoryPosts();
-    
-    // Inicializace mobilního menu
     initMobileMenu();
 });

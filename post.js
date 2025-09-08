@@ -36,7 +36,7 @@ function loadPostDetails() {
     if (postImageElement && post.image) postImageElement.src = post.image;
     if (postContentElement && post.content) postContentElement.innerHTML = formatContent(post.content);
 
-    // Důležitá oprava: Zajistíme, aby text z excerpt byl nastaven do skrytého odstavce
+    // Zajištění, aby text z excerpt byl nastaven do skrytého odstavce
     if (authorWordElement) {
         authorWordElement.textContent = post.excerpt;
     }

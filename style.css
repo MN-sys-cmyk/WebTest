@@ -651,27 +651,26 @@ ul {
     max-width: calc(33.333% - 20px); /* OPRAVENO: Správný výpočet šířky */
 }
 
-
-
 /* Styly pro sekci "Slovo autora" */
 .author-word-box {
     text-align: center;
 }
+
 .author-word-toggle {
     display: inline-block;
-    padding: 0; /* Odstraníme odsazení */
+    padding: 0;
     margin-top: 15px;
-    background-color: transparent; /* Odstraníme šedé pozadí */
-    border: none; /* Odstraníme případný rámeček */
+    background-color: transparent;
+    border: none;
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;
-    color: var(--text-color); /* Nastavíme původní barvu textu */
-    transition: color 0.3s ease; /* Přidáme přechod pro barvu */
+    color: var(--text-color);
+    transition: color 0.3s ease;
 }
 
 .author-word-toggle:hover {
-    color: var(--accent-color); /* Po najetí změníme barvu na oranžovou */
+    color: var(--accent-color);
 }
 
 .author-word-toggle .arrow {

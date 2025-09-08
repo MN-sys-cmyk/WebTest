@@ -634,7 +634,7 @@ ul {
 .posts-slide {
     min-width: 100%;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap = wrap;
     justify-content: flex-start; /* OPRAVENO: Zarovnání prvků doleva */
     gap: 30px; /* OPRAVENO: Konsistentní mezera */
 }
@@ -764,9 +764,9 @@ ul {
 }
 
 .author-thumbnail {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+    width: 60px; /* Zmenšená šířka */
+    height: 60px; /* Zmenšená výška */
+    border-radius: 50%; /* Zajištění zaobleného tvaru */
     object-fit: cover;
     margin-right: 15px;
 }

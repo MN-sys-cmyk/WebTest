@@ -20,6 +20,9 @@ function init() {
     
     // Přidání okraje mezi featured post a karuselem
     addMarginToPostsCarousel();
+    
+    // Inicializace tlačítka slovo autora
+    initAuthorWordToggle();
 }
 
 // Spuštění po načtení stránky
@@ -144,7 +147,7 @@ function generatePostsCarousel() {
                     <span>Slovo autora</span>
                     <span class="arrow">▼</span>
                 </div>
-                <div class="author-word-content">
+                <div class="author-word-content" style="display: none;">
                     <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
                 </div>
             </div>
@@ -198,7 +201,7 @@ function generatePostsCarousel() {
                         <span>Slovo autora</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div class="author-word-content">
+                    <div class="author-word-content" style="display: none;">
                         <p>Zde autor sdílí své myšlenky a motivaci k napsání tohoto textu.</p>
                     </div>
                 </div>

@@ -653,10 +653,9 @@ ul {
 
 /* Styly pro sekci "Slovo autora" */
 .author-word-toggle {
-    display: flex;
+    display: inline-flex; /* Změna na inline-flex pro zmenšení */
     align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
+    padding: 5px 10px; /* Zmenšení vnitřního odsazení */
     margin-top: 15px;
     background-color: var(--secondary-color);
     border-radius: 4px;
@@ -666,8 +665,8 @@ ul {
     transition: all 0.3s ease;
 }
 
-.author-word-toggle:hover {
-    background-color: var(--light-gray);
+.author-word-toggle .arrow {
+    display: none; /* Skryje šipku */
 }
 
 .author-word-content {

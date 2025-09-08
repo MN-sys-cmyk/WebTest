@@ -16,15 +16,15 @@ function initMobileMenu() {
         });
     }
 }
-
 // Function to initialize the modal for "Slovo autora" across all pages
 function initAuthorWordToggle() {
     const toggleButtons = document.querySelectorAll('.author-word-toggle');
     const modalOverlay = document.getElementById('authorWordModalOverlay');
+    const modal = document.getElementById('authorWordModal');
     const modalContent = document.getElementById('modalContent');
     const modalCloseButton = document.getElementById('modalCloseButton');
 
-    if (!modalOverlay || !modalContent || !modalCloseButton) {
+    if (!modalOverlay || !modal || !modalContent || !modalCloseButton) {
         console.error("Modal elements not found. 'Slovo autora' button will not work correctly.");
         return;
     }
@@ -51,18 +51,21 @@ function initAuthorWordToggle() {
 
             modalContent.textContent = textToShow;
             modalOverlay.classList.add('visible');
+            modal.classList.add('visible'); // Tento řádek byl přidán
             document.body.style.overflow = 'hidden';
         });
     });
 
     modalCloseButton.addEventListener('click', function() {
         modalOverlay.classList.remove('visible');
+        modal.classList.remove('visible'); // Tento řádek byl přidán
         document.body.style.overflow = '';
     });
 
     modalOverlay.addEventListener('click', function(e) {
         if (e.target === modalOverlay) {
             modalOverlay.classList.remove('visible');
+            modal.classList.remove('visible'); // Tento řádek byl přidán
             document.body.style.overflow = '';
         }
     });

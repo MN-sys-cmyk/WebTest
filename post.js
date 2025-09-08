@@ -33,7 +33,6 @@ function loadPostDetails() {
     const authorLinkElement = document.getElementById('authorLink');
     const postImageElement = document.getElementById('postImage');
     const postContentElement = document.getElementById('postContent');
-
     const authorWordElement = document.getElementById('authorWord');
     
     if (postDateElement) postDateElement.textContent = post.displayDate || post.date;
@@ -43,7 +42,7 @@ function loadPostDetails() {
     if (postImageElement && post.image) postImageElement.src = post.image;
     if (postContentElement && post.content) postContentElement.innerHTML = formatContent(post.content);
 
-    // Ensure the text from the post's excerpt is set in the hidden paragraph
+    // This is the key change: ensure the text is placed into the hidden paragraph
     if (authorWordElement) {
         authorWordElement.textContent = post.excerpt;
     }
@@ -71,7 +70,7 @@ function loadPostDetails() {
     // Load related posts (other posts by the same author)
     loadRelatedPosts(post.author, post.id);
     
-    // Inicializace tlačítka slovo autora na stránce příspěvku - použijeme setTimeout pro lepší načasování
+    // Inicializace tlačítek slovo autora na stránce příspěvku - použijeme setTimeout pro lepší načasování
     setTimeout(function() {
         initAuthorWordToggle();
     }, 300);

@@ -173,8 +173,26 @@ const authorsData = [
             twitter: "#",
             instagram: "#"
         }
+    },
+    {
+        id: "nova-autorka",
+        name: "Nová Autorka",
+        image: "image8.png",
+        genre: "Sci-fi, povídky",
+        bio: "Nová Autorka je nadaná spisovatelka, která se specializuje na sci-fi povídky. Její díla se vyznačují nečekanými zvraty a futuristickými koncepty. V současnosti připravuje svou první knihu.",
+        works: [
+            {
+                year: "2025",
+                title: "Planeta bez slunce",
+                description: "Povídka o cestě na okraj galaxie a hledání nového domova."
+            }
+        ],
+        social: {
+            facebook: "#",
+            twitter: "#",
+            instagram: "#"
+        }
     }
-    // Zde můžete přidávat další autory
 ];
 
 // Data o příspěvcích
@@ -266,6 +284,16 @@ const postsData = [
         excerpt: "Petra Svobodová se zamýšlí nad specifickými obtížemi při překladu moderní francouzské poezie a sdílí své zkušenosti a metody, které jí pomáhají zachovat ducha originálu.",
         image: "book8.png",
         content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras porttitor metus quis tincidunt lobortis. Integer condimentum eros id metus bibendum, vel tempor odio faucibus. Praesent malesuada, nibh eget tincidunt ullamcorper, dolor elit feugiat neque, sed efficitur nulla nunc vel metus. Etiam sit amet est vel nisl interdum iaculis. Nulla facilisi. Aenean a justo justo. Donec at vestibulum nibh, vel ornare nisl. Donec euismod, justo vel elementum iaculis, nisl ipsum feugiat odio, non pulvinar est lectus at ligula. Morbi cursus orci ut elementum maximus. Fusce id vehicula neque."
+    },
+    {
+        id: 9,
+        title: "Tajemství staré knihovny",
+        author: "Nová Autorka",
+        date: "2025-09-08",
+        displayDate: "8. září 2025",
+        category: "Povídka",
+        excerpt: "V této povídce odhaluje Nová Autorka záhadu, která se skrývá uvnitř staré, opuštěné knihovny.",
+        image: "book9.png",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ... [Zde vložte celý text díla]."
     }
-    // Zde můžete přidávat další příspěvky
 ];

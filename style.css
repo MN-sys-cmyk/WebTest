@@ -651,6 +651,9 @@ ul {
     max-width: calc(33.333% - 20px); /* OPRAVENO: Správný výpočet šířky */
 }
 
+.author-word-box {
+    text-align: center;
+
 /* Styly pro sekci "Slovo autora" */
 .author-word-toggle {
     display: inline-block;

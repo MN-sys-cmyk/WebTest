@@ -1,19 +1,15 @@
 // JavaScript pro stránku s texty podle autora
 
-// Funkce pro načtení příspěvků podle autora
 function loadAuthorCategoryPosts() {
-    // Získáme autora z URL parametru
     const urlParams = new URLSearchParams(window.location.search);
     const author = urlParams.get('author');
     
-    // Pokud nemáme autora, přesměrujeme na hlavní stránku
     if (!author) {
         console.error('Nebyl zadán autor');
         window.location.href = 'index.html';
         return;
     }
     
-    // Aktualizujeme nadpis stránky
     const authorTitle = document.getElementById('author-title');
     const authorSubtitle = document.getElementById('author-subtitle');
     
@@ -25,34 +21,28 @@ function loadAuthorCategoryPosts() {
         authorSubtitle.textContent = `Všechny texty autora ${author}`;
     }
     
-    // Zkontrolujeme, zda existuje globální proměnná postsData
     if (typeof postsData === 'undefined') {
         console.error('Data příspěvků nejsou k dispozici');
         return;
     }
     
-    // Filtrujeme příspěvky podle autora
     const authorPosts = postsData.filter(post => post.author === author);
     
-    // Seřadíme příspěvky podle data (nejnovější první)
     authorPosts.sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
     });
     
-    // Získáme kontejner pro příspěvky
     const postsGrid = document.getElementById('author-category-posts-grid');
     if (!postsGrid) {
         console.error('Kontejner pro příspěvky nebyl nalezen');
         return;
     }
     
-    // Pokud nejsou žádné příspěvky od daného autora, zobrazíme zprávu
     if (authorPosts.length === 0) {
         postsGrid.innerHTML = '<p>Tento autor zatím nemá žádné příspěvky.</p>';
         return;
     }
     
-    // Vygenerujeme HTML pro příspěvky
     let postsHTML = '';
     
     authorPosts.forEach(post => {
@@ -72,21 +62,18 @@ function loadAuthorCategoryPosts() {
                             <span>Slovo autora</span>
                             <span class="arrow">▼</span>
                         </div>
-                        <div style="display: none;"><p class="authorWordText">${post.excerpt}</p></div>
+                        <div style="display: none;"><p id="authorWord">${post.excerpt}</p></div>
                     </div>
                 </div>
             </div>
         `;
     });
     
-    // Vložíme HTML do kontejneru
     postsGrid.innerHTML = postsHTML;
 
-    // Inicializujeme tlačítka slovo autora
     initAuthorWordToggle();
 }
 
-// Inicializace stránky po načtení DOM
 document.addEventListener('DOMContentLoaded', function() {
     loadAuthorCategoryPosts();
     initMobileMenu();

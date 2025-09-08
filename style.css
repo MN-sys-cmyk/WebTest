@@ -777,8 +777,8 @@ ul {
 
 .post-featured-image {
     width: 100%;
-    max-width: 500px;
-    max-height: 300px;
+    max-width: 300px;
+    max-height: 100px;
     margin: 0 auto 30px;
     border-radius: 8px;
     overflow: hidden;

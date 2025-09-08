@@ -78,13 +78,13 @@ function loadAuthorPosts(authorName) {
                     </div>
                     <h3 class="post-title">${post.title}</h3>
                     <p class="post-excerpt">${post.excerpt}</p>
-                     <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
+                    <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
                     <div class="author-word-box">
                         <div class="author-word-toggle">
                             <span>Slovo autora</span>
                             <span class="arrow">▼</span>
                         </div>
-                        <div style="display: none;"><p id="authorWord">${post.excerpt}</p></div>
+                        <div style="display: none;"><p class="authorWordText">${post.excerpt}</p></div>
                     </div>
                 </div>
             </div>
@@ -99,16 +99,12 @@ function loadAuthorPosts(authorName) {
     postsGrid.style.flexWrap = 'wrap';
     postsGrid.style.gap = '30px';
     postsGrid.style.justifyContent = 'flex-start';
+
+    // Inicializace tlačítek slovo autora
+    initAuthorWordToggle();
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Načteme detail autora
     loadAuthorDetails();
-    
-    // Inicializace mobilního menu
     initMobileMenu();
-    
-    // Inicializace tlačítek pro "slovo autora"
-    initAuthorWordToggle();
 });

@@ -2,25 +2,21 @@
 
 // Funkce pro načtení všech příspěvků
 function loadAllPosts() {
-    // Zkontrolujeme, zda existuje globální proměnná postsData
     if (typeof postsData === 'undefined') {
         console.error('Data příspěvků nejsou k dispozici');
         return;
     }
     
-    // Získáme kontejner pro příspěvky
     const postsGrid = document.getElementById('all-posts-grid');
     if (!postsGrid) {
         console.error('Kontejner pro příspěvky nebyl nalezen');
         return;
     }
     
-    // Seřadíme příspěvky podle data (nejnovější první)
     const sortedPosts = [...postsData].sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
     });
     
-    // Vygenerujeme HTML pro všechny příspěvky
     let postsHTML = '';
     
     sortedPosts.forEach(post => {
@@ -40,25 +36,20 @@ function loadAllPosts() {
                             <span>Slovo autora</span>
                             <span class="arrow">▼</span>
                         </div>
-                        <div style="display: none;"><p class="authorWordText">${post.excerpt}</p></div>
+                        <div style="display: none;"><p id="authorWord">${post.excerpt}</p></div>
                     </div>
                 </div>
             </div>
         `;
     });
     
-    // Vložíme HTML do kontejneru
     postsGrid.innerHTML = postsHTML;
 
-    // Inicializace tlačítek slovo autora
+    // Inicializace tlačítka slovo autora
     initAuthorWordToggle();
 }
 
-// Inicializace stránky po načtení DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Načteme všechny příspěvky
     loadAllPosts();
-    
-    // Inicializace mobilního menu
     initMobileMenu();
 });

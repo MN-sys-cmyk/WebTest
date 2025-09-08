@@ -81,9 +81,6 @@ function loadCategoryPosts() {
     
     // Vložíme HTML do kontejneru
     postsGrid.innerHTML = postsHTML;
-    
-    // Inicializujeme tlačítka slovo autora
-    ;
 }
 
 // Inicializace stránky po načtení DOM

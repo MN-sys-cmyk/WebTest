@@ -1,3 +1,80 @@
+/* ===== [FIX] Slovo autora — robustní modal + delegace ===== */
+(function () {
+  // Pokud už modal existuje někde níž, nenačítej znovu
+  if (window.__AW_MODAL_BOUND__) return;
+  window.__AW_MODAL_BOUND__ = true;
+
+  function openAuthorWordModal(html) {
+    closeAuthorWordModal();
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    const dialog = document.createElement('div');
+    dialog.className = 'modal';
+    dialog.setAttribute('role', 'dialog');
+    dialog.setAttribute('aria-modal', 'true');
+    dialog.setAttribute('tabindex', '-1');
+    dialog.innerHTML = `
+      <button class="modal-close" aria-label="Zavřít">&times;</button>
+      <h3 class="modal-title">Slovo autora</h3>
+      <div class="modal-body">${html || '<p>(Autor zatím nic nedodal.)</p>'}</div>
+    `;
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+    const onKey = (e) => { if (e.key === 'Escape') closeAuthorWordModal(); };
+    const onOverlay = (e) => { if (e.target === overlay) closeAuthorWordModal(); };
+    overlay.addEventListener('click', onOverlay);
+    document.addEventListener('keydown', onKey);
+    overlay._cleanup = () => { overlay.removeEventListener('click', onOverlay); document.removeEventListener('keydown', onKey); };
+    dialog.querySelector('.modal-close').addEventListener('click', (e) => { e.preventDefault(); closeAuthorWordModal(); });
+    dialog.focus();
+  }
+  function closeAuthorWordModal() {
+    const overlay = document.querySelector('.modal-overlay');
+    if (overlay) { overlay._cleanup?.(); overlay.remove(); document.body.style.overflow = ''; }
+  }
+  function extractAuthorWordHtml(tg) {
+    // 1) aria-controls -> #id -> .authorWordText
+    const id = tg.getAttribute('aria-controls');
+    if (id) {
+      const box = document.getElementById(id);
+      if (box) {
+        const p = box.querySelector('.authorWordText');
+        return (p && p.innerHTML) || box.innerHTML;
+      }
+    }
+    // 2) nejbližší .author-word-box -> .authorWordText
+    const parent = tg.closest('.author-word-box') || tg.parentElement;
+    const p = parent?.querySelector('.authorWordText');
+    return (p && p.innerHTML) || '';
+  }
+
+  // Delegované KLIKNUTÍ — v capture, aby předběhlo <a> navigaci
+  document.addEventListener('click', (e) => {
+    const tg = e.target.closest?.('.author-word-toggle');
+    if (!tg) return;
+    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+    openAuthorWordModal(extractAuthorWordHtml(tg));
+  }, true);
+
+  // Delegované klávesy (Enter/Space)
+  document.addEventListener('keydown', (e) => {
+    const tg = e.target.closest?.('.author-word-toggle');
+    if (!tg) return;
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+    openAuthorWordModal(extractAuthorWordHtml(tg));
+  }, true);
+
+  // Přístupnost: zajisti role + tabindex na všechny toggly, i kdyby markup byl jiný
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.author-word-toggle').forEach(t => {
+      if (!t.hasAttribute('role')) t.setAttribute('role', 'button');
+      if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '0');
+      t.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
 // script.js — karusely + kliknutelné karty (manuální navigace) + modal "Slovo autora"
 (function () {
   const $ = (s, r = document) => r.querySelector(s);

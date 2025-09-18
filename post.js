@@ -1,4 +1,4 @@
-// post.js — detail příspěvku + související články
+// post.js — detail příspěvku + související články + Slovo autora toggle
 function findPostById(id) {
   return Utils.Data.allPosts().find(p => String(p.id) === String(id)) || null;
 }
@@ -6,6 +6,44 @@ function findPostById(id) {
 function formatContent(content) {
   if (!content) return '';
   return content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
+}
+
+function bindAuthorWordToggles(root = document) {
+  const toggles = root.querySelectorAll('.author-word-toggle');
+  toggles.forEach(tg => {
+    if (tg.dataset.bound === '1') return;
+    tg.dataset.bound = '1';
+
+    const activate = (evt) => {
+      evt.preventDefault();
+      evt.stopPropagation();
+      const controlsId = tg.getAttribute('aria-controls');
+      const box = controlsId ? document.getElementById(controlsId) : tg.parentElement?.querySelector('.author-word-content, div');
+      if (!box) return;
+
+      const isOpen = tg.getAttribute('aria-expanded') === 'true';
+      const nextOpen = !isOpen;
+      tg.setAttribute('aria-expanded', String(nextOpen));
+
+      if (box.classList.contains('author-word-content')) {
+        if (nextOpen) {
+          box.style.display = 'block';
+          const h = box.scrollHeight;
+          box.style.maxHeight = h + 'px';
+        } else {
+          box.style.maxHeight = '0';
+          box.addEventListener('transitionend', () => { if (tg.getAttribute('aria-expanded') === 'false') box.style.display = 'none'; }, { once: true });
+        }
+      } else {
+        box.style.display = nextOpen ? 'block' : 'none';
+      }
+    };
+
+    tg.addEventListener('click', activate);
+    tg.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') activate(e);
+    });
+  });
 }
 
 function loadRelatedPosts(authorId, currentPostId) {
@@ -34,12 +72,16 @@ function loadRelatedPosts(authorId, currentPostId) {
         <p class="post-excerpt">${Utils.escape(p.excerpt)}</p>
         <a href="post.html?id=${encodeURIComponent(p.id)}" class="read-more">Číst více</a>
         <div class="author-word-box">
-          <div class="author-word-toggle"><span>Slovo autora</span><span class="arrow">▼</span></div>
-          <div style="display:none;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
+          <div class="author-word-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="aw-rel-${p.id}">
+            <span>Slovo autora</span><span class="arrow">▼</span>
+          </div>
+          <div id="aw-rel-${p.id}" class="author-word-content" style="display:none; max-height:0;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
         </div>
       </div>
     </div>
   `).join("");
+
+  bindAuthorWordToggles(grid);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -89,6 +131,23 @@ document.addEventListener('DOMContentLoaded', () => {
       <a href="author-category.html?author=${encodeURIComponent(post.authorId)}" class="tag">${Utils.escape(author?.name || '')}</a>
     `;
   }
+
+  // připrav "Slovo autora" v detailu (existuje-li)
+  const awToggle = document.querySelector('.author-word-box .author-word-toggle');
+  const awBox = document.querySelector('.author-word-box > div');
+  if (awToggle && awBox) {
+    // doplníme ARIA pro lepší ovládání
+    const idBox = 'aw-detail';
+    awBox.id = idBox;
+    awBox.classList.add('author-word-content');
+    awBox.style.display = 'none';
+    awBox.style.maxHeight = '0';
+    awToggle.setAttribute('role', 'button');
+    awToggle.setAttribute('tabindex', '0');
+    awToggle.setAttribute('aria-expanded', 'false');
+    awToggle.setAttribute('aria-controls', idBox);
+  }
+  bindAuthorWordToggles(document);
 
   loadRelatedPosts(post.authorId, post.id);
 });

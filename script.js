@@ -1,6 +1,7 @@
 // script.js — karusely (autoři + příspěvky) s kliknutelnými kartami
 (function () {
   const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const el = (tag, attrs = {}) => { const n = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => (k in n ? (n[k] = v) : n.setAttribute(k, v))); return n; };
 
   function getAuthorsSafe() {
@@ -16,6 +17,52 @@
       if (Array.isArray(window.DATA?.posts)) return window.DATA.posts.map(p => ({ ...p, date: p.date ? new Date(p.date) : null }));
     } catch (_) {}
     return [];
+  }
+
+  // ---------- Slovo autora: bind ----------
+  function bindAuthorWordToggles(root = document) {
+    $$('.author-word-toggle', root).forEach(tg => {
+      // už navěšeno?
+      if (tg.dataset.bound === '1') return;
+      tg.dataset.bound = '1';
+
+      // kliknutí i klávesy
+      const activate = (evt) => {
+        // uvnitř <a> nechceme navigovat
+        evt.preventDefault();
+        evt.stopPropagation();
+
+        const controlsId = tg.getAttribute('aria-controls');
+        const box = controlsId ? document.getElementById(controlsId) : tg.parentElement?.querySelector('.author-word-content, div');
+        if (!box) return;
+
+        const isOpen = tg.getAttribute('aria-expanded') === 'true';
+        const nextOpen = !isOpen;
+        tg.setAttribute('aria-expanded', String(nextOpen));
+
+        // animace přes max-height (pokud má class), jinak fallback přes display
+        if (box.classList.contains('author-word-content')) {
+          if (nextOpen) {
+            box.style.display = 'block';
+            // na první přechod změříme výšku
+            const h = box.scrollHeight;
+            box.style.maxHeight = h + 'px';
+          } else {
+            box.style.maxHeight = '0';
+            // po skončení animace můžeme skrýt
+            box.addEventListener('transitionend', () => { if (tg.getAttribute('aria-expanded') === 'false') box.style.display = 'none'; }, { once: true });
+          }
+        } else {
+          // původní markup s <div style="display:none;">
+          box.style.display = nextOpen ? 'block' : 'none';
+        }
+      };
+
+      tg.addEventListener('click', activate);
+      tg.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') activate(e);
+      });
+    });
   }
 
   function ensureAuthorsCarouselDOM() {
@@ -74,7 +121,9 @@
         </a>
       `).join('');
       track.appendChild(slide);
+    }
 
+    for (let i = 0; i < slidesNeeded; i++) {
       const dot = el('div', { className: 'indicator-dot' + (i === 0 ? ' active' : '') });
       dot.onclick = () => moveAuthorsTo(i);
       dotsWrap.appendChild(dot);
@@ -115,7 +164,8 @@
 
     const [featuredPost, ...rest] = posts;
 
-    // === FEATURED je celý odkaz ===
+    // === FEATURED je celý odkaz + toggler s role="button" ===
+    const awId = `aw-featured`;
     featured.innerHTML = `
       <a class="featured-post" href="post.html?id=${encodeURIComponent(featuredPost.id)}" aria-label="${String(featuredPost.title || '').replace(/</g,'&lt;')}">
         <div class="featured-post-image" style="background-image: url('${featuredPost.image}');"></div>
@@ -127,8 +177,10 @@
           <h3 class="post-title">${String(featuredPost.title || '').replace(/</g,'&lt;')}</h3>
           <p class="post-excerpt">${String(featuredPost.excerpt || '').replace(/</g,'&lt;')}</p>
           <div class="author-word-box">
-            <div class="author-word-toggle"><span>Slovo autora</span><span class="arrow">▼</span></div>
-            <div style="display:none;"><p class="authorWordText">${String(featuredPost.excerpt || '').replace(/</g,'&lt;')}</p></div>
+            <div class="author-word-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="${awId}">
+              <span>Slovo autora</span><span class="arrow">▼</span>
+            </div>
+            <div id="${awId}" class="author-word-content" style="display:none; max-height:0;"><p class="authorWordText">${String(featuredPost.excerpt || '').replace(/</g,'&lt;')}</p></div>
           </div>
         </div>
       </a>
@@ -153,8 +205,9 @@
       slide.style.justifyContent = 'space-between';
       slide.style.gap = '20px';
 
-      // === KAŽDÁ KARTA JE CELÝ ODKAZ ===
-      slide.innerHTML = slice.map(p => `
+      slide.innerHTML = slice.map(p => {
+        const id = `aw-${p.id}`;
+        return `
         <a class="post-card" href="post.html?id=${encodeURIComponent(p.id)}" role="article" aria-label="${String(p.title || '').replace(/</g,'&lt;')}" style="display:block;">
           <div class="post-card-image" style="background-image: url('${p.image}');"></div>
           <div class="post-card-content">
@@ -165,21 +218,29 @@
             <h3 class="post-title">${String(p.title || '').replace(/</g,'&lt;')}</h3>
             <p class="post-excerpt">${String(p.excerpt || '').replace(/</g,'&lt;')}</p>
             <div class="author-word-box">
-              <div class="author-word-toggle"><span>Slovo autora</span><span class="arrow">▼</span></div>
-              <div style="display:none;"><p class="authorWordText">${String(p.excerpt || '').replace(/</g,'&lt;')}</p></div>
+              <div class="author-word-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="${id}">
+                <span>Slovo autora</span><span class="arrow">▼</span>
+              </div>
+              <div id="${id}" class="author-word-content" style="display:none; max-height:0;"><p class="authorWordText">${String(p.excerpt || '').replace(/</g,'&lt;')}</p></div>
             </div>
           </div>
-        </a>
-      `).join('');
+        </a>`;
+      }).join('');
 
       track.appendChild(slide);
+    }
 
-      if (indicator) {
+    if (indicator) {
+      for (let i = 0; i < slidesNeeded; i++) {
         const dot = el('div', { className: 'indicator-dot' + (i === 0 ? ' active' : '') });
         dot.onclick = () => movePostsTo(i);
         indicator.appendChild(dot);
       }
     }
+
+    // navěsit togglery teď, když je DOM hotový
+    bindAuthorWordToggles(featured);
+    bindAuthorWordToggles(postsContainer);
 
     adjustPostsCarouselResponsive(track);
     return slidesNeeded;
@@ -213,9 +274,9 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    try { slidesCount = generateAuthorsCarousel(); initAuthorsCarousel(); } catch (e) { console.error('Autoři:', e); }
+    try { const n = generateAuthorsCarousel(); initAuthorsCarousel(); } catch (e) { console.error('Autoři:', e); }
     try {
-      postSlidesCount = generatePostsCarousel(); initPostsCarousel();
+      const m = generatePostsCarousel(); initPostsCarousel();
       const featured = $('#featured-post-container'); if (featured) featured.style.marginBottom = '50px';
     } catch (e) { console.error('Příspěvky:', e); }
   });

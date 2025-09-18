@@ -1,116 +1,71 @@
-// script.js — robustní verze karuselů (autoři + příspěvky)
-
+// script.js — karusely (autoři + příspěvky) s kliknutelnými kartami
 (function () {
-  // --- Pomůcky
   const $ = (s, r = document) => r.querySelector(s);
-  const el = (tag, attrs = {}) => {
-    const n = document.createElement(tag);
-    Object.entries(attrs).forEach(([k, v]) => (k in n ? (n[k] = v) : n.setAttribute(k, v)));
-    return n;
-  };
+  const el = (tag, attrs = {}) => { const n = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => (k in n ? (n[k] = v) : n.setAttribute(k, v))); return n; };
 
-  // Bezpečné čtení dat i při starším data.js
   function getAuthorsSafe() {
     try {
       if (window.Utils?.Data?.getAuthors) return window.Utils.Data.getAuthors();
       if (Array.isArray(window.DATA?.authors)) return window.DATA.authors;
-      if (Array.isArray(window.authorsData)) return window.authorsData; // fallback na starší název
     } catch (_) {}
     return [];
   }
   function getPostsSafe() {
     try {
       if (window.Utils?.Data?.allPosts) return window.Utils.Data.allPosts();
-      if (Array.isArray(window.DATA?.posts)) {
-        // normalizuj datum
-        return window.DATA.posts.map(p => ({ ...p, date: p.date ? new Date(p.date) : null }));
-      }
-      if (Array.isArray(window.postsData)) return window.postsData; // fallback na starší název
+      if (Array.isArray(window.DATA?.posts)) return window.DATA.posts.map(p => ({ ...p, date: p.date ? new Date(p.date) : null }));
     } catch (_) {}
     return [];
   }
 
-  // Vytvoř chybějící markup, pokud by v HTML absentoval
   function ensureAuthorsCarouselDOM() {
     let wrap = $('.authors-carousel');
     if (!wrap) {
-      // vytvoř celou sekci, pokud chybí
       wrap = el('div', { className: 'authors-carousel' });
       const cont = $('.authors-section .container') || $('.container') || document.body;
       cont.appendChild(wrap);
     }
-    if (!$('.authors-carousel .carousel-arrow.prev')) {
-      wrap.insertAdjacentHTML('beforeend', `<div class="carousel-arrow prev">❮</div>`);
-    }
-    if (!$('.authors-carousel .carousel-container')) {
-      wrap.insertAdjacentHTML('beforeend', `<div class="carousel-container"><div class="carousel-track" id="carousel-track"></div></div>`);
-    } else if (!$('#carousel-track')) {
-      $('.authors-carousel .carousel-container').innerHTML = `<div class="carousel-track" id="carousel-track"></div>`;
-    }
-    if (!$('.authors-carousel .carousel-arrow.next')) {
-      wrap.insertAdjacentHTML('beforeend', `<div class="carousel-arrow next">❯</div>`);
-    }
-    if (!$('#carousel-indicator')) {
-      wrap.insertAdjacentHTML('beforeend', `<div class="carousel-indicator" id="carousel-indicator"></div>`);
-    }
+    if (!$('.authors-carousel .carousel-arrow.prev')) wrap.insertAdjacentHTML('beforeend', `<div class="carousel-arrow prev">❮</div>`);
+    if (!$('.authors-carousel .carousel-container')) wrap.insertAdjacentHTML('beforeend', `<div class="carousel-container"><div class="carousel-track" id="carousel-track"></div></div>`);
+    else if (!$('#carousel-track')) $('.authors-carousel .carousel-container').innerHTML = `<div class="carousel-track" id="carousel-track"></div>`;
+    if (!$('.authors-carousel .carousel-arrow.next')) wrap.insertAdjacentHTML('beforeend', `<div class="carousel-arrow next">❯</div>`);
+    if (!$('#carousel-indicator')) wrap.insertAdjacentHTML('beforeend', `<div class="carousel-indicator" id="carousel-indicator"></div>`);
   }
-
   function ensurePostsCarouselDOM() {
     const latest = $('.latest-posts .container') || $('.latest-posts') || $('.container') || document.body;
-    if (!$('#featured-post-container')) {
-      latest.insertAdjacentHTML('afterbegin', `<div id="featured-post-container"></div>`);
-    }
+    if (!$('#featured-post-container')) latest.insertAdjacentHTML('afterbegin', `<div id="featured-post-container"></div>`);
     let pc = $('.posts-carousel');
-    if (!pc) {
-      pc = el('div', { className: 'posts-carousel' });
-      latest.appendChild(pc);
-    }
-    if (!$('.posts-carousel .carousel-arrow.prev')) {
-      pc.insertAdjacentHTML('beforeend', `<div class="carousel-arrow prev">❮</div>`);
-    }
-    if (!$('.posts-carousel .carousel-container')) {
-      pc.insertAdjacentHTML('beforeend', `<div class="carousel-container"><div class="posts-container" id="posts-container"></div></div>`);
-    } else if (!$('#posts-container')) {
-      $('.posts-carousel .carousel-container').innerHTML = `<div class="posts-container" id="posts-container"></div>`;
-    }
-    if (!$('.posts-carousel .carousel-arrow.next')) {
-      pc.insertAdjacentHTML('beforeend', `<div class="carousel-arrow next">❯</div>`);
-    }
-    if (!$('#posts-indicator')) {
-      pc.insertAdjacentHTML('beforeend', `<div class="carousel-indicator" id="posts-indicator"></div>`);
-    }
+    if (!pc) { pc = el('div', { className: 'posts-carousel' }); latest.appendChild(pc); }
+    if (!$('.posts-carousel .carousel-arrow.prev')) pc.insertAdjacentHTML('beforeend', `<div class="carousel-arrow prev">❮</div>`);
+    if (!$('.posts-carousel .carousel-container')) pc.insertAdjacentHTML('beforeend', `<div class="carousel-container"><div class="posts-container" id="posts-container"></div></div>`);
+    else if (!$('#posts-container')) $('.posts-carousel .carousel-container').innerHTML = `<div class="posts-container" id="posts-container"></div>`;
+    if (!$('.posts-carousel .carousel-arrow.next')) pc.insertAdjacentHTML('beforeend', `<div class="carousel-arrow next">❯</div>`);
+    if (!$('#posts-indicator')) pc.insertAdjacentHTML('beforeend', `<div class="carousel-indicator" id="posts-indicator"></div>`);
   }
 
-  // ===== Autorské karusely =====
-  let currentSlide = 0;
-  let slidesCount = 0;
+  // ===== Autoři =====
+  let currentSlide = 0, slidesCount = 0;
 
   function generateAuthorsCarousel() {
     ensureAuthorsCarouselDOM();
-
-    const track = $('#carousel-track');
-    const dotsWrap = $('#carousel-indicator');
+    const track = $('#carousel-track'); const dotsWrap = $('#carousel-indicator');
     if (!track || !dotsWrap) return 0;
 
     const authors = getAuthorsSafe();
     if (!authors.length) {
-      console.warn('[WebTest] Nenačteni autoři. Zkontroluj: data.js (window.DATA.authors) a pořadí skriptů.');
+      console.warn('[WebTest] Chybí DATA.authors');
       track.innerHTML = `<div class="carousel-slide"><p>Autoři zatím nejsou k dispozici.</p></div>`;
       return 1;
     }
 
-    track.innerHTML = '';
-    dotsWrap.innerHTML = '';
-
-    const perSlide = 4;
-    const slidesNeeded = Math.ceil(authors.length / perSlide);
+    track.innerHTML = ''; dotsWrap.innerHTML = '';
+    const perSlide = 4; const slidesNeeded = Math.ceil(authors.length / perSlide);
 
     for (let i = 0; i < slidesNeeded; i++) {
-      const start = i * perSlide;
-      const slice = authors.slice(start, start + perSlide);
+      const start = i * perSlide; const slice = authors.slice(start, start + perSlide);
       const slide = el('div', { className: 'carousel-slide' });
       slide.innerHTML = slice.map(a => `
-        <a href="author.html?id=${encodeURIComponent(a.id)}" class="author-card">
+        <a href="author.html?id=${encodeURIComponent(a.id)}" class="author-card" aria-label="${(a.name || '').replace(/</g,'&lt;')}">
           <div class="author-image-container">
             <img src="${a.image}" alt="${(a.name || '').replace(/</g,'&lt;')}" class="author-image" loading="lazy">
           </div>
@@ -126,33 +81,20 @@
     }
     return slidesNeeded;
   }
-
   function initAuthorsCarousel() {
     const slides = document.querySelectorAll('.authors-carousel .carousel-slide');
-    slidesCount = slides.length;
-    if (slidesCount < 2) return;
-
-    const prev = $('.authors-carousel .carousel-arrow.prev');
-    const next = $('.authors-carousel .carousel-arrow.next');
-    prev?.addEventListener('click', () => moveAuthorsTo(currentSlide - 1));
-    next?.addEventListener('click', () => moveAuthorsTo(currentSlide + 1));
+    slidesCount = slides.length; if (slidesCount < 2) return;
+    $('.authors-carousel .carousel-arrow.prev')?.addEventListener('click', () => moveAuthorsTo(currentSlide - 1));
+    $('.authors-carousel .carousel-arrow.next')?.addEventListener('click', () => moveAuthorsTo(currentSlide + 1));
   }
-
   function moveAuthorsTo(index) {
-    if (index < 0) index = slidesCount - 1;
-    else if (index >= slidesCount) index = 0;
-    currentSlide = index;
-
-    const track = $('#carousel-track');
-    if (track) track.style.transform = `translateX(-${currentSlide * 100}%)`;
-
-    document.querySelectorAll('.authors-carousel .indicator-dot')
-      .forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+    if (index < 0) index = slidesCount - 1; else if (index >= slidesCount) index = 0; currentSlide = index;
+    const track = $('#carousel-track'); if (track) track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    document.querySelectorAll('.authors-carousel .indicator-dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
   }
 
-  // ===== Karusel příspěvků =====
-  let currentPostSlide = 0;
-  let postSlidesCount = 0;
+  // ===== Příspěvky =====
+  let currentPostSlide = 0, postSlidesCount = 0;
 
   function generatePostsCarousel() {
     ensurePostsCarouselDOM();
@@ -162,21 +104,20 @@
     const featured = $('#featured-post-container');
     if (!postsContainer || !featured) return 0;
 
-    postsContainer.innerHTML = '';
-    if (indicator) indicator.innerHTML = '';
-    featured.innerHTML = '';
+    postsContainer.innerHTML = ''; indicator && (indicator.innerHTML = ''); featured.innerHTML = '';
 
     const posts = getPostsSafe().sort((a, b) => (b.date?.getTime?.() || 0) - (a.date?.getTime?.() || 0));
     if (!posts.length) {
-      console.warn('[WebTest] Nenačtené příspěvky. Zkontroluj: data.js (window.DATA.posts) a pořadí skriptů.');
+      console.warn('[WebTest] Chybí DATA.posts');
       featured.innerHTML = `<p>Žádné příspěvky zatím nejsou k dispozici.</p>`;
       return 0;
     }
 
     const [featuredPost, ...rest] = posts;
 
+    // === FEATURED je celý odkaz ===
     featured.innerHTML = `
-      <div class="featured-post">
+      <a class="featured-post" href="post.html?id=${encodeURIComponent(featuredPost.id)}" aria-label="${String(featuredPost.title || '').replace(/</g,'&lt;')}">
         <div class="featured-post-image" style="background-image: url('${featuredPost.image}');"></div>
         <div class="featured-post-content">
           <div class="post-meta">
@@ -185,13 +126,12 @@
           </div>
           <h3 class="post-title">${String(featuredPost.title || '').replace(/</g,'&lt;')}</h3>
           <p class="post-excerpt">${String(featuredPost.excerpt || '').replace(/</g,'&lt;')}</p>
-          <a href="post.html?id=${encodeURIComponent(featuredPost.id)}" class="read-more">Přečíst celý text</a>
           <div class="author-word-box">
             <div class="author-word-toggle"><span>Slovo autora</span><span class="arrow">▼</span></div>
             <div style="display:none;"><p class="authorWordText">${String(featuredPost.excerpt || '').replace(/</g,'&lt;')}</p></div>
           </div>
         </div>
-      </div>
+      </a>
     `;
 
     const track = el('div', { className: 'posts-carousel-track' });
@@ -213,8 +153,9 @@
       slide.style.justifyContent = 'space-between';
       slide.style.gap = '20px';
 
+      // === KAŽDÁ KARTA JE CELÝ ODKAZ ===
       slide.innerHTML = slice.map(p => `
-        <div class="post-card">
+        <a class="post-card" href="post.html?id=${encodeURIComponent(p.id)}" role="article" aria-label="${String(p.title || '').replace(/</g,'&lt;')}" style="display:block;">
           <div class="post-card-image" style="background-image: url('${p.image}');"></div>
           <div class="post-card-content">
             <div class="post-meta">
@@ -223,13 +164,12 @@
             </div>
             <h3 class="post-title">${String(p.title || '').replace(/</g,'&lt;')}</h3>
             <p class="post-excerpt">${String(p.excerpt || '').replace(/</g,'&lt;')}</p>
-            <a href="post.html?id=${encodeURIComponent(p.id)}" class="read-more">Číst více</a>
             <div class="author-word-box">
               <div class="author-word-toggle"><span>Slovo autora</span><span class="arrow">▼</span></div>
               <div style="display:none;"><p class="authorWordText">${String(p.excerpt || '').replace(/</g,'&lt;')}</p></div>
             </div>
           </div>
-        </div>
+        </a>
       `).join('');
 
       track.appendChild(slide);
@@ -250,67 +190,33 @@
     const cards = track.querySelectorAll('.post-card');
     const apply = () => {
       const w = window.innerWidth;
-      if (w <= 576) {
-        cards.forEach(c => { c.style.flex = '0 0 100%'; c.style.maxWidth = '100%'; });
-      } else if (w <= 992) {
-        cards.forEach(c => { c.style.flex = '0 0 calc(50% - 10px)'; c.style.maxWidth = 'calc(50% - 10px)'; });
-      } else {
-        cards.forEach(c => { c.style.flex = '0 0 calc(33.333% - 14px)'; c.style.maxWidth = 'calc(33.333% - 14px)'; });
-      }
+      if (w <= 576)       cards.forEach(c => { c.style.flex = '0 0 100%';                 c.style.maxWidth = '100%'; });
+      else if (w <= 992)  cards.forEach(c => { c.style.flex = '0 0 calc(50% - 10px)';    c.style.maxWidth = 'calc(50% - 10px)'; });
+      else                cards.forEach(c => { c.style.flex = '0 0 calc(33.333% - 14px)'; c.style.maxWidth = 'calc(33.333% - 14px)'; });
     };
     apply();
     window.addEventListener('resize', apply);
   }
 
   function initPostsCarousel() {
-    const track = $('.posts-carousel-track');
-    if (!track) return;
-
+    const track = $('.posts-carousel-track'); if (!track) return;
     const slides = track.querySelectorAll('.posts-slide');
-    postSlidesCount = slides.length;
-    if (postSlidesCount <= 1) return;
-
-    const prev = $('.posts-carousel .carousel-arrow.prev');
-    const next = $('.posts-carousel .carousel-arrow.next');
-    prev?.addEventListener('click', () => movePostsTo(currentPostSlide - 1));
-    next?.addEventListener('click', () => movePostsTo(currentPostSlide + 1));
+    postSlidesCount = slides.length; if (postSlidesCount <= 1) return;
+    $('.posts-carousel .carousel-arrow.prev')?.addEventListener('click', () => movePostsTo(currentPostSlide - 1));
+    $('.posts-carousel .carousel-arrow.next')?.addEventListener('click', () => movePostsTo(currentPostSlide + 1));
   }
-
   function movePostsTo(index) {
-    if (index < 0) index = postSlidesCount - 1;
-    else if (index >= postSlidesCount) index = 0;
+    if (index < 0) index = postSlidesCount - 1; else if (index >= postSlidesCount) index = 0;
     currentPostSlide = index;
-
-    const track = $('.posts-carousel-track');
-    if (track) track.style.transform = `translateX(-${currentPostSlide * 100}%)`;
-
-    document.querySelectorAll('#posts-indicator .indicator-dot')
-      .forEach((d, i) => d.classList.toggle('active', i === currentPostSlide));
+    const track = $('.posts-carousel-track'); if (track) track.style.transform = `translateX(-${currentPostSlide * 100}%)`;
+    document.querySelectorAll('#posts-indicator .indicator-dot').forEach((d, i) => d.classList.toggle('active', i === currentPostSlide));
   }
 
-  // === Bootstrap po načtení DOMu (až budou k dispozici Utils i DATA) ===
   document.addEventListener('DOMContentLoaded', () => {
-    // kontrola pořadí skriptů / dat
-    const hasUtils = !!window.Utils;
-    const hasData = !!(window.DATA?.posts?.length || window.Utils?.Data?.allPosts?.());
-    if (!hasUtils) console.warn('[WebTest] window.Utils není k dispozici. Zkontroluj, že utils.js je vložen před script.js.');
-    if (!hasData) console.warn('[WebTest] DATA nejsou k dispozici. Zkontroluj, že data.js je vložen před utils.js a script.js.');
-
+    try { slidesCount = generateAuthorsCarousel(); initAuthorsCarousel(); } catch (e) { console.error('Autoři:', e); }
     try {
-      slidesCount = generateAuthorsCarousel();
-      initAuthorsCarousel();
-    } catch (e) {
-      console.error('[WebTest] Chyba při generování karuselu autorů:', e);
-    }
-
-    try {
-      postSlidesCount = generatePostsCarousel();
-      initPostsCarousel();
-      // drobné odsazení pro vzhled
-      const featured = $('#featured-post-container');
-      if (featured) featured.style.marginBottom = '50px';
-    } catch (e) {
-      console.error('[WebTest] Chyba při generování karuselu příspěvků:', e);
-    }
+      postSlidesCount = generatePostsCarousel(); initPostsCarousel();
+      const featured = $('#featured-post-container'); if (featured) featured.style.marginBottom = '50px';
+    } catch (e) { console.error('Příspěvky:', e); }
   });
 })();

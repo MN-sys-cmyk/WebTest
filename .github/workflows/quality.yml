@@ -1,0 +1,31 @@
+name: Quality checks (HTML/CSS/JS)
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dev tools
+        run: |
+          npm init -y >/dev/null 2>&1 || true
+          npm i -D eslint prettier stylelint stylelint-config-standard html-validate@8
+
+      - name: ESLint (JS)
+        run: npx eslint . || true
+
+      - name: Stylelint (CSS)
+        run: npx stylelint "**/*.css" || true
+
+      - name: HTML-Validate
+        run: npx html-validate "**/*.html" || true

@@ -1,139 +1,94 @@
-// Function to load post details
-function loadPostDetails() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('id');
-    
-    if (!postId) {
-        console.error('Post ID not specified');
-        window.location.href = 'index.html';
-        return;
-    }
-    
-    const post = postsData.find(p => p.id.toString() === postId.toString());
-    
-    if (!post) {
-        console.error('Post with ID ' + postId + ' not found');
-        window.location.href = 'index.html';
-        return;
-    }
-    
-    document.title = post.title + ' - LiterárníKomunita';
-    
-    const postDateElement = document.getElementById('postDate');
-    const postCategoryElement = document.getElementById('postCategory');
-    const postTitleElement = document.getElementById('postTitle');
-    const authorNameElement = document.getElementById('authorName');
-    const authorImageElement = document.getElementById('authorImage');
-    const authorLinkElement = document.getElementById('authorLink');
-    const postImageElement = document.getElementById('postImage');
-    const postContentElement = document.getElementById('postContent');
-    const authorWordElement = document.getElementById('authorWord');
-    
-    if (postDateElement) postDateElement.textContent = post.displayDate || post.date;
-    if (postCategoryElement) postCategoryElement.textContent = post.category;
-    if (postTitleElement) postTitleElement.textContent = post.title;
-    if (authorNameElement) authorNameElement.textContent = post.author;
-    if (postImageElement && post.image) postImageElement.src = post.image;
-    if (postContentElement && post.content) postContentElement.innerHTML = formatContent(post.content);
-
-    // Zajištění, aby text z excerpt byl nastaven do skrytého odstavce
-    if (authorWordElement) {
-        authorWordElement.textContent = post.excerpt;
-    }
-    
-    if (authorNameElement && authorImageElement && authorLinkElement) {
-        const author = authorsData.find(a => a.name === post.author);
-        
-        if (author) {
-            authorImageElement.src = author.image;
-            authorLinkElement.href = `author.html?id=${author.id}`;
-        }
-    }
-    
-    const tagsContainer = document.querySelector('.post-tags');
-    if (tagsContainer && post.category) {
-        tagsContainer.innerHTML = `
-            <a href="category.html?category=${encodeURIComponent(post.category)}" class="tag">${post.category}</a>
-            <a href="author-category.html?author=${encodeURIComponent(post.author)}" class="tag">${post.author}</a>
-        `;
-    }
-    
-    loadRelatedPosts(post.author, post.id);
-    
-    setTimeout(function() {
-        initAuthorWordToggle();
-    }, 300);
-    
-    initShareButtons();
+// post.js — detail příspěvku + související články
+function findPostById(id) {
+  return Utils.Data.allPosts().find(p => String(p.id) === String(id)) || null;
 }
 
-// Pomocná funkce pro formátování obsahu
 function formatContent(content) {
-    if (!content) return '';
-    const paragraphs = content.split('\n');
-    let formattedContent = '';
-    paragraphs.forEach(paragraph => {
-        if (paragraph.trim() !== '') {
-            formattedContent += `<p>${paragraph}</p>`;
-        }
-    });
-    return formattedContent;
+  if (!content) return '';
+  return content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
 }
 
-// Funkce pro načtení souvisejících příspěvků
-function loadRelatedPosts(authorName, currentPostId) {
-    const postsGrid = document.querySelector('.related-posts .posts-grid');
-    if (!postsGrid) return;
-    
-    const authorPosts = postsData.filter(post => 
-        post.author === authorName && post.id.toString() !== currentPostId.toString()
-    );
-    
-    authorPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    const recentPosts = authorPosts.slice(0, 3);
-    
-    let postsHTML = '';
-    
-    if (recentPosts.length === 0) {
-        postsGrid.innerHTML = '<p>Tento autor zatím nemá žádné další příspěvky.</p>';
-        return;
+function loadRelatedPosts(authorId, currentPostId) {
+  const grid = document.querySelector('.related-posts .posts-grid');
+  if (!grid) return;
+
+  const posts = Utils.Data.getPosts({ authorId })
+    .filter(p => String(p.id) !== String(currentPostId))
+    .sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))
+    .slice(0, 3);
+
+  if (!posts.length) {
+    grid.innerHTML = '<p>Tento autor zatím nemá žádné další příspěvky.</p>';
+    return;
+  }
+
+  grid.innerHTML = posts.map(p => `
+    <div class="post-card">
+      <div class="post-card-image" style="background-image: url('${p.image}');"></div>
+      <div class="post-card-content">
+        <div class="post-meta">
+          <span class="post-date">${p.date ? p.date.toLocaleDateString('cs-CZ') : ''}</span>
+          <span class="post-category">${(p.categories && p.categories[0]) ? Utils.escape(p.categories[0]) : ''}</span>
+        </div>
+        <h3 class="post-title">${Utils.escape(p.title)}</h3>
+        <p class="post-excerpt">${Utils.escape(p.excerpt)}</p>
+        <a href="post.html?id=${encodeURIComponent(p.id)}" class="read-more">Číst více</a>
+        <div class="author-word-box">
+          <div class="author-word-toggle"><span>Slovo autora</span><span class="arrow">▼</span></div>
+          <div style="display:none;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  if (!id) return location.replace('index.html');
+
+  const post = findPostById(id);
+  if (!post) return location.replace('index.html');
+
+  document.title = `${post.title} - LiterárníKomunita`;
+
+  const postDateElement = document.getElementById('postDate');
+  const postCategoryElement = document.getElementById('postCategory');
+  const postTitleElement = document.getElementById('postTitle');
+  const authorNameElement = document.getElementById('authorName');
+  const authorImageElement = document.getElementById('authorImage');
+  const authorLinkElement = document.getElementById('authorLink');
+  const postContentElement = document.getElementById('postContent');
+  const authorWordElement = document.getElementById('authorWord');
+
+  if (postDateElement) postDateElement.textContent = post.date ? post.date.toLocaleDateString('cs-CZ') : '';
+  if (postCategoryElement) postCategoryElement.textContent = (post.categories && post.categories[0]) || '';
+  if (postTitleElement) postTitleElement.textContent = post.title;
+  if (authorNameElement) authorNameElement.textContent = Utils.Data.getAuthorById(post.authorId)?.name || '';
+
+  if (postContentElement) postContentElement.innerHTML = formatContent(post.content || '');
+  if (authorWordElement) authorWordElement.textContent = post.excerpt || '';
+
+  // autor info
+  const author = Utils.Data.getAuthorById(post.authorId);
+  if (author) {
+    if (authorImageElement) {
+      authorImageElement.src = author.image;
+      authorImageElement.alt = author.name;
+      authorImageElement.loading = 'lazy';
     }
-    
-    recentPosts.forEach(post => {
-        postsHTML += `
-            <div class="post-card">
-                <div class="post-card-image" style="background-image: url('${post.image}');"></div>
-                <div class="post-card-content">
-                    <div class="post-meta">
-                        <span class="post-date">${post.displayDate || post.date}</span>
-                        <span class="post-category">${post.category}</span>
-                    </div>
-                    <h3 class="post-title">${post.title}</h3>
-                    <p class="post-excerpt">${post.excerpt}</p>
-                    <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
-                    <div class="author-word-box">
-                        <div class="author-word-toggle">
-                            <span>Slovo autora</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div style="display: none;"><p class="authorWordText">${post.excerpt}</p></div>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    postsGrid.innerHTML = postsHTML;
-    
-    setTimeout(function() {
-        initAuthorWordToggle();
-    }, 300);
-}
+    if (authorLinkElement) authorLinkElement.href = `author.html?id=${encodeURIComponent(author.id)}`;
+  }
 
-document.addEventListener('DOMContentLoaded', function() {
-    loadPostDetails();
-    initMobileMenu();
-    initCommentForm();
-    initShareButtons();
+  // tagy
+  const tagsContainer = document.querySelector('.post-tags');
+  if (tagsContainer && post.categories?.length) {
+    const [cat] = post.categories;
+    tagsContainer.innerHTML = `
+      <a href="category.html?category=${encodeURIComponent(cat)}" class="tag">${Utils.escape(cat)}</a>
+      <a href="author-category.html?author=${encodeURIComponent(post.authorId)}" class="tag">${Utils.escape(author?.name || '')}</a>
+    `;
+  }
+
+  loadRelatedPosts(post.authorId, post.id);
 });

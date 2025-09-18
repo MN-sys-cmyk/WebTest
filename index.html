@@ -19,6 +19,11 @@
       <div class="hero-content">
         <h1 class="hero-title">Objevujte svět současné české literatury</h1>
         <p class="hero-subtitle">Platforma propojující autory, čtenáře a literární nadšence</p>
+
+        <!-- NOVÉ: odkaz na otevření modalu -->
+        <p class="hero-credits">
+          Web vytvořil <a href="#" id="autor">Autor</a>.
+        </p>
       </div>
     </div>
   </section>
@@ -70,6 +75,27 @@
   </section>
 
   <footer id="site-footer"></footer>
+
+  <!-- MODAL MARKUP – přidáno podle varianty A -->
+  <div
+    id="autor-modal"
+    class="modal-root"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="autor-modal-title"
+  >
+    <div class="modal-overlay" data-close="1"></div>
+    <div class="modal" role="document">
+      <button class="modal-close" aria-label="Zavřít" data-close="1">×</button>
+      <h2 id="autor-modal-title">O autorovi</h2>
+      <p>
+        Tady bude text o autorovi… Můžeš sem vložit bio, odkaz na portfolio,
+        kontakt atd. Tento obsah si uprav přímo v HTML, nebo si ho můžeš plnit dynamicky z JS.
+      </p>
+    </div>
+  </div>
+  <!-- /MODAL MARKUP -->
 
   <script src="data.js?v=1.2" defer></script>
   <script src="utils.js" defer></script>

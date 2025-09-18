@@ -1,219 +1,531 @@
-// script.js — homepage: generování karuselů z Utils.Data
-let currentSlide = 0;
-let slidesCount = 0;
-let currentPostSlide = 0;
-let postSlidesCount = 0;
+/* =========================================================
+   Design tokens & base
+   ========================================================= */
+:root {
+  /* původní proměnné */
+  --main-bg-color: #ffffff;
+  --primary-color: #000000;
+  --secondary-color: #f1f1f1;
+  --accent-color: #e94e1b;
+  --text-color: #333333;
+  --light-gray: #e5e5e5;
+  --medium-gray: #999;
+  --font-main: 'Montserrat', Arial, sans-serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
 
-document.addEventListener('DOMContentLoaded', () => {
-  slidesCount = generateAuthorsCarousel();
-  postSlidesCount = generatePostsCarousel();
-  initAuthorsCarousel();
-  initPostsCarousel();
-  addMarginToPostsCarousel();
-});
-
-// ===== Autorské karusely =====
-function generateAuthorsCarousel() {
-  const track = document.getElementById('carousel-track');
-  const dotsWrap = document.getElementById('carousel-indicator');
-  if (!track || !dotsWrap) return 0;
-
-  track.innerHTML = '';
-  dotsWrap.innerHTML = '';
-
-  const authors = Utils.Data.getAuthors();
-  const perSlide = 4;
-  const slidesNeeded = Math.ceil(authors.length / perSlide);
-
-  for (let i = 0; i < slidesNeeded; i++) {
-    const start = i * perSlide;
-    const slice = authors.slice(start, start + perSlide);
-    const slide = document.createElement('div');
-    slide.className = 'carousel-slide';
-    slide.innerHTML = slice.map(a => `
-      <a href="author.html?id=${encodeURIComponent(a.id)}" class="author-card">
-        <div class="author-image-container">
-          <img src="${a.image}" alt="${Utils.escape(a.name)}" class="author-image" loading="lazy">
-        </div>
-        <h3 class="author-name">${Utils.escape(a.name)}</h3>
-        ${a.genre ? `<p class="author-genre">${Utils.escape(a.genre)}</p>` : ""}
-      </a>
-    `).join('');
-    track.appendChild(slide);
-
-    const dot = document.createElement('div');
-    dot.className = 'indicator-dot' + (i === 0 ? ' active' : '');
-    dot.onclick = () => moveAuthorsTo(i);
-    dotsWrap.appendChild(dot);
-  }
-  return slidesNeeded;
+  /* doplněné pro layout */
+  --maxw: 1440px;
+  --gap: 20px;
+  --gap-lg: 30px;
+  --focus: #ffb703; /* kontrastní focus */
 }
 
-function initAuthorsCarousel() {
-  const slides = document.querySelectorAll('.carousel-slide');
-  slidesCount = slides.length;
-  if (slidesCount < 2) return;
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  const prev = document.querySelector('.authors-carousel .carousel-arrow.prev');
-  const next = document.querySelector('.authors-carousel .carousel-arrow.next');
-  if (prev && next) {
-    prev.addEventListener('click', () => moveAuthorsTo(currentSlide - 1));
-    next.addEventListener('click', () => moveAuthorsTo(currentSlide + 1));
-  }
+html { line-height: 1.5; }
+body {
+  font-family: var(--font-main);
+  color: var(--text-color);
+  background-color: var(--main-bg-color);
+  line-height: 1.5;
+  overflow-x: hidden;
 }
 
-function moveAuthorsTo(index) {
-  if (index < 0) index = slidesCount - 1;
-  else if (index >= slidesCount) index = 0;
-  currentSlide = index;
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+ul { list-style: none; }
 
-  const track = document.getElementById('carousel-track');
-  if (track) track.style.transform = `translateX(-${currentSlide * 100}%)`;
-
-  const dots = document.querySelectorAll('.authors-carousel .indicator-dot');
-  dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-inline: var(--gap);
 }
 
-// ===== Karusel příspěvků =====
-function generatePostsCarousel() {
-  const postsContainer = document.getElementById('posts-container');
-  const indicator = document.getElementById('posts-indicator');
-  const featured = document.getElementById('featured-post-container');
-  if (!postsContainer || !featured) return 0;
-
-  postsContainer.innerHTML = '';
-  featured.innerHTML = '';
-  if (indicator) indicator.innerHTML = '';
-
-  const posts = Utils.Data.allPosts()
-    .sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
-
-  if (!posts.length) return 0;
-
-  const [featuredPost, ...rest] = posts;
-
-  featured.innerHTML = `
-    <div class="featured-post">
-      <div class="featured-post-image" style="background-image: url('${featuredPost.image}');"></div>
-      <div class="featured-post-content">
-        <div class="post-meta">
-          <span class="post-date">${featuredPost.date ? featuredPost.date.toLocaleDateString('cs-CZ') : ''}</span>
-          <span class="post-category">${(featuredPost.categories && featuredPost.categories[0]) ? Utils.escape(featuredPost.categories[0]) : ''}</span>
-        </div>
-        <h3 class="post-title">${Utils.escape(featuredPost.title)}</h3>
-        <p class="post-excerpt">${Utils.escape(featuredPost.excerpt)}</p>
-        <a href="post.html?id=${encodeURIComponent(featuredPost.id)}" class="read-more">Přečíst celý text</a>
-        <div class="author-word-box">
-          <div class="author-word-toggle"><span>Slovo autora</span><span class="arrow">▼</span></div>
-          <div style="display:none;"><p class="authorWordText">${Utils.escape(featuredPost.excerpt)}</p></div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  const track = document.createElement('div');
-  track.className = 'posts-carousel-track';
-  track.style.display = 'flex';
-  track.style.transition = 'transform 0.5s ease';
-  postsContainer.appendChild(track);
-
-  const perSlide = 3;
-  const slidesNeeded = Math.ceil(rest.length / perSlide);
-
-  for (let i = 0; i < slidesNeeded; i++) {
-    const start = i * perSlide;
-    const slice = rest.slice(start, start + perSlide);
-
-    const slide = document.createElement('div');
-    slide.className = 'posts-slide';
-    slide.style.minWidth = '100%';
-    slide.style.display = 'flex';
-    slide.style.flexWrap = 'wrap';
-    slide.style.justifyContent = 'space-between';
-    slide.style.gap = '20px';
-
-    slide.innerHTML = slice.map(p => `
-      <div class="post-card">
-        <div class="post-card-image" style="background-image: url('${p.image}');"></div>
-        <div class="post-card-content">
-          <div class="post-meta">
-            <span class="post-date">${p.date ? p.date.toLocaleDateString('cs-CZ') : ''}</span>
-            <span class="post-category">${(p.categories && p.categories[0]) ? Utils.escape(p.categories[0]) : ''}</span>
-          </div>
-          <h3 class="post-title">${Utils.escape(p.title)}</h3>
-          <p class="post-excerpt">${Utils.escape(p.excerpt)}</p>
-          <a href="post.html?id=${encodeURIComponent(p.id)}" class="read-more">Číst více</a>
-          <div class="author-word-box">
-            <div class="author-word-toggle"><span>Slovo autora</span><span class="arrow">▼</span></div>
-            <div style="display:none;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
-          </div>
-        </div>
-      </div>
-    `).join('');
-
-    track.appendChild(slide);
-
-    if (indicator) {
-      const dot = document.createElement('div');
-      dot.className = 'indicator-dot' + (i === 0 ? ' active' : '');
-      dot.onclick = () => movePostsTo(i);
-      indicator.appendChild(dot);
-    }
-  }
-
-  adjustPostsCarouselResponsive(track);
-  return slidesNeeded;
+/* Klávesová přístupnost */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
 
-function adjustPostsCarouselResponsive(track) {
-  if (!track) return;
-  const cards = track.querySelectorAll('.post-card');
+/* =========================================================
+   Shared header / nav / footer (napojeno na utils.js)
+   ========================================================= */
 
-  const apply = () => {
-    const w = window.innerWidth;
-    if (w <= 576) {
-      cards.forEach(c => { c.style.flex = '0 0 100%'; c.style.maxWidth = '100%'; });
-    } else if (w <= 992) {
-      cards.forEach(c => { c.style.flex = '0 0 calc(50% - 10px)'; c.style.maxWidth = 'calc(50% - 10px)'; });
-    } else {
-      cards.forEach(c => { c.style.flex = '0 0 calc(33.333% - 14px)'; c.style.maxWidth = 'calc(33.333% - 14px)'; });
-    }
-  };
-
-  apply();
-  window.addEventListener('resize', apply);
+/* Header (element) */
+header {
+  background-color: var(--main-bg-color);
+  border-bottom: 1px solid var(--light-gray);
+}
+header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
 }
 
-function initPostsCarousel() {
-  const track = document.querySelector('.posts-carousel-track');
-  if (!track) return;
+/* Logo (odkaz v headeru) */
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: var(--font-heading);
+}
+.logo span { color: var(--accent-color); }
 
-  const slides = track.querySelectorAll('.posts-slide');
-  postSlidesCount = slides.length;
-  if (postSlidesCount <= 1) return;
+/* Primární navigace */
+.site-nav { border-bottom: 1px solid var(--light-gray); }
+.nav-list {
+  margin: 0;
+  padding: 0 var(--gap);
+  list-style: none;
+  display: flex;
+  gap: 40px;
+  overflow-x: auto;
+}
+.nav-list a {
+  display: inline-block;
+  padding: 14px 4px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  position: relative;
+  transition: color .3s ease;
+}
+.nav-list a.is-active,
+.nav-list a[aria-current="page"] { color: var(--accent-color); }
+.nav-list a::after {
+  content: "";
+  position: absolute; bottom: -6px; left: 0;
+  width: 0; height: 2px; background: var(--accent-color);
+  transition: width .3s ease;
+}
+.nav-list a:hover::after,
+.nav-list a.is-active::after,
+.nav-list a[aria-current="page"]::after { width: 100%; }
 
-  const prev = document.querySelector('.posts-carousel .carousel-arrow.prev');
-  const next = document.querySelector('.posts-carousel .carousel-arrow.next');
-  if (prev && next) {
-    prev.addEventListener('click', () => movePostsTo(currentPostSlide - 1));
-    next.addEventListener('click', () => movePostsTo(currentPostSlide + 1));
-  }
+/* Mobilní toggle (vytváří utils.js) */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 0;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--primary-color);
 }
 
-function movePostsTo(index) {
-  if (index < 0) index = postSlidesCount - 1;
-  else if (index >= postSlidesCount) index = 0;
-  currentPostSlide = index;
+/* Footer (element) */
+footer {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 80px 0 30px;
+  margin-top: 60px;
+}
+footer .container { padding-inline: var(--gap); }
 
-  const track = document.querySelector('.posts-carousel-track');
-  if (track) track.style.transform = `translateX(-${currentPostSlide * 100}%)`;
-
-  const dots = document.querySelectorAll('#posts-indicator .indicator-dot');
-  dots.forEach((d, i) => d.classList.toggle('active', i === currentPostSlide));
+/* Mobile nav */
+@media (max-width: 1023.98px) {
+  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; padding: .5rem .75rem; }
+  .site-nav { display: none; }
+  .site-nav.open { display: block; }
+  .nav-list { flex-direction: column; gap: 16px; padding-bottom: 10px; }
 }
 
-function addMarginToPostsCarousel() {
-  const featured = document.getElementById('featured-post-container');
-  const carousel = document.querySelector('.posts-carousel');
-  if (featured && carousel) featured.style.marginBottom = '50px';
+/* =========================================================
+   Grid / Cards (univerzální pattern)
+   ========================================================= */
+.grid {
+  display: grid;
+  gap: var(--gap-lg);
+  grid-template-columns: repeat(12, 1fr);
+}
+.grid > * { grid-column: 1 / -1; } /* mobile default: 1 sloupec */
+.card {
+  background-color: #fff;
+  border: 1px solid var(--light-gray);
+  border-radius: .75rem;
+  overflow: clip;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.card img { aspect-ratio: 16/9; object-fit: cover; width: 100%; }
+
+@media (min-width: 480px) { .grid.cards > * { grid-column: span 6; } }   /* 2 sloupce */
+@media (min-width: 768px) { .grid.cards > * { grid-column: span 4; } }   /* 3 sloupce */
+@media (min-width: 1024px){ .grid.cards > * { grid-column: span 3; } }   /* 4 sloupce */
+
+/* =========================================================
+   Hero (původní vzhled zachován)
+   ========================================================= */
+.hero {
+  margin-top: 0; /* header už není fixed */
+  min-height: 600px;
+  height: calc(100vh - 120px);
+  position: relative;
+  overflow: hidden;
+}
+.hero-image {
+  position: absolute; inset: 0;
+  z-index: -1;
+  background-color: var(--secondary-color);
+  background-image: url('knihovna.png');
+  background-size: cover; background-position: center;
+}
+.hero-image::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6));
+}
+.hero-content {
+  position: absolute; left: 0; right: 0; bottom: 100px;
+  color: #fff; padding: 0 var(--gap);
+}
+.hero-title {
+  font-size: 60px; line-height: 1.2; font-weight: 700;
+  max-width: 800px; margin-bottom: 20px; font-family: var(--font-heading);
+}
+.hero-subtitle { font-size: 24px; max-width: 600px; margin-bottom: 30px; }
+.hero-button {
+  display: inline-block; padding: 12px 30px;
+  background: var(--accent-color); color: #fff; font-size: 16px;
+  text-transform: uppercase; letter-spacing: 1px; transition: .3s;
+}
+.hero-button:hover { background: var(--primary-color); }
+
+/* =========================================================
+   Sekce Autoři
+   ========================================================= */
+.authors-section { padding: 80px 0; margin-bottom: 20px; }
+.section-header { text-align: center; margin-bottom: 40px; }
+.section-title {
+  font-size: 36px; font-weight: 600; margin-bottom: 10px;
+  position: relative; display: inline-block; font-family: var(--font-heading);
+}
+.section-title::after {
+  content: ""; position: absolute; bottom: -15px; left: 50%;
+  transform: translateX(-50%); width: 50px; height: 3px; background: var(--accent-color);
+}
+.section-subtitle { font-size: 18px; color: var(--medium-gray); margin-top: 20px; }
+
+.authors-carousel { position: relative; max-width: 1000px; margin: 0 auto; padding: 0 60px; }
+.carousel-container { overflow: hidden; }
+.carousel-track { display: flex; transition: transform .5s ease; }
+.carousel-slide { min-width: 100%; display: flex; justify-content: center; gap: 20px; }
+
+.author-card { width: 220px; cursor: pointer; transition: transform .3s ease; }
+.author-card:hover { transform: translateY(-10px); }
+.author-image-container { position: relative; width: 100%; padding-bottom: 100%; overflow: hidden; margin-bottom: 15px; }
+.author-image {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; transition: transform .5s ease;
+}
+.author-card:hover .author-image { transform: scale(1.05); }
+.author-name { font-size: 18px; font-weight: 600; text-align: center; font-family: var(--font-heading); }
+.author-genre { font-size: 14px; color: var(--medium-gray); text-align: center; }
+
+.carousel-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 40px; background: #fff; border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 10; transition: .3s; font-size: 20px; font-weight: bold;
+}
+.carousel-arrow:hover { background: var(--accent-color); color: #fff; }
+.carousel-arrow.prev { left: 0; }
+.carousel-arrow.next { right: 0; }
+
+.carousel-indicator { display: flex; justify-content: center; margin-top: 30px; gap: 10px; }
+.indicator-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--light-gray); cursor: pointer; transition: .3s; }
+.indicator-dot.active { background: var(--accent-color); transform: scale(1.2); }
+
+.view-all { text-align: center; margin-top: 40px; }
+.view-all-button {
+  display: inline-block; padding: 12px 30px; border: 2px solid var(--accent-color);
+  color: var(--accent-color); text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: .3s;
+}
+.view-all-button:hover { background: var(--accent-color); color: #fff; }
+
+/* =========================================================
+   Nejnovější příspěvky
+   ========================================================= */
+.latest-posts { padding: 80px 0; background: var(--secondary-color); }
+
+.featured-post {
+  display: grid; grid-template-columns: 1fr 1fr;
+  margin-bottom: 50px; background: #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.featured-post:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+.featured-post-image {
+  min-height: 400px; background-size: cover; background-position: center;
+}
+.featured-post-content {
+  padding: 50px; display: flex; flex-direction: column; justify-content: center;
+}
+
+.post-meta { display: flex; align-items: center; margin-bottom: 20px; font-size: 14px; color: var(--medium-gray); }
+.post-date { margin-right: 15px; }
+.post-category { background: var(--accent-color); color: #fff; padding: 3px 10px; border-radius: 2px; }
+
+.post-title { font-size: 30px; font-weight: 600; margin-bottom: 20px; line-height: 1.3; font-family: var(--font-heading); }
+.post-excerpt { margin-bottom: 30px; line-height: 1.8; }
+.read-more {
+  align-self: flex-start; display: inline-block; padding: 10px 0;
+  text-transform: uppercase; font-size: 14px; color: var(--accent-color);
+  font-weight: 600; position: relative; overflow: hidden;
+}
+.read-more::after {
+  content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+  background: var(--accent-color); transform: translateX(-100%); transition: transform .3s ease;
+}
+.read-more:hover::after { transform: translateX(0); }
+
+.post-card {
+  background: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  overflow: hidden; transition: transform .3s ease, box-shadow .3s ease;
+}
+.post-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+.post-card-image { height: 200px; background-size: cover; background-position: center; }
+.post-card-content { padding: 30px; }
+.post-card .post-title { font-size: 20px; margin-bottom: 15px; }
+
+/* =========================================================
+   Footer obsah (přemapováno z .footer* na footer element)
+   ========================================================= */
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  margin-bottom: 50px;
+}
+.footer-logo {
+  font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; font-family: var(--font-heading);
+}
+.footer-logo span { color: var(--accent-color); }
+.footer-description { margin-bottom: 20px; opacity: .7; line-height: 1.8; }
+.footer-heading {
+  font-size: 18px; margin-bottom: 25px; position: relative; display: inline-block; font-family: var(--font-heading);
+}
+.footer-heading::after { content: ""; position: absolute; bottom: -8px; left: 0; width: 40px; height: 2px; background: var(--accent-color); }
+.footer-links li { margin-bottom: 12px; }
+.footer-links a { opacity: .7; transition: opacity .3s ease; }
+.footer-links a:hover { opacity: 1; color: var(--accent-color); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 30px; text-align: center; font-size: 14px; opacity: .7;
+}
+
+/* =========================================================
+   Mobile menu (pokud používáš vlastní panel; volitelné)
+   ========================================================= */
+.mobile-menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--primary-color); }
+.mobile-menu {
+  display: none; position: fixed; inset: 0; background: var(--main-bg-color);
+  z-index: 1001; padding: 80px 20px 40px; transform: translateX(-100%); transition: transform .3s ease;
+}
+.mobile-menu.active { transform: translateX(0); }
+.mobile-menu-close { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--primary-color); }
+.mobile-menu ul { display: flex; flex-direction: column; gap: 20px; }
+.mobile-menu a { font-size: 18px; text-transform: uppercase; display: block; padding: 10px 0; border-bottom: 1px solid var(--light-gray); }
+
+/* =========================================================
+   Posts carousel (opravy)
+   ========================================================= */
+.posts-carousel { position: relative; max-width: 1200px; margin: 0 auto; padding: 0 60px; overflow: hidden; }
+.posts-carousel-track { display: flex; transition: transform .5s ease; width: 100%; }
+.posts-slide {
+  min-width: 100%; display: flex;
+  flex-wrap: wrap;                /* FIX: bylo flex-wrap = wrap; */
+  justify-content: flex-start;    /* zarovnání vlevo */
+  gap: 30px;
+}
+.posts-grid { display: flex; flex-wrap: wrap; gap: 30px; justify-content: flex-start; }
+.post-card { flex: 1 1 300px; max-width: calc(33.333% - 20px); }
+
+/* "Slovo autora" */
+.author-word-box { text-align: center; }
+.author-word-toggle {
+  align-self: flex-start; display: inline-block; padding: 10px 0; text-transform: uppercase;
+  font-size: 14px; color: var(--accent-color); font-weight: 600; position: relative; overflow: hidden;
+  background: transparent; border: none; cursor: pointer; margin-top: 15px; transition: .3s;
+}
+.author-word-toggle::after {
+  content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+  background: var(--accent-color); transform: translateX(-100%); transition: transform .3s ease;
+}
+.author-word-toggle:hover::after { transform: translateX(0); }
+.author-word-toggle .arrow { display: none; }
+.author-word-content { max-height: 0; overflow: hidden; transition: max-height .3s ease-out; background: var(--secondary-color); border-radius: 0 0 4px 4px; margin-top: -5px; padding: 0 15px; }
+.author-word-content p { padding: 15px 0; margin: 0; font-size: 14px; line-height: 1.6; }
+.arrow { transition: transform .3s ease; }
+
+/* =========================================================
+   Post page
+   ========================================================= */
+.post-page { margin-top: 40px; padding-bottom: 80px; } /* dříve 140px kvůli fixed headeru */
+.post-content { max-width: 1200px; margin: 0 auto 60px; }
+.post-header { margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
+.post-header .post-meta { display: flex; align-items: center; margin-bottom: 20px; font-size: 14px; color: var(--medium-gray); }
+.post-header .post-date { margin-right: 15px; }
+.post-header .post-category { background: var(--accent-color); color: #fff; padding: 3px 10px; border-radius: 2px; }
+.post-header .post-title { font-size: 42px; font-weight: 700; line-height: 1.2; margin-bottom: 20px; font-family: var(--font-heading); }
+
+.post-author { display: flex; align-items: center; margin-bottom: 30px; }
+.author-link { display: flex; align-items: center; transition: color .3s ease; }
+.author-link img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px; }
+.author-link:hover { color: var(--accent-color); }
+.author-thumbnail { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px; }
+.author-name { font-weight: 600; }
+
+.post-featured-image {
+  width: 100%; max-width: 700px; max-height: 400px;
+  margin: 0 auto 30px; border-radius: 8px; overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.post-featured-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.post-body { font-size: 18px; line-height: 1.8; margin-bottom: 40px; }
+.post-body p { margin-bottom: 20px; }
+
+.post-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.tag {
+  background: var(--secondary-color); padding: 5px 15px; border-radius: 20px; font-size: 14px; transition: .3s;
+}
+.tag:hover { background: var(--accent-color); color: #fff; cursor: pointer; }
+
+/* =========================================================
+   Stránky: autoři / všechny posty / kategorie / autor-kategorie
+   ========================================================= */
+.all-authors-page,
+.all-posts-page,
+.category-page,
+.author-category-page {
+  margin-top: 40px; /* dříve 140px kvůli fixed headeru */
+  padding-bottom: 80px;
+}
+
+.authors-grid,
+.all-posts-grid,
+.category-posts-grid,
+.author-category-posts-grid {
+  display: flex; flex-wrap: wrap; gap: 30px; justify-content: flex-start; margin-top: 40px;
+}
+
+.authors-grid .author-card { width: 220px; margin-bottom: 30px; }
+
+.all-posts-grid .post-card,
+.category-posts-grid .post-card,
+.author-category-posts-grid .post-card {
+  flex: 0 0 calc(33.333% - 20px);
+  max-width: calc(33.333% - 20px);
+  margin-bottom: 30px;
+}
+
+/* =========================================================
+   Autor detail
+   ========================================================= */
+.author-page { margin-top: 40px; padding-bottom: 80px; } /* dříve 140px */
+.author-header {
+  display: flex; gap: 50px; margin-bottom: 60px; align-items: center;
+}
+.author-image-large {
+  flex: 0 0 300px; height: 300px; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.author-image-large img { width: 100%; height: 100%; object-fit: cover; }
+.author-info { flex: 1; }
+.author-info .author-name { font-size: 42px; font-weight: 700; font-family: var(--font-heading); margin-bottom: 15px; }
+.author-info .author-genre { font-size: 20px; color: var(--medium-gray); margin-bottom: 25px; }
+
+.author-social { display: none; }
+.social-link {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--secondary-color);
+  display: flex; align-items: center; justify-content: center; transition: .3s;
+}
+.social-link:hover { background: var(--accent-color); }
+.social-link img { width: 20px; height: 20px; }
+
+.author-bio { margin-bottom: 60px; }
+.author-bio .section-title { text-align: left; margin-bottom: 30px; }
+.author-bio .section-title::after { left: 0; transform: none; }
+.bio-content { font-size: 18px; line-height: 1.8; }
+.bio-content p { margin-bottom: 20px; }
+
+.author-posts { margin-bottom: 60px; }
+.author-posts .section-title { text-align: left; margin-bottom: 30px; }
+.author-posts .section-title::after { left: 0; transform: none; }
+
+.author-posts .posts-grid { display: flex; flex-wrap: wrap; gap: 30px; justify-content: flex-start; }
+.author-page-card { flex: 0 0 calc(33.333% - 20px); max-width: calc(33.333% - 20px); margin-bottom: 20px; }
+
+/* =========================================================
+   Komentáře
+   ========================================================= */
+.post-comments { max-width: 800px; margin: 0 auto; }
+.post-comments .section-title { text-align: left; margin-bottom: 30px; }
+.post-comments .section-title::after { left: 0; transform: none; }
+.comments-list { margin-bottom: 40px; }
+
+.comment {
+  display: flex; margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid var(--light-gray);
+}
+.comment:last-child { border-bottom: none; }
+.comment-avatar { flex: 0 0 60px; height: 60px; border-radius: 50%; overflow: hidden; margin-right: 20px; }
+.comment-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.comment-content { flex: 1; }
+.comment-meta { margin-bottom: 10px; }
+.comment-author { font-weight: 600; margin-right: 15px; }
+.comment-date { color: var(--medium-gray); font-size: 14px; }
+.comment-text { line-height: 1.6; }
+
+/* Formulář pro komentáře */
+.comment-form { background: var(--secondary-color); padding: 30px; border-radius: 8px; }
+.comment-form h3 { font-size: 24px; font-weight: 600; margin-bottom: 20px; font-family: var(--font-heading); }
+.comment-form .form-group { margin-bottom: 20px; }
+.comment-form label { display: block; margin-bottom: 8px; font-weight: 500; }
+.comment-form input,
+.comment-form textarea {
+  width: 100%; padding: 12px 15px; border: 1px solid var(--light-gray); border-radius: 4px; font-family: var(--font-main); font-size: 16px;
+}
+.comment-form textarea { resize: vertical; min-height: 150px; }
+.submit-button {
+  padding: 12px 30px; background: var(--accent-color); color: #fff; border: none; border-radius: 4px;
+  font-family: var(--font-main); font-size: 16px; font-weight: 600; cursor: pointer; transition: .3s;
+}
+.submit-button:hover { background: var(--primary-color); }
+
+/* Sdílení příspěvku */
+.post-share { display: flex; align-items: center; gap: 10px; }
+.share-link { font-size: 14px; padding: 5px 10px; border-radius: 4px; transition: .3s; }
+.share-link.facebook { background: #3b5998; color: #fff; }
+.share-link.twitter { background: #1da1f2; color: #fff; }
+.share-link.email { background: var(--medium-gray); color: #fff; }
+.share-link:hover { opacity: .8; }
+
+/* Související příspěvky */
+.related-posts { margin-bottom: 60px; }
+.related-posts .section-title { text-align: center; margin-bottom: 40px; }
+
+/* Patička příspěvku */
+.post-footer {
+  border-top: 1px solid var(--light-gray);
+  padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+@media (max-width: 992px) {
+  .post-header .post-title { font-size: 36px; }
+  .featured-post { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .post-featured-image { max-height: 350px; }
+  .post-header .post-title { font-size: 30px; }
+  .post-footer { flex-direction: column; align-items: flex-start; }
+  .comment { flex-direction: column; }
+  .comment-avatar { margin-bottom: 15px; margin-right: 0; }
+}
+
+@media (max-width: 576px) {
+  .post-featured-image { max-height: 300px; }
+  .post-body { font-size: 16px; }
 }

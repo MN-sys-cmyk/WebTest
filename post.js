@@ -1,4 +1,4 @@
-// post.js — detail příspěvku + související články + Slovo autora toggle
+// post.js — detail příspěvku + související + "Slovo autora" jako modal
 function findPostById(id) {
   return Utils.Data.allPosts().find(p => String(p.id) === String(id)) || null;
 }
@@ -8,41 +8,78 @@ function formatContent(content) {
   return content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
 }
 
+// --- Modal (stejný princip jako na homepage) ---
+let lastFocusedPost = null;
+function openModalPost(html, { title = 'Slovo autora' } = {}) {
+  closeModalPost();
+  lastFocusedPost = document.activeElement;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  const dialog = document.createElement('div');
+  dialog.className = 'modal';
+  dialog.setAttribute('role', 'dialog');
+  dialog.setAttribute('aria-modal', 'true');
+  dialog.setAttribute('aria-labelledby', 'modal-title');
+  dialog.setAttribute('tabindex', '-1');
+  dialog.innerHTML = `
+    <button class="modal-close" aria-label="Zavřít">&times;</button>
+    <h3 id="modal-title" class="modal-title">${title}</h3>
+    <div class="modal-body">${html}</div>
+  `;
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  const onKey = (e) => {
+    if (e.key === 'Escape') closeModalPost();
+    if (e.key === 'Tab') {
+      const focusables = dialog.querySelectorAll('a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])');
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  };
+  const onOverlay = (e) => { if (e.target === overlay) closeModalPost(); };
+
+  overlay.addEventListener('click', onOverlay);
+  overlay._cleanup = () => {
+    overlay.removeEventListener('click', onOverlay);
+    document.removeEventListener('keydown', onKey);
+  };
+  document.addEventListener('keydown', onKey);
+
+  dialog.querySelector('.modal-close').addEventListener('click', (e) => { e.preventDefault(); closeModalPost(); });
+  dialog.focus();
+}
+function closeModalPost() {
+  const overlay = document.querySelector('.modal-overlay');
+  if (overlay) { overlay._cleanup?.(); overlay.remove(); }
+  document.body.style.overflow = '';
+  if (lastFocusedPost && typeof lastFocusedPost.focus === 'function') lastFocusedPost.focus();
+}
+
 function bindAuthorWordToggles(root = document) {
   const toggles = root.querySelectorAll('.author-word-toggle');
   toggles.forEach(tg => {
     if (tg.dataset.bound === '1') return;
     tg.dataset.bound = '1';
+    tg.setAttribute('role', 'button');
+    tg.setAttribute('tabindex', '0');
 
     const activate = (evt) => {
       evt.preventDefault();
       evt.stopPropagation();
       const controlsId = tg.getAttribute('aria-controls');
       const box = controlsId ? document.getElementById(controlsId) : tg.parentElement?.querySelector('.author-word-content, div');
-      if (!box) return;
-
-      const isOpen = tg.getAttribute('aria-expanded') === 'true';
-      const nextOpen = !isOpen;
-      tg.setAttribute('aria-expanded', String(nextOpen));
-
-      if (box.classList.contains('author-word-content')) {
-        if (nextOpen) {
-          box.style.display = 'block';
-          const h = box.scrollHeight;
-          box.style.maxHeight = h + 'px';
-        } else {
-          box.style.maxHeight = '0';
-          box.addEventListener('transitionend', () => { if (tg.getAttribute('aria-expanded') === 'false') box.style.display = 'none'; }, { once: true });
-        }
-      } else {
-        box.style.display = nextOpen ? 'block' : 'none';
-      }
+      let html = box?.querySelector('.authorWordText')?.innerHTML || box?.innerHTML || '<p>(Autor zatím nic nedodal.)</p>';
+      openModalPost(html);
     };
 
     tg.addEventListener('click', activate);
-    tg.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') activate(e);
-    });
+    tg.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') activate(e); });
   });
 }
 
@@ -75,7 +112,7 @@ function loadRelatedPosts(authorId, currentPostId) {
           <div class="author-word-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="aw-rel-${p.id}">
             <span>Slovo autora</span><span class="arrow">▼</span>
           </div>
-          <div id="aw-rel-${p.id}" class="author-word-content" style="display:none; max-height:0;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
+          <div id="aw-rel-${p.id}" style="display:none;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
         </div>
       </div>
     </div>
@@ -111,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (postContentElement) postContentElement.innerHTML = formatContent(post.content || '');
   if (authorWordElement) authorWordElement.textContent = post.excerpt || '';
 
-  // autor info
   const author = Utils.Data.getAuthorById(post.authorId);
   if (author) {
     if (authorImageElement) {
@@ -122,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (authorLinkElement) authorLinkElement.href = `author.html?id=${encodeURIComponent(author.id)}`;
   }
 
-  // tagy
   const tagsContainer = document.querySelector('.post-tags');
   if (tagsContainer && post.categories?.length) {
     const [cat] = post.categories;
@@ -132,19 +167,12 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // připrav "Slovo autora" v detailu (existuje-li)
+  // V detailu převážně používáš box s textem v DOM – uděláme z něj modal
   const awToggle = document.querySelector('.author-word-box .author-word-toggle');
   const awBox = document.querySelector('.author-word-box > div');
   if (awToggle && awBox) {
-    // doplníme ARIA pro lepší ovládání
     const idBox = 'aw-detail';
     awBox.id = idBox;
-    awBox.classList.add('author-word-content');
-    awBox.style.display = 'none';
-    awBox.style.maxHeight = '0';
-    awToggle.setAttribute('role', 'button');
-    awToggle.setAttribute('tabindex', '0');
-    awToggle.setAttribute('aria-expanded', 'false');
     awToggle.setAttribute('aria-controls', idBox);
   }
   bindAuthorWordToggles(document);

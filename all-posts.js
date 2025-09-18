@@ -1,53 +1,33 @@
-// JavaScript pro stránku se všemi texty
+// all-posts.js — sjednocený zdroj dat přes Utils.Data
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.getElementById('all-posts-grid');
+  if (!grid) return;
 
-function loadAllPosts() {
-    if (typeof postsData === 'undefined') {
-        console.error('Data příspěvků nejsou k dispozici');
-        return;
-    }
-    
-    const postsGrid = document.getElementById('all-posts-grid');
-    if (!postsGrid) {
-        console.error('Kontejner pro příspěvky nebyl nalezen');
-        return;
-    }
-    
-    const sortedPosts = [...postsData].sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-    });
-    
-    let postsHTML = '';
-    
-    sortedPosts.forEach(post => {
-        postsHTML += `
-            <div class="post-card">
-                <div class="post-card-image" style="background-image: url('${post.image}');"></div>
-                <div class="post-card-content">
-                    <div class="post-meta">
-                        <span class="post-date">${post.displayDate || post.date}</span>
-                        <span class="post-category">${post.category}</span>
-                    </div>
-                    <h3 class="post-title">${post.title}</h3>
-                    <p class="post-excerpt">${post.excerpt}</p>
-                    <a href="post.html?id=${post.id}" class="read-more">Číst více</a>
-                    <div class="author-word-box">
-                        <div class="author-word-toggle">
-                            <span>Slovo autora</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div style="display: none;"><p id="authorWord">${post.excerpt}</p></div>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    postsGrid.innerHTML = postsHTML;
+  // získáme a seřadíme
+  const posts = Utils.Data.allPosts()
+    .sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
 
-    initAuthorWordToggle();
-}
+  if (!posts.length) {
+    grid.innerHTML = '<p>Žádné příspěvky zatím nejsou k dispozici.</p>';
+    return;
+  }
 
-document.addEventListener('DOMContentLoaded', function() {
-    loadAllPosts();
-    initMobileMenu();
+  grid.innerHTML = posts.map(p => `
+    <div class="post-card">
+      <div class="post-card-image" style="background-image: url('${p.image}');"></div>
+      <div class="post-card-content">
+        <div class="post-meta">
+          <span class="post-date">${p.date ? p.date.toLocaleDateString('cs-CZ') : ''}</span>
+          <span class="post-category">${(p.categories && p.categories[0]) ? Utils.escape(p.categories[0]) : ''}</span>
+        </div>
+        <h3 class="post-title">${Utils.escape(p.title)}</h3>
+        <p class="post-excerpt">${Utils.escape(p.excerpt)}</p>
+        <a href="post.html?id=${encodeURIComponent(p.id)}" class="read-more">Číst více</a>
+        <div class="author-word-box">
+          <div class="author-word-toggle"><span>Slovo autora</span><span class="arrow">▼</span></div>
+          <div style="display:none;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
+        </div>
+      </div>
+    </div>
+  `).join("");
 });

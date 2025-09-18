@@ -1,90 +1,69 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail příspěvku - LiterárníKomunita</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=1.6">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail příspěvku - LiterárníKomunita</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1.6">
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-top">
-                <a href="index.html" class="logo">Literární<span>Komunita</span></a>
-                <div class="language-switcher">
-                    <a href="#" class="language-link active">CZ</a>
-                    <a href="#" class="language-link">EN</a>
-                </div>
-                <button class="mobile-menu-toggle">☰</button>
-            </div>
-        </div>
-    </header>
-    
-    <div class="mobile-menu">
-        <button class="mobile-menu-close">✕</button>
-    </div>
-    
-    <main class="post-page">
-        <div class="container">
-            <article class="post-content">
-                <header class="post-header">
-                    <div class="post-meta">
-                        <span class="post-date" id="postDate">1. března 2025</span>
-                        <span class="post-category" id="postCategory">Kategorie</span>
-                    </div>
-                    <h1 class="post-title" id="postTitle">Název příspěvku</h1>
-                    <div class="post-author">
-                        <a href="#" class="author-link" id="authorLink">
-                            <img src="image5.png" alt="Jméno autora" id="authorImage">
-                            <span class="author-name" id="authorName">Jméno autora</span>
-                        </a>
-                    </div>
-                </header>
-                
-                <div class="post-body" id="postContent">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras porttitor metus quis tincidunt lobortis. Integer condimentum eros id metus bibendum, vel tempor odio faucibus. Praesent malesuada, nibh eget tincidunt ullamcorper, dolor elit feugiat neque, sed efficitur nulla nunc vel metus.</p>
-                    
-                    <p>Etiam sit amet est vel nisl interdum iaculis. Nulla facilisi. Aenean a justo justo. Donec at vestibulum nibh, vel ornare nisl. Donec euismod, justo vel elementum iaculis, nisl ipsum feugiat odio, non pulvinar est lectus at ligula. Morbi cursus orci ut elementum maximus. Fusce id vehicula neque.</p>
-                </div>
-                
-                <div class="author-word-box">
-                    <div class="author-word-toggle">
-                        <span>Slovo autora</span>
-                        <span class="arrow">▼</span>
-                    </div>
-                    <div style="display: none;"><p id="authorWord"></p></div>
-                </div>
-                
-                <footer class="post-footer">
-                    <div class="post-tags">
-                        </div>
-                </footer>
-            </article>
-            
-            <section class="related-posts">
-                <h2 class="section-title">Související příspěvky</h2>
-                
-                <div class="posts-grid">
-                    </div>
-            </section>
-        </div>
-    </main>
+  <header id="site-header"></header>
+  <nav id="site-nav" class="site-nav"></nav>
 
-    <div class="modal-overlay" id="authorWordModalOverlay">
-        <div class="modal" id="authorWordModal">
-            <button class="modal-close" id="modalCloseButton">✕</button>
-            <h3 class="modal-title">Slovo autora</h3>
-            <div class="modal-content" id="modalContent">
-                </div>
+  <main class="post-page">
+    <div class="container">
+      <article class="post-content">
+        <header class="post-header">
+          <div class="post-meta">
+            <span class="post-date" id="postDate">1. března 2025</span>
+            <span class="post-category" id="postCategory">Kategorie</span>
+          </div>
+          <h1 class="post-title" id="postTitle">Název příspěvku</h1>
+          <div class="post-author">
+            <a href="#" class="author-link" id="authorLink">
+              <img src="image5.png" alt="Jméno autora" id="authorImage" loading="lazy">
+              <span class="author-name" id="authorName">Jméno autora</span>
+            </a>
+          </div>
+        </header>
+
+        <div class="post-body" id="postContent">
+          <p>Lorem ipsum dolor sit amet…</p>
+          <p>Etiam sit amet est vel nisl…</p>
         </div>
+
+        <div class="author-word-box">
+          <div class="author-word-toggle">
+            <span>Slovo autora</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div style="display: none;"><p id="authorWord"></p></div>
+        </div>
+
+        <footer class="post-footer">
+          <div class="post-tags"></div>
+        </footer>
+      </article>
+
+      <section class="related-posts">
+        <h2 class="section-title">Související příspěvky</h2>
+        <div class="posts-grid"></div>
+      </section>
     </div>
-    
-    <script src="data.js?v=1.2"></script>
-    <script src="script.js?v=1.5"></script>
-    <script src="post.js?v=1.3"></script>
-    <script src="utils.js"></script>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="data.js?v=1.2" defer></script>
+  <script src="utils.js" defer></script>
+  <script src="script.js?v=1.5" defer></script>
+  <script src="post.js?v=1.3" defer></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'posts' }));
+  </script>
 </body>
 </html>

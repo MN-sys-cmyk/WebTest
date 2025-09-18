@@ -1,9 +1,81 @@
-// script.js — karusely (autoři + příspěvky) s kliknutelnými kartami
+// script.js — karusely + kliknutelné karty + "Slovo autora" jako modal
 (function () {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const el = (tag, attrs = {}) => { const n = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => (k in n ? (n[k] = v) : n.setAttribute(k, v))); return n; };
 
+  // ---------- MODAL ----------
+  let lastFocused = null;
+  function openModal(html, { title = 'Slovo autora' } = {}) {
+    closeModal(); // pro jistotu
+    lastFocused = document.activeElement;
+
+    const overlay = el('div', { className: 'modal-overlay', role: 'presentation' });
+    const dialog = el('div', { className: 'modal', role: 'dialog', ariaModal: 'true', ariaLabelledby: 'modal-title', tabIndex: '-1' });
+
+    dialog.innerHTML = `
+      <button class="modal-close" aria-label="Zavřít">&times;</button>
+      <h3 id="modal-title" class="modal-title">${title}</h3>
+      <div class="modal-body">${html}</div>
+    `;
+
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    const closeBtn = dialog.querySelector('.modal-close');
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Tab') trapFocus(e, dialog);
+    };
+    const onOverlayClick = (e) => {
+      if (e.target === overlay) closeModal();
+    };
+    const onClose = (e) => {
+      e.preventDefault();
+      closeModal();
+    };
+
+    overlay.addEventListener('click', onOverlayClick);
+    closeBtn.addEventListener('click', onClose);
+    document.addEventListener('keydown', onKey);
+
+    // ulož handlery pro pozdější odstranění
+    overlay._cleanup = () => {
+      overlay.removeEventListener('click', onOverlayClick);
+      closeBtn.removeEventListener('click', onClose);
+      document.removeEventListener('keydown', onKey);
+    };
+
+    // fokus do modalu
+    dialog.focus();
+  }
+
+  function closeModal() {
+    const overlay = document.querySelector('.modal-overlay');
+    if (!overlay) return;
+    overlay._cleanup?.();
+    overlay.remove();
+    document.body.style.overflow = '';
+    if (lastFocused && typeof lastFocused.focus === 'function') {
+      lastFocused.focus();
+    }
+  }
+
+  function trapFocus(e, root) {
+    const focusables = root.querySelectorAll('a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])');
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  }
+
+  // ---------- DATA BEZPEČNĚ ----------
   function getAuthorsSafe() {
     try {
       if (window.Utils?.Data?.getAuthors) return window.Utils.Data.getAuthors();
@@ -19,43 +91,33 @@
     return [];
   }
 
-  // ---------- Slovo autora: bind ----------
+  // ---------- BIND "SLOVO AUTORA" (otevře modal, neodchází z odkazu) ----------
   function bindAuthorWordToggles(root = document) {
     $$('.author-word-toggle', root).forEach(tg => {
-      // už navěšeno?
       if (tg.dataset.bound === '1') return;
       tg.dataset.bound = '1';
+      tg.setAttribute('role', 'button');
+      tg.setAttribute('tabindex', '0');
+      tg.setAttribute('aria-expanded', 'false');
 
-      // kliknutí i klávesy
       const activate = (evt) => {
-        // uvnitř <a> nechceme navigovat
         evt.preventDefault();
         evt.stopPropagation();
 
+        // zkusit najít text v sourozenci .authorWordText nebo aria-controls
+        let text = '';
         const controlsId = tg.getAttribute('aria-controls');
-        const box = controlsId ? document.getElementById(controlsId) : tg.parentElement?.querySelector('.author-word-content, div');
-        if (!box) return;
-
-        const isOpen = tg.getAttribute('aria-expanded') === 'true';
-        const nextOpen = !isOpen;
-        tg.setAttribute('aria-expanded', String(nextOpen));
-
-        // animace přes max-height (pokud má class), jinak fallback přes display
-        if (box.classList.contains('author-word-content')) {
-          if (nextOpen) {
-            box.style.display = 'block';
-            // na první přechod změříme výšku
-            const h = box.scrollHeight;
-            box.style.maxHeight = h + 'px';
-          } else {
-            box.style.maxHeight = '0';
-            // po skončení animace můžeme skrýt
-            box.addEventListener('transitionend', () => { if (tg.getAttribute('aria-expanded') === 'false') box.style.display = 'none'; }, { once: true });
-          }
+        if (controlsId) {
+          const box = document.getElementById(controlsId);
+          const p = box?.querySelector('.authorWordText');
+          text = p ? p.innerHTML : (box ? box.innerHTML : '');
         } else {
-          // původní markup s <div style="display:none;">
-          box.style.display = nextOpen ? 'block' : 'none';
+          const p = tg.parentElement?.querySelector('.authorWordText');
+          text = p ? p.innerHTML : '';
         }
+        if (!text) text = '<p>(Autor zatím nic nedodal.)</p>';
+
+        openModal(text, { title: 'Slovo autora' });
       };
 
       tg.addEventListener('click', activate);
@@ -65,6 +127,7 @@
     });
   }
 
+  // ---------- DOM ENSURE ----------
   function ensureAuthorsCarouselDOM() {
     let wrap = $('.authors-carousel');
     if (!wrap) {
@@ -164,7 +227,7 @@
 
     const [featuredPost, ...rest] = posts;
 
-    // === FEATURED je celý odkaz + toggler s role="button" ===
+    // FEATURED je celý odkaz + toggle
     const awId = `aw-featured`;
     featured.innerHTML = `
       <a class="featured-post" href="post.html?id=${encodeURIComponent(featuredPost.id)}" aria-label="${String(featuredPost.title || '').replace(/</g,'&lt;')}">
@@ -177,10 +240,10 @@
           <h3 class="post-title">${String(featuredPost.title || '').replace(/</g,'&lt;')}</h3>
           <p class="post-excerpt">${String(featuredPost.excerpt || '').replace(/</g,'&lt;')}</p>
           <div class="author-word-box">
-            <div class="author-word-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="${awId}">
+            <div class="author-word-toggle" aria-controls="${awId}">
               <span>Slovo autora</span><span class="arrow">▼</span>
             </div>
-            <div id="${awId}" class="author-word-content" style="display:none; max-height:0;"><p class="authorWordText">${String(featuredPost.excerpt || '').replace(/</g,'&lt;')}</p></div>
+            <div id="${awId}" style="display:none;"><p class="authorWordText">${String(featuredPost.excerpt || '').replace(/</g,'&lt;')}</p></div>
           </div>
         </div>
       </a>
@@ -218,10 +281,10 @@
             <h3 class="post-title">${String(p.title || '').replace(/</g,'&lt;')}</h3>
             <p class="post-excerpt">${String(p.excerpt || '').replace(/</g,'&lt;')}</p>
             <div class="author-word-box">
-              <div class="author-word-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="${id}">
+              <div class="author-word-toggle" aria-controls="${id}">
                 <span>Slovo autora</span><span class="arrow">▼</span>
               </div>
-              <div id="${id}" class="author-word-content" style="display:none; max-height:0;"><p class="authorWordText">${String(p.excerpt || '').replace(/</g,'&lt;')}</p></div>
+              <div id="${id}" style="display:none;"><p class="authorWordText">${String(p.excerpt || '').replace(/</g,'&lt;')}</p></div>
             </div>
           </div>
         </a>`;
@@ -238,7 +301,7 @@
       }
     }
 
-    // navěsit togglery teď, když je DOM hotový
+    // navěsit modaly
     bindAuthorWordToggles(featured);
     bindAuthorWordToggles(postsContainer);
 
@@ -274,9 +337,9 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    try { const n = generateAuthorsCarousel(); initAuthorsCarousel(); } catch (e) { console.error('Autoři:', e); }
+    try { generateAuthorsCarousel(); initAuthorsCarousel(); } catch (e) { console.error('Autoři:', e); }
     try {
-      const m = generatePostsCarousel(); initPostsCarousel();
+      generatePostsCarousel(); initPostsCarousel();
       const featured = $('#featured-post-container'); if (featured) featured.style.marginBottom = '50px';
     } catch (e) { console.error('Příspěvky:', e); }
   });

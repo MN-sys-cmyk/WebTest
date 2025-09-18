@@ -1,4 +1,4 @@
-// post.js — detail příspěvku + související + "Slovo autora" modal s delegací v capture
+// post.js — detail + související; karty = article[data-post-href]; modal "Slovo autora"
 function findPostById(id) {
   return Utils.Data.allPosts().find(p => String(p.id) === String(id)) || null;
 }
@@ -7,12 +7,11 @@ function formatContent(content) {
   return content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
 }
 
-/* ---------- Modal ---------- */
+/* ===== Modal ===== */
 let lastFocusedPost = null;
 function openModalPost(html, { title = 'Slovo autora' } = {}) {
   closeModalPost();
   lastFocusedPost = document.activeElement;
-
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
   const dialog = document.createElement('div');
@@ -41,11 +40,9 @@ function openModalPost(html, { title = 'Slovo autora' } = {}) {
     }
   };
   const onOverlay = (e) => { if (e.target === overlay) closeModalPost(); };
-
   overlay.addEventListener('click', onOverlay);
   overlay._cleanup = () => { overlay.removeEventListener('click', onOverlay); document.removeEventListener('keydown', onKey); };
   document.addEventListener('keydown', onKey);
-
   dialog.querySelector('.modal-close').addEventListener('click', (e) => { e.preventDefault(); closeModalPost(); });
   dialog.focus();
 }
@@ -56,7 +53,7 @@ function closeModalPost() {
   if (lastFocusedPost && typeof lastFocusedPost.focus === 'function') lastFocusedPost.focus();
 }
 
-/* ---------- Delegovaný handler pro Slovo autora ---------- */
+/* ===== Delegace: toggle modal + ruční navigace souvisejících karet ===== */
 function getAuthorWordHtmlFromToggle(tg) {
   const id = tg.getAttribute('aria-controls');
   if (id) {
@@ -67,34 +64,39 @@ function getAuthorWordHtmlFromToggle(tg) {
       if (box.innerHTML) return box.innerHTML;
     }
   }
-  const box2 = tg.closest('.author-word-box') || tg.parentElement;
-  if (box2) {
-    const p = box2.querySelector('.authorWordText');
-    if (p && p.innerHTML) return p.innerHTML;
-  }
-  return '<p>(Autor zatím nic nedodal.)</p>';
+  const parent = tg.closest('.author-word-box') || tg.parentElement;
+  const p = parent?.querySelector('.authorWordText');
+  return (p && p.innerHTML) || '<p>(Autor zatím nic nedodal.)</p>';
 }
 
 document.addEventListener('click', (e) => {
-  const tg = e.target.closest && e.target.closest('.author-word-toggle');
-  if (!tg) return;
-  e.preventDefault();
-  e.stopPropagation();
-  e.stopImmediatePropagation();
-  openModalPost(getAuthorWordHtmlFromToggle(tg));
-}, true);
+  const tg = e.target.closest?.('.author-word-toggle');
+  if (tg) {
+    e.preventDefault(); e.stopPropagation();
+    return openModalPost(getAuthorWordHtmlFromToggle(tg));
+  }
+  const card = e.target.closest?.('.post-card,[data-post-href],.featured-post');
+  if (card) {
+    const href = card.getAttribute('data-post-href') || card.getAttribute('href');
+    if (!href) return;
+    e.preventDefault();
+    window.location.assign(href);
+  }
+});
 
 document.addEventListener('keydown', (e) => {
-  const tg = e.target.closest && e.target.closest('.author-word-toggle');
-  if (!tg) return;
   if (e.key !== 'Enter' && e.key !== ' ') return;
-  e.preventDefault();
-  e.stopPropagation();
-  e.stopImmediatePropagation();
-  openModalPost(getAuthorWordHtmlFromToggle(tg));
-}, true);
+  const tg = e.target.closest?.('.author-word-toggle');
+  if (tg) { e.preventDefault(); e.stopPropagation(); return openModalPost(getAuthorWordHtmlFromToggle(tg)); }
+  const card = e.target.closest?.('.post-card,[data-post-href],.featured-post');
+  if (card) {
+    e.preventDefault();
+    const href = card.getAttribute('data-post-href') || card.getAttribute('href');
+    if (href) window.location.assign(href);
+  }
+});
 
-/* ---------- Related posts ---------- */
+/* ===== Related posts render ===== */
 function loadRelatedPosts(authorId, currentPostId) {
   const grid = document.querySelector('.related-posts .posts-grid');
   if (!grid) return;
@@ -110,7 +112,7 @@ function loadRelatedPosts(authorId, currentPostId) {
   }
 
   grid.innerHTML = posts.map(p => `
-    <div class="post-card">
+    <article class="post-card" role="link" tabindex="0" data-post-href="post.html?id=${encodeURIComponent(p.id)}">
       <div class="post-card-image" style="background-image: url('${p.image}');"></div>
       <div class="post-card-content">
         <div class="post-meta">
@@ -119,19 +121,18 @@ function loadRelatedPosts(authorId, currentPostId) {
         </div>
         <h3 class="post-title">${Utils.escape(p.title)}</h3>
         <p class="post-excerpt">${Utils.escape(p.excerpt)}</p>
-        <a href="post.html?id=${encodeURIComponent(p.id)}" class="read-more">Číst více</a>
         <div class="author-word-box">
-          <div class="author-word-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="aw-rel-${p.id}">
+          <div class="author-word-toggle" aria-controls="aw-rel-${p.id}">
             <span>Slovo autora</span><span class="arrow">▼</span>
           </div>
           <div id="aw-rel-${p.id}" style="display:none;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
         </div>
       </div>
-    </div>
+    </article>
   `).join("");
 }
 
-/* ---------- Init detailu ---------- */
+/* ===== Init detailu ===== */
 document.addEventListener('DOMContentLoaded', () => {
   const id = new URLSearchParams(location.search).get('id');
   if (!id) return location.replace('index.html');
@@ -171,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // napoj aria-controls v detailu, aby se našel text
+  // připrav aria-controls v detailu, aby se našel text pro modal
   const awToggle = document.querySelector('.author-word-box .author-word-toggle');
   const awBox = document.querySelector('.author-word-box > div');
   if (awToggle && awBox) {

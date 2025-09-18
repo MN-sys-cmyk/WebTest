@@ -392,3 +392,51 @@
     try { generatePostsCarousel(); initPostsCarousel(); } catch (e) { console.error('Příspěvky:', e); }
   });
 })();
+
+document.addEventListener('DOMContentLoaded', () => {
+  const trigger = document.getElementById('autor');
+  const modalRoot = document.getElementById('autor-modal');
+  if (!trigger || !modalRoot) return;
+
+  const closeSelectors = '[data-close]';
+  let lastFocused = null;
+
+  function openModal() {
+    lastFocused = document.activeElement;
+    modalRoot.classList.add('active');
+    modalRoot.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('scroll-lock');
+
+    // Zaostři dovnitř modalu (přístupnost)
+    const focusable = modalRoot.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    (focusable || modalRoot).focus();
+  }
+
+  function closeModal() {
+    modalRoot.classList.remove('active');
+    modalRoot.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('scroll-lock');
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+
+  // Otevření
+  trigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal();
+  });
+
+  // Zavření (křížek, overlay)
+  modalRoot.addEventListener('click', (e) => {
+    if (e.target.matches(closeSelectors)) closeModal();
+  });
+
+  // Zavření klávesou Esc
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalRoot.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // Export pro případný fallback z popup varianty:
+  window.__openAutorModal = openModal;
+});

@@ -1,80 +1,37 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Texty autora - LiterárníKomunita</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=1.5">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Texty autora - LiterárníKomunita</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1.5">
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-top">
-                <a href="index.html" class="logo">Literární<span>Komunita</span></a>
-                <div class="language-switcher">
-                    <a href="#" class="language-link active">CZ</a>
-                    <a href="#" class="language-link">EN</a>
-                </div>
-                <button class="mobile-menu-toggle">☰</button>
-            </div>
-        </div>
-    </header>
-    
-    <div class="mobile-menu">
-        <button class="mobile-menu-close">✕</button>
+  <header id="site-header"></header>
+  <nav id="site-nav" class="site-nav"></nav>
+
+  <main class="author-category-page">
+    <div class="container">
+      <div class="section-header">
+        <h1 class="section-title" id="author-title">Texty autora</h1>
+        <p class="section-subtitle" id="author-subtitle">Všechny texty daného autora</p>
+      </div>
+      <div class="author-category-posts-grid" id="author-category-posts-grid"></div>
     </div>
-    
-    <main class="author-category-page">
-        <div class="container">
-            <div class="section-header">
-                <h1 class="section-title" id="author-title">Texty autora</h1>
-                <p class="section-subtitle" id="author-subtitle">Všechny texty daného autora</p>
-            </div>
-            
-            <div class="author-category-posts-grid" id="author-category-posts-grid">
-                </div>
-        </div>
-    </main>
-    
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div>
-                    <div class="footer-logo">Literární<span>Komunita</span></div>
-                    <p class="footer-description">Platforma propojující autory, čtenáře a všechny milovníky literatury. Objevujte současnou českou literární scénu.</p>
-                </div>
-                
-                <div>
-                    <h3 class="footer-heading">Kontakt</h3>
-                    <ul class="footer-links">
-                        <li>info@literarnikomunita.cz</li>
-                        <li>+420 123 456 789</li>
-                        <li>Literární 123, Praha 1</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                © 2025 LiterárníKomunita. Všechna práva vyhrazena.
-            </div>
-        </div>
-    </footer>
-    
-    <div class="modal-overlay" id="authorWordModalOverlay">
-        <div class="modal" id="authorWordModal">
-            <button class="modal-close" id="modalCloseButton">✕</button>
-            <h3 class="modal-title">Slovo autora</h3>
-            <div class="modal-content" id="modalContent">
-                </div>
-        </div>
-    </div>
-    
-    <script src="data.js?v=1.2"></script>
-    <script src="script.js?v=1.4"></script>
-    <script src="author-category.js?v=1.0"></script>
-    <script src="utils.js"></script>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="data.js?v=1.2" defer></script>
+  <script src="utils.js" defer></script>
+  <script src="script.js?v=1.4" defer></script>
+  <script src="author-category.js?v=1.0" defer></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'posts' }));
+  </script>
 </body>
 </html>

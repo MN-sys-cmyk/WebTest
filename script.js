@@ -1,14 +1,14 @@
-// script.js — karusely + kliknutelné karty + "Slovo autora" jako modal (deleagovaný capture handler)
+// script.js — karusely + kliknutelné karty (manuální navigace) + modal "Slovo autora"
 (function () {
   const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const el = (tag, attrs = {}) => { const n = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => (k in n ? (n[k] = v) : n.setAttribute(k, v))); return n; };
 
-  // ---------- MODAL ----------
+  /* ===== Modal ===== */
   let lastFocused = null;
   function openModal(html, { title = 'Slovo autora' } = {}) {
     closeModal();
     lastFocused = document.activeElement;
-
     const overlay = el('div', { className: 'modal-overlay', role: 'presentation' });
     const dialog = el('div', { className: 'modal', role: 'dialog', ariaModal: 'true', ariaLabelledby: 'modal-title', tabIndex: '-1' });
     dialog.innerHTML = `
@@ -31,14 +31,9 @@
       }
     };
     const onOverlay = (e) => { if (e.target === overlay) closeModal(); };
-
     overlay.addEventListener('click', onOverlay);
     document.addEventListener('keydown', onKey);
-    overlay._cleanup = () => {
-      overlay.removeEventListener('click', onOverlay);
-      document.removeEventListener('keydown', onKey);
-    };
-
+    overlay._cleanup = () => { overlay.removeEventListener('click', onOverlay); document.removeEventListener('keydown', onKey); };
     dialog.querySelector('.modal-close').addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
     dialog.focus();
   }
@@ -51,7 +46,7 @@
     if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
   }
 
-  // ---------- DATA ----------
+  /* ===== Data ===== */
   function getAuthorsSafe() {
     try { if (window.Utils?.Data?.getAuthors) return window.Utils.Data.getAuthors(); if (Array.isArray(window.DATA?.authors)) return window.DATA.authors; } catch {}
     return [];
@@ -61,61 +56,64 @@
     return [];
   }
 
-  // ---------- DELEGOVANÝ HANDLER "SLOVO AUTORA" (funguje i uvnitř <a>) ----------
-  function findAuthorWordHtmlFromToggle(tg) {
-    // 1) aria-controls
-    const id = tg.getAttribute('aria-controls');
+  /* ===== Delegace: "Slovo autora" → modal, a zároveň ruční navigace karet ===== */
+
+  // 1) Otevření modalu na toggle
+  function extractAuthorWordHtml(toggleEl) {
+    const id = toggleEl.getAttribute('aria-controls');
     if (id) {
       const box = document.getElementById(id);
       if (box) {
         const p = box.querySelector('.authorWordText');
-        if (p && p.innerHTML) return p.innerHTML;
-        if (box.innerHTML) return box.innerHTML;
+        return (p && p.innerHTML) || box.innerHTML || '<p>(Autor zatím nic nedodal.)</p>';
       }
     }
-    // 2) nejbližší box v rodiči
-    const box2 = tg.closest('.author-word-box') || tg.parentElement;
-    if (box2) {
-      const p = box2.querySelector('.authorWordText');
-      if (p && p.innerHTML) return p.innerHTML;
-    }
-    return '<p>(Autor zatím nic nedodal.)</p>';
+    const parent = toggleEl.closest('.author-word-box') || toggleEl.parentElement;
+    const p = parent?.querySelector('.authorWordText');
+    return (p && p.innerHTML) || '<p>(Autor zatím nic nedodal.)</p>';
   }
 
-  // Zachytíme klik už ve **capture** fázi = dřív, než <a> naviguje
   document.addEventListener('click', (e) => {
-    const tg = e.target.closest('.author-word-toggle');
+    const tg = e.target.closest?.('.author-word-toggle');
     if (!tg) return;
     e.preventDefault();
     e.stopPropagation();
-    e.stopImmediatePropagation();
+    openModal(extractAuthorWordHtml(tg));
+  });
 
-    const html = findAuthorWordHtmlFromToggle(tg);
-    openModal(html, { title: 'Slovo autora' });
-  }, true);
-
-  // Klávesy Enter/Space (taky v capture)
   document.addEventListener('keydown', (e) => {
-    const isToggle = e.target && e.target.closest && e.target.closest('.author-word-toggle');
-    if (!isToggle) return;
+    const tg = e.target.closest?.('.author-word-toggle');
+    if (!tg) return;
     if (e.key !== 'Enter' && e.key !== ' ') return;
     e.preventDefault();
     e.stopPropagation();
-    e.stopImmediatePropagation();
-    const html = findAuthorWordHtmlFromToggle(e.target.closest('.author-word-toggle'));
-    openModal(html, { title: 'Slovo autora' });
-  }, true);
+    openModal(extractAuthorWordHtml(tg));
+  });
 
-  // Malá pomoc s přístupností – dorolujeme role/tabindex na všechny toggly
-  function annotateToggles() {
-    document.querySelectorAll('.author-word-toggle').forEach(t => {
-      if (!t.hasAttribute('role')) t.setAttribute('role', 'button');
-      if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '0');
-      if (!t.hasAttribute('aria-expanded')) t.setAttribute('aria-expanded', 'false');
-    });
-  }
+  // 2) Manuální navigace karet (post-card & featured-post), ale NE pokud klik je na .author-word-toggle
+  function navigateTo(href) { if (href) window.location.assign(href); }
+  document.addEventListener('click', (e) => {
+    const onToggle = e.target.closest?.('.author-word-toggle');
+    if (onToggle) return; // modal už řešíme výše, nenavigujeme
+    const card = e.target.closest?.('.post-card,[data-post-href],.featured-post');
+    if (!card) return;
+    const href = card.getAttribute('data-post-href') || card.getAttribute('href');
+    if (!href) return;
+    e.preventDefault();
+    navigateTo(href);
+  });
 
-  // ---------- DOM helpery pro karusely ----------
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest?.('.post-card,[data-post-href],.featured-post');
+    if (!card) return;
+    const onToggle = e.target.closest?.('.author-word-toggle');
+    if (onToggle) return;
+    e.preventDefault();
+    navigateTo(card.getAttribute('data-post-href') || card.getAttribute('href'));
+  });
+
+  /* ===== DOM helpers pro karusely ===== */
   function ensureAuthorsCarouselDOM() {
     let wrap = $('.authors-carousel');
     if (!wrap) {
@@ -141,12 +139,11 @@
     if (!$('#posts-indicator')) pc.insertAdjacentHTML('beforeend', `<div class="carousel-indicator" id="posts-indicator"></div>`);
   }
 
-  // ===== Autoři =====
-  let currentSlide = 0, slidesCount = 0;
+  /* ===== Autoři ===== */
+  let currentSlide = 0;
   function generateAuthorsCarousel() {
     ensureAuthorsCarouselDOM();
-    const track = $('#carousel-track');
-    const dotsWrap = $('#carousel-indicator');
+    const track = $('#carousel-track'); const dotsWrap = $('#carousel-indicator');
     if (!track || !dotsWrap) return 0;
 
     const authors = getAuthorsSafe();
@@ -155,27 +152,20 @@
       return 1;
     }
 
-    track.innerHTML = '';
-    dotsWrap.innerHTML = '';
-    const perSlide = 4;
-    const slidesNeeded = Math.ceil(authors.length / perSlide);
-
+    track.innerHTML = ''; dotsWrap.innerHTML = '';
+    const perSlide = 4; const slidesNeeded = Math.ceil(authors.length / perSlide);
     for (let i = 0; i < slidesNeeded; i++) {
-      const start = i * perSlide;
-      const slice = authors.slice(start, start + perSlide);
+      const slice = authors.slice(i * perSlide, i * perSlide + perSlide);
       const slide = el('div', { className: 'carousel-slide' });
       slide.innerHTML = slice.map(a => `
         <a href="author.html?id=${encodeURIComponent(a.id)}" class="author-card" aria-label="${(a.name || '').replace(/</g,'&lt;')}">
-          <div class="author-image-container">
-            <img src="${a.image}" alt="${(a.name || '').replace(/</g,'&lt;')}" class="author-image" loading="lazy">
-          </div>
+          <div class="author-image-container"><img src="${a.image}" alt="${(a.name || '').replace(/</g,'&lt;')}" class="author-image" loading="lazy"></div>
           <h3 class="author-name">${(a.name || '').replace(/</g,'&lt;')}</h3>
           ${a.genre ? `<p class="author-genre">${String(a.genre).replace(/</g,'&lt;')}</p>` : ""}
         </a>
       `).join('');
       track.appendChild(slide);
     }
-
     for (let i = 0; i < slidesNeeded; i++) {
       const dot = el('div', { className: 'indicator-dot' + (i === 0 ? ' active' : '') });
       dot.onclick = () => moveAuthorsTo(i);
@@ -183,23 +173,25 @@
     }
     return slidesNeeded;
   }
+  function moveAuthorsTo(index) {
+    const slides = $$('.authors-carousel .carousel-slide');
+    const n = slides.length; if (!n) return;
+    if (index < 0) index = n - 1; else if (index >= n) index = 0;
+    currentSlide = index;
+    const track = $('#carousel-track'); if (track) track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    $$('.authors-carousel .indicator-dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+  }
   function initAuthorsCarousel() {
-    const slides = document.querySelectorAll('.authors-carousel .carousel-slide');
-    slidesCount = slides.length; if (slidesCount < 2) return;
+    if ($$('.authors-carousel .carousel-slide').length < 2) return;
     $('.authors-carousel .carousel-arrow.prev')?.addEventListener('click', () => moveAuthorsTo(currentSlide - 1));
     $('.authors-carousel .carousel-arrow.next')?.addEventListener('click', () => moveAuthorsTo(currentSlide + 1));
   }
-  function moveAuthorsTo(index) {
-    if (index < 0) index = slidesCount - 1; else if (index >= slidesCount) index = 0; currentSlide = index;
-    const track = $('#carousel-track'); if (track) track.style.transform = `translateX(-${currentSlide * 100}%)`;
-    document.querySelectorAll('.authors-carousel .indicator-dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
-  }
 
-  // ===== Příspěvky =====
+  /* ===== Příspěvky ===== */
   let currentPostSlide = 0, postSlidesCount = 0;
+
   function generatePostsCarousel() {
     ensurePostsCarouselDOM();
-
     const postsContainer = $('#posts-container');
     const indicator = $('#posts-indicator');
     const featured = $('#featured-post-container');
@@ -213,30 +205,29 @@
       return 0;
     }
 
-    const [featuredPost, ...rest] = posts;
-
-    // FEATURED = odkaz + vnořený "Slovo autora"
-    const awId = `aw-featured`;
+    // FEATURED — použijeme <article ... data-post-href="..."> (ne <a>)
+    const fp = posts[0];
     featured.innerHTML = `
-      <a class="featured-post" href="post.html?id=${encodeURIComponent(featuredPost.id)}" aria-label="${String(featuredPost.title || '').replace(/</g,'&lt;')}">
-        <div class="featured-post-image" style="background-image: url('${featuredPost.image}');"></div>
+      <article class="featured-post" role="link" tabindex="0" data-post-href="post.html?id=${encodeURIComponent(fp.id)}" aria-label="${String(fp.title || '').replace(/</g,'&lt;')}">
+        <div class="featured-post-image" style="background-image: url('${fp.image}');"></div>
         <div class="featured-post-content">
           <div class="post-meta">
-            <span class="post-date">${featuredPost.date ? featuredPost.date.toLocaleDateString('cs-CZ') : ''}</span>
-            <span class="post-category">${(featuredPost.categories && featuredPost.categories[0]) ? String(featuredPost.categories[0]).replace(/</g,'&lt;') : ''}</span>
+            <span class="post-date">${fp.date ? fp.date.toLocaleDateString('cs-CZ') : ''}</span>
+            <span class="post-category">${(fp.categories && fp.categories[0]) ? String(fp.categories[0]).replace(/</g,'&lt;') : ''}</span>
           </div>
-          <h3 class="post-title">${String(featuredPost.title || '').replace(/</g,'&lt;')}</h3>
-          <p class="post-excerpt">${String(featuredPost.excerpt || '').replace(/</g,'&lt;')}</p>
+          <h3 class="post-title">${String(fp.title || '').replace(/</g,'&lt;')}</h3>
+          <p class="post-excerpt">${String(fp.excerpt || '').replace(/</g,'&lt;')}</p>
           <div class="author-word-box">
-            <div class="author-word-toggle" aria-controls="${awId}" role="button" tabindex="0">
+            <div class="author-word-toggle" aria-controls="aw-featured">
               <span>Slovo autora</span><span class="arrow">▼</span>
             </div>
-            <div id="${awId}" style="display:none;"><p class="authorWordText">${String(featuredPost.excerpt || '').replace(/</g,'&lt;')}</p></div>
+            <div id="aw-featured" style="display:none;"><p class="authorWordText">${String(fp.excerpt || '').replace(/</g,'&lt;')}</p></div>
           </div>
         </div>
-      </a>
+      </article>
     `;
 
+    const rest = posts.slice(1);
     const track = el('div', { className: 'posts-carousel-track' });
     track.style.display = 'flex';
     track.style.transition = 'transform 0.5s ease';
@@ -246,9 +237,7 @@
     const slidesNeeded = Math.ceil(rest.length / perSlide);
 
     for (let i = 0; i < slidesNeeded; i++) {
-      const start = i * perSlide;
-      const slice = rest.slice(start, start + perSlide);
-
+      const slice = rest.slice(i * perSlide, i * perSlide + perSlide);
       const slide = el('div', { className: 'posts-slide' });
       slide.style.minWidth = '100%';
       slide.style.display = 'flex';
@@ -256,10 +245,9 @@
       slide.style.justifyContent = 'space-between';
       slide.style.gap = '20px';
 
-      slide.innerHTML = slice.map(p => {
-        const id = `aw-${p.id}`;
-        return `
-        <a class="post-card" href="post.html?id=${encodeURIComponent(p.id)}" role="article" aria-label="${String(p.title || '').replace(/</g,'&lt;')}" style="display:block;">
+      // KAŽDÁ KARTA: <article class="post-card" data-post-href="...">
+      slide.innerHTML = slice.map(p => `
+        <article class="post-card" role="link" tabindex="0" data-post-href="post.html?id=${encodeURIComponent(p.id)}" aria-label="${String(p.title || '').replace(/</g,'&lt;')}" style="display:block;">
           <div class="post-card-image" style="background-image: url('${p.image}');"></div>
           <div class="post-card-content">
             <div class="post-meta">
@@ -269,15 +257,14 @@
             <h3 class="post-title">${String(p.title || '').replace(/</g,'&lt;')}</h3>
             <p class="post-excerpt">${String(p.excerpt || '').replace(/</g,'&lt;')}</p>
             <div class="author-word-box">
-              <div class="author-word-toggle" aria-controls="${id}" role="button" tabindex="0">
+              <div class="author-word-toggle" aria-controls="aw-${p.id}">
                 <span>Slovo autora</span><span class="arrow">▼</span>
               </div>
-              <div id="${id}" style="display:none;"><p class="authorWordText">${String(p.excerpt || '').replace(/</g,'&lt;')}</p></div>
+              <div id="aw-${p.id}" style="display:none;"><p class="authorWordText">${String(p.excerpt || '').replace(/</g,'&lt;')}</p></div>
             </div>
           </div>
-        </a>`;
-      }).join('');
-
+        </article>
+      `).join('');
       track.appendChild(slide);
     }
 
@@ -289,7 +276,6 @@
       }
     }
 
-    annotateToggles();
     adjustPostsCarouselResponsive(track);
     return slidesNeeded;
   }
@@ -307,37 +293,23 @@
     window.addEventListener('resize', apply);
   }
 
-  function initAuthorsCarousel() {
-    const slides = document.querySelectorAll('.authors-carousel .carousel-slide');
-    if (slides.length < 2) return;
-    $('.authors-carousel .carousel-arrow.prev')?.addEventListener('click', () => moveAuthorsTo(currentSlide - 1));
-    $('.authors-carousel .carousel-arrow.next')?.addEventListener('click', () => moveAuthorsTo(currentSlide + 1));
-  }
   function initPostsCarousel() {
     const track = $('.posts-carousel-track'); if (!track) return;
-    const slides = track.querySelectorAll('.posts-slide');
-    postSlidesCount = slides.length; if (postSlidesCount <= 1) return;
+    postSlidesCount = track.querySelectorAll('.posts-slide').length;
+    if (postSlidesCount <= 1) return;
     $('.posts-carousel .carousel-arrow.prev')?.addEventListener('click', () => movePostsTo(currentPostSlide - 1));
     $('.posts-carousel .carousel-arrow.next')?.addEventListener('click', () => movePostsTo(currentPostSlide + 1));
   }
-  function moveAuthorsTo(i) {
-    const slides = document.querySelectorAll('.authors-carousel .carousel-slide');
-    const n = slides.length; if (n < 1) return;
-    if (i < 0) i = n - 1; else if (i >= n) i = 0;
-    currentSlide = i;
-    const track = $('#carousel-track'); if (track) track.style.transform = `translateX(-${currentSlide * 100}%)`;
-    document.querySelectorAll('.authors-carousel .indicator-dot').forEach((d, idx) => d.classList.toggle('active', idx === currentSlide));
-  }
-  function movePostsTo(i) {
-    const slides = document.querySelectorAll('.posts-carousel-track .posts-slide');
-    const n = slides.length; if (n < 1) return;
-    if (i < 0) i = n - 1; else if (i >= n) i = 0;
-    currentPostSlide = i;
+  function movePostsTo(index) {
+    const slides = $$('.posts-carousel-track .posts-slide');
+    const n = slides.length; if (!n) return;
+    if (index < 0) index = n - 1; else if (index >= n) index = 0;
+    currentPostSlide = index;
     const track = $('.posts-carousel-track'); if (track) track.style.transform = `translateX(-${currentPostSlide * 100}%)`;
-    document.querySelectorAll('#posts-indicator .indicator-dot').forEach((d, idx) => d.classList.toggle('active', idx === currentPostSlide));
+    $$('#posts-indicator .indicator-dot').forEach((d, i) => d.classList.toggle('active', i === currentPostSlide));
   }
 
-  // ---------- BOOT ----------
+  /* ===== Boot ===== */
   document.addEventListener('DOMContentLoaded', () => {
     try { generateAuthorsCarousel(); initAuthorsCarousel(); } catch (e) { console.error('Autoři:', e); }
     try { generatePostsCarousel(); initPostsCarousel(); } catch (e) { console.error('Příspěvky:', e); }

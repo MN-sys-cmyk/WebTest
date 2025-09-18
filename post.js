@@ -1,14 +1,13 @@
-// post.js — detail příspěvku + související + "Slovo autora" jako modal
+// post.js — detail příspěvku + související + "Slovo autora" modal s delegací v capture
 function findPostById(id) {
   return Utils.Data.allPosts().find(p => String(p.id) === String(id)) || null;
 }
-
 function formatContent(content) {
   if (!content) return '';
   return content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
 }
 
-// --- Modal (stejný princip jako na homepage) ---
+/* ---------- Modal ---------- */
 let lastFocusedPost = null;
 function openModalPost(html, { title = 'Slovo autora' } = {}) {
   closeModalPost();
@@ -34,10 +33,9 @@ function openModalPost(html, { title = 'Slovo autora' } = {}) {
   const onKey = (e) => {
     if (e.key === 'Escape') closeModalPost();
     if (e.key === 'Tab') {
-      const focusables = dialog.querySelectorAll('a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])');
-      if (!focusables.length) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
+      const f = dialog.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
@@ -45,10 +43,7 @@ function openModalPost(html, { title = 'Slovo autora' } = {}) {
   const onOverlay = (e) => { if (e.target === overlay) closeModalPost(); };
 
   overlay.addEventListener('click', onOverlay);
-  overlay._cleanup = () => {
-    overlay.removeEventListener('click', onOverlay);
-    document.removeEventListener('keydown', onKey);
-  };
+  overlay._cleanup = () => { overlay.removeEventListener('click', onOverlay); document.removeEventListener('keydown', onKey); };
   document.addEventListener('keydown', onKey);
 
   dialog.querySelector('.modal-close').addEventListener('click', (e) => { e.preventDefault(); closeModalPost(); });
@@ -61,28 +56,45 @@ function closeModalPost() {
   if (lastFocusedPost && typeof lastFocusedPost.focus === 'function') lastFocusedPost.focus();
 }
 
-function bindAuthorWordToggles(root = document) {
-  const toggles = root.querySelectorAll('.author-word-toggle');
-  toggles.forEach(tg => {
-    if (tg.dataset.bound === '1') return;
-    tg.dataset.bound = '1';
-    tg.setAttribute('role', 'button');
-    tg.setAttribute('tabindex', '0');
-
-    const activate = (evt) => {
-      evt.preventDefault();
-      evt.stopPropagation();
-      const controlsId = tg.getAttribute('aria-controls');
-      const box = controlsId ? document.getElementById(controlsId) : tg.parentElement?.querySelector('.author-word-content, div');
-      let html = box?.querySelector('.authorWordText')?.innerHTML || box?.innerHTML || '<p>(Autor zatím nic nedodal.)</p>';
-      openModalPost(html);
-    };
-
-    tg.addEventListener('click', activate);
-    tg.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') activate(e); });
-  });
+/* ---------- Delegovaný handler pro Slovo autora ---------- */
+function getAuthorWordHtmlFromToggle(tg) {
+  const id = tg.getAttribute('aria-controls');
+  if (id) {
+    const box = document.getElementById(id);
+    if (box) {
+      const p = box.querySelector('.authorWordText');
+      if (p && p.innerHTML) return p.innerHTML;
+      if (box.innerHTML) return box.innerHTML;
+    }
+  }
+  const box2 = tg.closest('.author-word-box') || tg.parentElement;
+  if (box2) {
+    const p = box2.querySelector('.authorWordText');
+    if (p && p.innerHTML) return p.innerHTML;
+  }
+  return '<p>(Autor zatím nic nedodal.)</p>';
 }
 
+document.addEventListener('click', (e) => {
+  const tg = e.target.closest && e.target.closest('.author-word-toggle');
+  if (!tg) return;
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+  openModalPost(getAuthorWordHtmlFromToggle(tg));
+}, true);
+
+document.addEventListener('keydown', (e) => {
+  const tg = e.target.closest && e.target.closest('.author-word-toggle');
+  if (!tg) return;
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+  openModalPost(getAuthorWordHtmlFromToggle(tg));
+}, true);
+
+/* ---------- Related posts ---------- */
 function loadRelatedPosts(authorId, currentPostId) {
   const grid = document.querySelector('.related-posts .posts-grid');
   if (!grid) return;
@@ -117,15 +129,12 @@ function loadRelatedPosts(authorId, currentPostId) {
       </div>
     </div>
   `).join("");
-
-  bindAuthorWordToggles(grid);
 }
 
+/* ---------- Init detailu ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  const params = new URLSearchParams(location.search);
-  const id = params.get('id');
+  const id = new URLSearchParams(location.search).get('id');
   if (!id) return location.replace('index.html');
-
   const post = findPostById(id);
   if (!post) return location.replace('index.html');
 
@@ -144,17 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (postCategoryElement) postCategoryElement.textContent = (post.categories && post.categories[0]) || '';
   if (postTitleElement) postTitleElement.textContent = post.title;
   if (authorNameElement) authorNameElement.textContent = Utils.Data.getAuthorById(post.authorId)?.name || '';
-
   if (postContentElement) postContentElement.innerHTML = formatContent(post.content || '');
   if (authorWordElement) authorWordElement.textContent = post.excerpt || '';
 
   const author = Utils.Data.getAuthorById(post.authorId);
   if (author) {
-    if (authorImageElement) {
-      authorImageElement.src = author.image;
-      authorImageElement.alt = author.name;
-      authorImageElement.loading = 'lazy';
-    }
+    if (authorImageElement) { authorImageElement.src = author.image; authorImageElement.alt = author.name; authorImageElement.loading = 'lazy'; }
     if (authorLinkElement) authorLinkElement.href = `author.html?id=${encodeURIComponent(author.id)}`;
   }
 
@@ -167,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // V detailu převážně používáš box s textem v DOM – uděláme z něj modal
+  // napoj aria-controls v detailu, aby se našel text
   const awToggle = document.querySelector('.author-word-box .author-word-toggle');
   const awBox = document.querySelector('.author-word-box > div');
   if (awToggle && awBox) {
@@ -175,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
     awBox.id = idBox;
     awToggle.setAttribute('aria-controls', idBox);
   }
-  bindAuthorWordToggles(document);
 
   loadRelatedPosts(post.authorId, post.id);
 });

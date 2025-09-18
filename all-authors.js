@@ -1,47 +1,23 @@
-// JavaScript pro stránku se všemi autory
+// all-authors.js — čte autory z Utils.Data a renderuje grid
+document.addEventListener('DOMContentLoaded', () => {
+  const wrap = document.getElementById('authors-grid');
+  if (!wrap) return;
 
-// Funkce pro načtení všech autorů
-function loadAllAuthors() {
-    // Zkontrolujeme, zda existuje globální proměnná authorsData
-    if (typeof authorsData === 'undefined') {
-        console.error('Data autorů nejsou k dispozici');
-        return;
-    }
-    
-    // Získáme kontejner pro autory
-    const authorsGrid = document.getElementById('authors-grid');
-    if (!authorsGrid) {
-        console.error('Kontejner pro autory nebyl nalezen');
-        return;
-    }
-    
-    // Vygenerujeme HTML pro všechny autory
-    let authorsHTML = '';
-    
-    authorsData.forEach(author => {
-        authorsHTML += `
-            <a href="author.html?id=${author.id}" class="author-card">
-                <div class="author-image-container">
-                    <img src="${author.image}" alt="${author.name}" class="author-image">
-                </div>
-                <h3 class="author-name">${author.name}</h3>
-                <p class="author-genre">${author.genre}</p>
-            </a>
-        `;
-    });
-    
-    // Vložíme HTML do kontejneru
-    authorsGrid.innerHTML = authorsHTML;
-}
+  const authors = Utils.Data.getAuthors();
+  if (!authors.length) {
+    wrap.innerHTML = '<p>Žádní autoři zatím nejsou k dispozici.</p>';
+    return;
+  }
 
-// Inicializace stránky po načtení DOM
-document.addEventListener('DOMContentLoaded', function() {
-    // Načteme všechny autory
-    loadAllAuthors();
-    
-    // Inicializace mobilního menu
-    initMobileMenu();
-    
-    // Inicializace tlačítek pro "slovo autora"
-    initAuthorWordToggle();
+  wrap.innerHTML = authors.map(a => `
+    <a href="author.html?id=${encodeURIComponent(a.id)}" class="author-card">
+      <div class="author-image-container">
+        <img src="${a.image}" alt="${Utils.escape(a.name)}" class="author-image" loading="lazy">
+      </div>
+      <h3 class="author-name">${Utils.escape(a.name)}</h3>
+      ${a.genre ? `<p class="author-genre">${Utils.escape(a.genre)}</p>` : ""}
+    </a>
+  `).join("");
+
+  // volitelné: necháme Utils.hardenImages() udělat zbytek
 });

@@ -440,3 +440,73 @@ document.addEventListener('DOMContentLoaded', () => {
   // Export pro případný fallback z popup varianty:
   window.__openAutorModal = openModal;
 });
+
+// === Modal: O autorovi (varianta A) ===
+(function () {
+  // Pokud už kód běží (případ vícenásobného importu), nic dalšího nedělej
+  if (window.__autorModalInit) return;
+  window.__autorModalInit = true;
+
+  function onReady(cb) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', cb, { once: true });
+    } else {
+      cb();
+    }
+  }
+
+  onReady(() => {
+    const trigger = document.getElementById('autor');
+    const modalRoot = document.getElementById('autor-modal');
+    if (!trigger || !modalRoot) return;
+
+    const closeAttrSelector = '[data-close]';
+    let lastFocused = null;
+
+    function openModal() {
+      lastFocused = document.activeElement;
+      modalRoot.classList.add('active');
+      modalRoot.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('scroll-lock');
+
+      // zaostření na první fokusovatelný prvek v modalu
+      const focusable = modalRoot.querySelector(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      (focusable || modalRoot).focus();
+    }
+
+    function closeModal() {
+      modalRoot.classList.remove('active');
+      modalRoot.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('scroll-lock');
+      if (lastFocused && typeof lastFocused.focus === 'function') {
+        lastFocused.focus();
+      }
+    }
+
+    // otevření
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal();
+    });
+
+    // zavření přes X a overlay
+    modalRoot.addEventListener('click', (e) => {
+      if (e.target.matches(closeAttrSelector)) {
+        closeModal();
+      }
+    });
+
+    // zavření klávesou Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalRoot.classList.contains('active')) {
+        closeModal();
+      }
+    });
+
+    // zpřístupnění pro jiné skripty (třeba fallback z popupu)
+    window.__openAutorModal = openModal;
+    window.__closeAutorModal = closeModal;
+  });
+})();

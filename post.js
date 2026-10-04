@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const post = findPostById(id);
   if (!post) return location.replace('index.html');
 
-  document.title = `${post.title} - LiterárníKomunita`;
+  document.title = `${post.title} - Tvůrčí psaní`;
 
   const postDateElement = document.getElementById('postDate');
   const postCategoryElement = document.getElementById('postCategory');
@@ -260,3 +260,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadRelatedPosts(post.authorId, post.id);
 });
+

@@ -9,61 +9,53 @@
 
   // 1) Sdílený layout: header/nav/footer inject
   Utils.injectShared = ({ active = "" } = {}) => {
-    const headerHtml = `
-      <div class="container">
-        <a class="logo" href="index.html" aria-label="Domů">WebTest</a>
-        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
-      </div>
-    `;
-
     const navItems = [
-      { href: "index.html", key: "home", label: "Domů" },
-      { href: "all-posts.html", key: "posts", label: "Články" },
-      { href: "all-authors.html", key: "authors", label: "Autoři" }
+      { href: "all-posts.html", key: "posts", label: "Texty" },
+      { href: "all-authors.html", key: "authors", label: "Autoři" },
+      { href: "about.html", key: "about", label: "O projektu" },
+      { href: "#site-footer", key: "contact", label: "Kontakt" }
     ];
-
-    const navHtml = `
-      <ul class="nav-list">
-        ${navItems.map(i => `
-          <li>
-            <a href="${i.href}" ${i.key === active ? 'aria-current="page" class="is-active"' : ""}>
-              ${Utils.escape(i.label)}
-            </a>
-          </li>`).join("")}
-      </ul>
-    `;
-
-    const footerHtml = `
-      <div class="container">
-        <p>&copy; ${new Date().getFullYear()} WebTest. <a href="all-authors.html">Autoři</a></p>
-      </div>
-    `;
-
-    // Umístění (vytvoří, pokud chybí)
-    const ensure = (id, tag) => {
-      let el = Utils.$(`#${id}`);
-      if (!el) {
-        el = document.createElement(tag);
-        el.id = id;
-        document.body.insertAdjacentElement(tag === "header" ? "afterbegin" : "beforeend", el);
-      }
-      return el;
-    };
-
-    ensure("site-header", "header").innerHTML = headerHtml;
-    ensure("site-nav", "nav").innerHTML = navHtml;
-    ensure("site-footer", "footer").innerHTML = footerHtml;
-
-    // Mobilní toggle
-    const btn = Utils.$(".nav-toggle");
-    const nav = Utils.$("#site-nav");
-    if (btn && nav) {
-      btn.addEventListener("click", () => {
-        const exp = btn.getAttribute("aria-expanded") === "true";
-        btn.setAttribute("aria-expanded", String(!exp));
-        nav.classList.toggle("open");
-      });
+    // One shared header owns the navigation on every page.
+    document.getElementById("site-nav")?.remove();
+    let header = document.getElementById("site-header");
+    if (!header) {
+      header = document.createElement("header");
+      header.id = "site-header";
+      document.body.prepend(header);
     }
+    header.className = "topbar";
+    header.innerHTML = `
+      <div class="topbar__inner">
+        <a class="topbar__brand" href="index.html" ${active === "home" ? 'aria-current="page"' : ''}>Tvůrčí psaní</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu">Menu ☰</button>
+        <nav id="site-nav" class="topbar__nav" aria-label="Hlavní navigace">
+          ${navItems.map(i => `<a href="${i.href}" ${i.key === active ? 'aria-current="page" class="active"' : ''}>${i.label}</a>`).join("")}
+        </nav>
+      </div>`;
+    let footer = document.getElementById("site-footer");
+    if (!footer) {
+      footer = document.createElement("footer");
+      footer.id = "site-footer";
+      document.body.appendChild(footer);
+    }
+    footer.innerHTML = `<div class="container"><p>&copy; ${new Date().getFullYear()} Tvůrčí psaní. <a href="all-authors.html">Autoři</a></p></div>`;
+    const btn = header.querySelector(".nav-toggle");
+    const nav = header.querySelector("nav");
+    const setOpen = open => {
+      btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute("aria-label", open ? "Zavřít menu" : "Otevřít menu");
+      nav.classList.toggle("open", open);
+    };
+    btn.addEventListener("click", () => setOpen(btn.getAttribute("aria-expanded") !== "true"));
+    nav.addEventListener("click", e => { if (e.target.closest("a")) setOpen(false); });
+    header.addEventListener("keydown", e => {
+      if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+        btn.focus();
+      }
+    });
+    const desktop = window.matchMedia("(min-width: 701px)");
+    desktop.addEventListener("change", () => setOpen(false));
   };
 
   // 2) Výkon & a11y: imgs lazy + alt + rozměry
@@ -147,3 +139,4 @@
 
   window.Utils = Utils;
 })();
+

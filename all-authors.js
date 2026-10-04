@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   wrap.innerHTML = authors.map(a => `
     <a href="author.html?id=${encodeURIComponent(a.id)}" class="author-card">
-      <div class="author-image-container">
+      <div class="author-image-container"><span class="author-initials" aria-hidden="true">${Utils.escape(a.name.split(/\s+/).slice(0, 2).map(part => part[0]).join(""))}</span>
         <img src="${a.image}" alt="${Utils.escape(a.name)}" class="author-image" loading="lazy">
       </div>
       <h3 class="author-name">${Utils.escape(a.name)}</h3>
@@ -19,5 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     </a>
   `).join("");
 
-  // volitelné: necháme Utils.hardenImages() udělat zbytek
+  wrap.querySelectorAll('img').forEach(img => {
+    const hide = () => { img.hidden = true; };
+    img.addEventListener('error', hide, { once: true });
+    if (img.complete && !img.naturalWidth) hide();
+  });
 });

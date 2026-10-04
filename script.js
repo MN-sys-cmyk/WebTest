@@ -11,6 +11,28 @@ document.addEventListener('DOMContentLoaded', () => {
   status.className = 'sr-only';
   status.setAttribute('role', 'status');
   carousel.appendChild(status);
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let paused = motion.matches;
+  let hovering = false;
+  let timer;
+  const rotation = document.createElement('button');
+  rotation.type = 'button';
+  rotation.className = 'carousel-rotation';
+  carousel.prepend(rotation);
+  function schedule() {
+    clearTimeout(timer);
+    rotation.textContent = paused ? 'Spustit přehrávání' : 'Pozastavit přehrávání';
+    status.setAttribute('aria-live', paused || hovering || carousel.contains(document.activeElement) ? 'polite' : 'off');
+    if (paused || hovering || document.hidden || carousel.contains(document.activeElement) || slides.length < 2) return;
+    timer = setTimeout(() => { move(page + 1); schedule(); }, 5000);
+  }
+  rotation.addEventListener('click', () => { paused = !paused; schedule(); });
+  carousel.addEventListener('mouseenter', () => { hovering = true; schedule(); });
+  carousel.addEventListener('mouseleave', () => { hovering = false; schedule(); });
+  carousel.addEventListener('focusin', schedule);
+  carousel.addEventListener('focusout', () => setTimeout(schedule, 0));
+  document.addEventListener('visibilitychange', schedule);
+  motion.addEventListener('change', () => { paused = motion.matches; schedule(); });
   let page = 0;
   let perPage = 0;
   let slides = [];
@@ -68,5 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (wasInSlide) slides[page].querySelector('a')?.focus();
   });
   render();
-  window.addEventListener('resize', render);
+  schedule();
+  window.addEventListener('resize', () => { render(); schedule(); });
 });

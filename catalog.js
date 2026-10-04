@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
           <h3><a href="${href}">${escape(p.title)}</a></h3>
           <p class="text-card__author">${author ? `<a href="author.html?id=${encodeURIComponent(author.id)}">${escape(author.name)}</a>` : 'Autor neuveden'}</p>
           <p class="text-card__excerpt">${escape(short)}</p>
+          <div class="author-word-box">
+            <button type="button" class="author-word-toggle" aria-haspopup="dialog">Slovo autora</button>
+            <p class="authorWordText" hidden>${escape(excerpt)}</p>
+          </div>
           <a class="text-card__read" href="${href}" aria-label="${escape('Číst text: ' + p.title)}">Číst text <span aria-hidden="true">→</span></a>
         </div>
       </article>`;

@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.7">
+  <link rel="stylesheet" href="style.css?v=1.8">
 
 </head>
 <body>
@@ -19,10 +19,10 @@
         <h1 class="hero-title">Objevujte svět současné české literatury</h1>
         <p class="hero-subtitle">Platforma propojující autory, čtenáře a literární nadšence</p>
 
-        <!-- NOVÉ: odkaz na otevření modalu -->
-        <p class="hero-credits">
-          Web vytvořil <a href="#" id="autor">Autor</a>.
-        </p>
+        <div class="hero-actions">
+          <a href="all-posts.html" class="hero-action hero-action--primary">Začít číst</a>
+          <a href="all-authors.html" class="hero-action hero-action--secondary">Poznat autory</a>
+        </div>
       </div>
     </div>
   </section>
@@ -73,26 +73,6 @@
     </div>
   </section>
 
-  <!-- MODAL MARKUP – přidáno podle varianty A -->
-  <div
-    id="autor-modal"
-    class="modal-root"
-    aria-hidden="true"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="autor-modal-title"
-  >
-    <div class="modal-overlay" data-close="1"></div>
-    <div class="modal" role="document">
-      <button class="modal-close" aria-label="Zavřít" data-close="1">×</button>
-      <h2 id="autor-modal-title">O autorovi</h2>
-      <p>
-        Tady bude text o autorovi… Můžeš sem vložit bio, odkaz na portfolio,
-        kontakt atd. Tento obsah si uprav přímo v HTML, nebo si ho můžeš plnit dynamicky z JS.
-      </p>
-    </div>
-  </div>
-  <!-- /MODAL MARKUP -->
 
   <script src="data.js?v=1.2" defer></script>
   <script src="utils.js?v=2" defer></script>

@@ -1515,3 +1515,33 @@ body.scroll-lock { overflow: hidden; }
   }
 }
 
+
+/* Direct paths from the hero to reading and author discovery. */
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.hero-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 26px;
+  border: 2px solid transparent;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 4px;
+  transition: background-color .2s ease;
+}
+.hero-action--primary { background: #b83813; color: #fff; }
+.hero-action--primary:hover { background: #922b0e; }
+.hero-action--secondary { background: rgba(0, 0, 0, .55); border-color: #fff; color: #fff; }
+.hero-action--secondary:hover { background: #fff; color: #222; }
+.hero-action:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+@media (max-width: 576px) {
+  .hero-title { font-size: clamp(32px, 8vw, 44px); }
+  .hero-subtitle { font-size: 19px; }
+  .hero-actions { gap: 12px; }
+  .hero-action { padding: 12px 18px; }
+}

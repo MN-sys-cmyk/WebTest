@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.0">
+  <link rel="stylesheet" href="style.css?v=2.1">
 </head>
 <body>
   <header id="site-header"></header>
@@ -21,6 +21,13 @@
             <span class="post-category" id="postCategory">Kategorie</span>
           </div>
           <h1 class="post-title" id="postTitle">Název příspěvku</h1>
+        <div class="author-word-box">
+          <button type="button" class="author-word-toggle" aria-haspopup="dialog">
+            <span>Slovo autora</span>
+            <span class="arrow">▼</span>
+          </button>
+          <div style="display: none;"><p id="authorWord"></p></div>
+        </div>
           <div class="post-author">
             <a href="#" class="author-link" id="authorLink">
               <img src="image5.webp" alt="Jméno autora" id="authorImage" loading="lazy">
@@ -34,13 +41,7 @@
           <p>Etiam sit amet est vel nisl…</p>
         </div>
 
-        <div class="author-word-box">
-          <button type="button" class="author-word-toggle" aria-haspopup="dialog">
-            <span>Slovo autora</span>
-            <span class="arrow">▼</span>
-          </button>
-          <div style="display: none;"><p id="authorWord"></p></div>
-        </div>
+
 
         <footer class="post-footer">
           <div class="post-tags"></div>

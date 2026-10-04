@@ -3,33 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Literární komunita - Platforma pro autory</title>
+  <title>Tvůrčí psaní - Platforma pro autory</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.6">
-  <script src="topbar.js" defer></script>
+  <link rel="stylesheet" href="style.css?v=1.7">
 
-  <!-- === HORNÍ LIŠTA (CSS) – můžeš přesunout do style.css === -->
-  <style>
-    :root { --topbar-h: 48px; }
-    .topbar{
-      position:fixed; inset:0 0 auto 0;
-      background:#fff; border-bottom:1px solid #eee;
-      box-shadow:0 2px 12px rgba(0,0,0,.06);
-      z-index:1000;
-    }
-    .topbar__inner{ max-width:1200px; margin:0 auto; padding:12px 16px; }
-    .topbar__title{ font-size:20px; font-weight:700; letter-spacing:.3px; }
-    /* Rezerva pod fixní lištou */
-    body{ padding-top:var(--topbar-h); }
-    @media (max-width:480px){
-      :root { --topbar-h: 44px; }
-      .topbar__inner{ padding:10px 12px; }
-      .topbar__title{ font-size:18px; }
-    }
-  </style>
-  <!-- === /HORNÍ LIŠTA (CSS) === -->
 </head>
 <body>
   
@@ -116,11 +95,12 @@
   <!-- /MODAL MARKUP -->
 
   <script src="data.js?v=1.2" defer></script>
-  <script src="utils.js" defer></script>
-  <script src="script.js?v=1.4" defer></script>
+  <script src="utils.js?v=2" defer></script>
+  <script src="script.js?v=1.6" defer></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'home' }));
   </script>
 </body>
 </html>
+

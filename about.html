@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Všechny texty - Tvůrčí psaní</title>
+  <title>O projektu - Tvůrčí psaní</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
@@ -11,24 +11,13 @@
 </head>
 <body>
   <header id="site-header"></header>
-
-  <main class="all-posts-page">
-    <div class="section-header">
-      <h1 class="section-title">Všechny texty</h1>
-      <p class="section-subtitle">Objevte všechny texty na naší platformě</p>
-    </div>
-    <div class="all-posts-grid" id="all-posts-grid"></div>
+  <main class="about-page">
+    <h1>O projektu</h1>
+    <p>Tvůrčí psaní je prostor pro autory, čtenáře a literární nadšence. Představuje autory a jejich tvorbu na jednom místě.</p>
+    <p>Prozkoumejte <a href="all-posts.html">publikované texty</a> nebo poznejte <a href="all-authors.html">jejich autory</a>.</p>
   </main>
-
   <footer id="site-footer"></footer>
-
-  <script src="data.js?v=1.2" defer></script>
   <script src="utils.js?v=2" defer></script>
-  <script src="all-posts.js?v=1.0" defer></script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'posts' }));
-  </script>
+  <script>document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'about' }));</script>
 </body>
 </html>
-

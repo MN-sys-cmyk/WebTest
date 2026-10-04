@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const author = Utils.Data.getAuthorById(id);
   if (!author) return location.replace('index.html');
 
-  document.title = `${author.name} - LiterárníKomunita`;
+  document.title = `${author.name} - Tvůrčí psaní`;
 
   const nameEl = document.getElementById('authorName');
   const genreEl = document.getElementById('authorGenre');
@@ -60,3 +60,4 @@ document.addEventListener('DOMContentLoaded', () => {
   postsWrap.style.gap = '30px';
   postsWrap.style.justifyContent = 'flex-start';
 });
+

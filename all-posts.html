@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.7">
+  <link rel="stylesheet" href="style.css?v=1.9">
 </head>
 <body>
   <header id="site-header"></header>
@@ -17,18 +17,26 @@
       <h1 class="section-title">Všechny texty</h1>
       <p class="section-subtitle">Objevte všechny texty na naší platformě</p>
     </div>
-    <div class="all-posts-grid" id="all-posts-grid"></div>
+    <div class="text-filters" role="search" aria-label="Vyhledávání textů">
+      <div><label for="text-search">Hledat text nebo autora</label><input id="text-search" type="search" placeholder="Název, autor nebo klíčové slovo…"></div>
+      <div><label for="text-genre">Žánr</label><select id="text-genre"><option value="">Všechny žánry</option></select></div>
+      <button id="text-reset" type="button">Zrušit filtry</button>
+    </div>
+    <p id="text-count" class="text-count" role="status" aria-live="polite"></p>
+    <div class="text-grid" id="all-posts-grid"></div>
+    <p id="text-empty" class="text-empty" hidden>Žádné texty neodpovídají hledání. Zkuste jiný výraz nebo zrušte filtry.</p>
   </main>
 
   <footer id="site-footer"></footer>
 
   <script src="data.js?v=1.2" defer></script>
   <script src="utils.js?v=2" defer></script>
-  <script src="all-posts.js?v=1.0" defer></script>
+  <script src="catalog.js?v=1" defer></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'posts' }));
   </script>
 </body>
 </html>
+
 

@@ -389,7 +389,6 @@
   /* ===== Boot ===== */
   document.addEventListener('DOMContentLoaded', () => {
     try { if (document.querySelector(".authors-section")) { generateAuthorsCarousel(); initAuthorsCarousel(); } } catch (e) { console.error('Autoři:', e); }
-    try { if (document.querySelector(".latest-posts")) { generatePostsCarousel(); initPostsCarousel(); } } catch (e) { console.error('Příspěvky:', e); }
   });
 })();
 
@@ -510,4 +509,5 @@ document.addEventListener('DOMContentLoaded', () => {
     window.__closeAutorModal = closeModal;
   });
 })();
+
 

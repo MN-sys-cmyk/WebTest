@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.7">
+  <link rel="stylesheet" href="style.css?v=2.0">
 </head>
 <body>
   <header id="site-header"></header>
@@ -23,7 +23,7 @@
           <h1 class="post-title" id="postTitle">Název příspěvku</h1>
           <div class="post-author">
             <a href="#" class="author-link" id="authorLink">
-              <img src="image5.png" alt="Jméno autora" id="authorImage" loading="lazy">
+              <img src="image5.webp" alt="Jméno autora" id="authorImage" loading="lazy">
               <span class="author-name" id="authorName">Jméno autora</span>
             </a>
           </div>
@@ -35,10 +35,10 @@
         </div>
 
         <div class="author-word-box">
-          <div class="author-word-toggle">
+          <button type="button" class="author-word-toggle" aria-haspopup="dialog">
             <span>Slovo autora</span>
             <span class="arrow">▼</span>
-          </div>
+          </button>
           <div style="display: none;"><p id="authorWord"></p></div>
         </div>
 
@@ -56,9 +56,10 @@
 
   <footer id="site-footer"></footer>
 
-  <script src="data.js?v=1.2" defer></script>
+  <script src="data.js?v=6" defer></script>
   <script src="utils.js?v=2" defer></script>
-  <script src="post.js?v=1.4" defer></script>
+  <script src="interactions.js?v=1" defer></script>
+  <script src="post.js?v=6" defer></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'posts' }));

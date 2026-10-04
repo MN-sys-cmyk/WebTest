@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.8">
+  <link rel="stylesheet" href="style.css?v=1.9">
 
 </head>
 <body>
@@ -56,16 +56,7 @@
         <p class="section-subtitle">Aktuální tvorba našich autorů</p>
       </div>
 
-      <div id="featured-post-container"></div>
-
-      <div class="posts-carousel">
-        <div class="carousel-arrow prev">❮</div>
-        <div class="carousel-container">
-          <div class="posts-container" id="posts-container"></div>
-        </div>
-        <div class="carousel-arrow next">❯</div>
-        <div class="carousel-indicator" id="posts-indicator"></div>
-      </div>
+      <div class="text-grid" id="latest-texts-grid"></div>
 
       <div class="view-all">
         <a href="all-posts.html" class="view-all-button">Zobrazit všechny texty</a>
@@ -76,11 +67,13 @@
 
   <script src="data.js?v=1.2" defer></script>
   <script src="utils.js?v=2" defer></script>
-  <script src="script.js?v=1.6" defer></script>
+  <script src="script.js?v=1.7" defer></script>
+  <script src="catalog.js?v=1" defer></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'home' }));
   </script>
 </body>
 </html>
+
 

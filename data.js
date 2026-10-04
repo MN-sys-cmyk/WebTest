@@ -9,7 +9,7 @@ window.DATA = {
     {
       id: "jan-novak",
       name: "Jan Novák",
-      image: "image5.png",
+      image: "image5.webp",
       genre: "Próza, román",
       bio: "Jan Novák je uznávaný autor prózy, který se věnuje především románům s tématikou mezilidských vztahů a historických událostí. Jeho díla se vyznačují bohatým jazykem a propracovanou psychologií postav. V současnosti pracuje na nové trilogii, která mapuje osudy jedné rodiny napříč 20. stoletím.",
       works: [
@@ -22,7 +22,7 @@ window.DATA = {
     {
       id: "petra-svobodova",
       name: "Petra Svobodová",
-      image: "image3.png",
+      image: "image3.webp",
       genre: "Poezie, překlad",
       bio: "Petra Svobodová je básnířka a překladatelka, která se specializuje na překlady současné francouzské poezie. Její vlastní tvorba je charakteristická experimentováním s formou a jazykem. Je držitelkou několika literárních ocenění a pravidelně publikuje v literárních časopisech.",
       works: [
@@ -35,7 +35,7 @@ window.DATA = {
     {
       id: "tomas-cerny",
       name: "Tomáš Černý",
-      image: "Image2.png",
+      image: "image/Image2.webp",
       genre: "Scenáristika, drama",
       bio: "Tomáš Černý je dramatik a scenárista, který se specializuje na společenská témata a politickou satiru. Jeho hry byly uvedeny na předních českých scénách a některé byly přeloženy do angličtiny a němčiny. Vedle psaní pro divadlo se věnuje také rozhlasovým hrám a televizním scénářům.",
       works: [
@@ -48,7 +48,7 @@ window.DATA = {
     {
       id: "lucie-kralova",
       name: "Lucie Králová",
-      image: "image6.png",
+      image: "image6.webp",
       genre: "Literatura pro děti",
       bio: "Lucie Králová je autorka knih pro děti a mládež. Její příběhy kombinují dobrodružství s edukativními prvky, často se zaměřením na ekologii a vztah k přírodě. Vedle psaní se věnuje také ilustraci a vede tvůrčí dílny pro děti.",
       works: [
@@ -61,7 +61,7 @@ window.DATA = {
     {
       id: "karel-maly",
       name: "Karel Malý",
-      image: "image7.png",
+      image: "image7.webp",
       genre: "Eseje, kritika",
       bio: "Karel Malý je literární kritik a esejista...",
       works: [
@@ -74,7 +74,7 @@ window.DATA = {
     {
       id: "monika-vesela",
       name: "Monika Veselá",
-      image: "image4.png",
+      image: "image4.webp",
       genre: "Fantasy, sci-fi",
       bio: "Monika Veselá je autorka fantasy a sci-fi literatury...",
       works: [
@@ -105,7 +105,7 @@ window.DATA = {
       date: "2024-03-23",
       authorId: "jan-novak",
       categories: ["Povídka"],
-      image: "book4.png",
+      image: "book4.webp",
       alt: "Obálka knihy Vzpomínky na dětství",
       excerpt: "asdasdasdasdddsdsdasdasxcyxasdca.",
       content: "Lorem isdsdsdsdpsum dolor sit amet, consectetur adipiscing elit..."
@@ -117,7 +117,7 @@ window.DATA = {
       date: "2023-03-22",
       authorId: "petra-svobodova",
       categories: ["Poezie"],
-      image: "book3.png",
+      image: "book3.webp",
       alt: "Ilustrace k básnické sbírce",
       excerpt: "Petra Svobodová přemýšlí o struktuře své připravované básnické sbírky...",
       content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
@@ -129,7 +129,7 @@ window.DATA = {
       date: "2025-03-21",
       authorId: "tomas-cerny",
       categories: ["Scénář"],
-      image: "book2.png",
+      image: "book2.webp",
       alt: "Scénáristické poznámky na stole",
       excerpt: "Tomáš Černý dokončil první draft scénáře k novému filmu...",
       content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
@@ -141,7 +141,7 @@ window.DATA = {
       date: "2025-03-20",
       authorId: "lucie-kralova",
       categories: ["Knihy pro děti"],
-      image: "book1.png",
+      image: "book1.webp",
       alt: "Ilustrace dětské knihy",
       excerpt: "Lucie Králová představuje koncept své nové knihy pro děti...",
       content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
@@ -153,7 +153,7 @@ window.DATA = {
       date: "2025-02-15",
       authorId: "karel-maly",
       categories: ["Esej"],
-      image: "book5.png",
+      image: "book5.webp",
       alt: "Kniha s poznámkami",
       excerpt: "Karel Malý nabízí rozsáhlou kritickou analýzu trendů...",
       content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
@@ -165,7 +165,7 @@ window.DATA = {
       date: "2025-01-10",
       authorId: "monika-vesela",
       categories: ["Fantasy"],
-      image: "book6.png",
+      image: "book6.webp",
       alt: "Fantasy ilustrace",
       excerpt: "Monika Veselá představuje svůj nový fantasy projekt...",
       content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."

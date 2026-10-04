@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="post-excerpt">${Utils.escape(p.excerpt)}</p>
         <a href="post.html?id=${encodeURIComponent(p.id)}" class="read-more">Číst více</a>
         <div class="author-word-box">
-          <div class="author-word-toggle"><span>Slovo autora</span><span class="arrow">▼</span></div>
+          <button type="button" class="author-word-toggle" aria-haspopup="dialog"><span>Slovo autora</span><span class="arrow">▼</span></button>
           <div style="display:none;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
         </div>
       </div>

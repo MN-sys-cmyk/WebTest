@@ -161,7 +161,7 @@ ul {
     height: 100%;
     z-index: -1;
     background-color: var(--secondary-color);
-    background-image: url('knihovna.png');
+    background-image: url('knihovna.webp');
     background-size: cover;
     background-position: center;
 }
@@ -660,7 +660,7 @@ ul {
 .posts-slide {
     min-width: 100%;
     display: flex;
-    flex-wrap = wrap;
+    flex-wrap: wrap;
     justify-content: flex-start; /* OPRAVENO: Zarovnání prvků doleva */
     gap: 30px; /* OPRAVENO: Konsistentní mezera */
 }
@@ -1244,81 +1244,6 @@ ul {
     gap: 20px;
 }
 
-/* Modal Window - New Styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(5px);
-    z-index: 2000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.modal-overlay.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    z-index: 2001;
-    max-width: 500px;
-    width: 90%;
-    text-align: center;
-    opacity: 0;
-    visibility: hidden;
-    transform: translate(-50%, -60%);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-}
-
-.modal.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, -50%);
-}
-
-.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--medium-gray);
-    cursor: pointer;
-    background: none;
-    border: none;
-    line-height: 1;
-}
-
-.modal-close:hover {
-    color: var(--primary-color);
-}
-
-.modal-content {
-    font-size: 16px;
-    line-height: 1.7;
-    margin-top: 20px;
-}
-
-.modal-title {
-    font-size: 24px;
-    font-family: var(--font-heading);
-    font-weight: 700;
-}
-
-
 /* Responsivní design */
 @media (max-width: 992px) {
     .post-header .post-title {
@@ -1359,162 +1284,6 @@ ul {
         font-size: 16px;
     }
 }
-
-/* ===== Modal pro "Slovo autora" ===== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.45);       /* přitmavení pozadí */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-  padding: 24px;
-}
-
-.modal {
-  background: #fff;
-  color: var(--text-color);
-  width: min(720px, 100%);
-  max-height: 85vh;
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.25);
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  outline: none;
-}
-
-.modal-title {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: 22px;
-  padding: 18px 56px 12px 20px;
-  border-bottom: 1px solid var(--light-gray);
-}
-
-.modal-close {
-  position: absolute;
-  right: 14px;
-  top: 10px;
-  width: 36px;
-  height: 36px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  font-size: 26px;
-  line-height: 1;
-  cursor: pointer;
-}
-.modal-close:hover { background: #f4f4f4; }
-
-.modal-body {
-  padding: 18px 20px 22px;
-  overflow: auto;
-  line-height: 1.7;
-}
-.modal-body p { margin: 0 0 1em 0; }
-
-/* ===== Modal pro "Slovo autora" (bezpečné minimum) ===== */
-.modal-overlay{
-  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-  background:rgba(0,0,0,.45); z-index:10000; padding:24px;
-}
-.modal{
-  background:#fff; color:var(--text-color,#222); width:min(720px,100%); max-height:85vh;
-  border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.25); overflow:hidden; outline:none;
-}
-.modal-title{ margin:0; font-size:22px; padding:18px 56px 12px 20px; border-bottom:1px solid #eee; }
-.modal-close{ position:absolute; right:14px; top:10px; width:36px; height:36px; border:none; background:transparent; font-size:26px; cursor:pointer; }
-.modal-close:hover{ background:#f4f4f4; }
-.modal-body{ padding:18px 20px 22px; overflow:auto; line-height:1.7; }
-.modal-body p{ margin:0 0 1em 0; }
-
-/* Toggle musí být kliknutelný i když je uvnitř <a> s overlayem */
-.author-word-toggle{ cursor:pointer; pointer-events:auto; }
-
-/* Modal – základ */
-.modal-root { position: fixed; inset: 0; display: none; }
-.modal-root.active { display: block; }
-.modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.5); }
-.modal {
-  position: relative;
-  max-width: 640px;
-  margin: 10vh auto;
-  background: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.25);
-  line-height: 1.6;
-}
-.modal-close {
-  position: absolute;
-  top: 10px; right: 12px;
-  font-size: 24px;
-  background: none; border: 0; cursor: pointer;
-}
-
-/* Volitelné: když je modal otevřený, zamez posunu pozadí */
-body.scroll-lock { overflow: hidden; }
-
-/* === Modal: O autorovi (varianta A) === */
-.modal-root {
-  position: fixed;
-  inset: 0;
-  display: none;
-  z-index: 1000; /* nad navigací i karuselem */
-}
-.modal-root.active { display: block; }
-
-.modal-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,.5);
-  backdrop-filter: blur(2px);
-}
-
-.modal {
-  position: relative;
-  max-width: 640px;
-  margin: 10vh auto;
-  background: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.25);
-  line-height: 1.6;
-  transform: translateY(8px);
-  opacity: 0;
-  transition: opacity .18s ease, transform .18s ease;
-}
-
-/* jemná animace při otevření */
-.modal-root.active .modal {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  font-size: 24px;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  line-height: 1;
-}
-
-body.scroll-lock { overflow: hidden; }
-
-/* responzivní doladění */
-@media (max-width: 680px) {
-  .modal {
-    margin: 5vh 16px;
-    padding: 20px;
-    max-width: none;
-  }
-}
-
 
 /* Direct paths from the hero to reading and author discovery. */
 .hero-actions {
@@ -1578,3 +1347,22 @@ body.scroll-lock { overflow: hidden; }
   .text-filters { gap: 14px; }
   .all-posts-page { padding-top: 40px; }
 }
+
+/* Accessible carousel controls and one shared native dialog. */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.carousel-arrow { border: 0; font-family: inherit; width: 44px; height: 44px; }
+.carousel-arrow[hidden], .carousel-indicator[hidden] { display: none; }
+.carousel-indicator .indicator-dot { width: 44px; height: 44px; border: 0; background: transparent; padding: 16px; transform: none; }
+.indicator-dot::before { content: ''; display: block; width: 12px; height: 12px; border-radius: 50%; background: #999; }
+.indicator-dot.active::before { background: var(--accent-color); }
+button:focus-visible, .author-card:focus-visible, .post-card a:focus-visible { outline: 3px solid #a43414; outline-offset: 3px; }
+.author-word-toggle { min-height: 44px; font-family: inherit; color: #a43414; }
+.word-dialog { border: 0; border-radius: 12px; padding: 28px; margin: auto; width: min(640px, calc(100% - 32px)); max-height: 85dvh; overflow: auto; color: var(--text-color); box-shadow: 0 20px 60px #0004; }
+.word-dialog::backdrop { background: #0009; }
+.word-dialog h2 { font: 600 26px var(--font-heading); margin: 0 48px 20px 0; }
+.word-dialog__body { white-space: pre-wrap; line-height: 1.8; }
+.word-dialog__close { position: absolute; right: 10px; top: 10px; width: 44px; height: 44px; font: 28px/1 Arial, sans-serif; border: 0; background: transparent; cursor: pointer; }
+@media (max-width: 576px) { .authors-carousel { padding: 0 48px; } }
+@media (prefers-reduced-motion: reduce) { .carousel-track, .author-card, .author-image { transition: none; } }
+.carousel-indicator { flex-wrap: wrap; }
+.carousel-indicator .indicator-dot { flex: 0 0 44px; }

@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.9">
+  <link rel="stylesheet" href="style.css?v=2.0">
 
 </head>
 <body>
@@ -34,12 +34,12 @@
         <p class="section-subtitle">Osobnosti české literární scény</p>
       </div>
 
-      <div class="authors-carousel">
-        <div class="carousel-arrow prev">❮</div>
+      <div class="authors-carousel" role="region" aria-label="Představujeme autory" aria-roledescription="karusel">
+        <button type="button" class="carousel-arrow prev" aria-label="Předchozí autoři" aria-controls="carousel-track">❮</button>
         <div class="carousel-container">
           <div class="carousel-track" id="carousel-track"></div>
         </div>
-        <div class="carousel-arrow next">❯</div>
+        <button type="button" class="carousel-arrow next" aria-label="Další autoři" aria-controls="carousel-track">❯</button>
         <div class="carousel-indicator" id="carousel-indicator"></div>
       </div>
 
@@ -65,9 +65,10 @@
   </section>
 
 
-  <script src="data.js?v=1.2" defer></script>
+  <script src="data.js?v=6" defer></script>
   <script src="utils.js?v=2" defer></script>
-  <script src="script.js?v=1.7" defer></script>
+  <script src="interactions.js?v=1" defer></script>
+  <script src="script.js?v=6" defer></script>
   <script src="catalog.js?v=1" defer></script>
 
   <script>

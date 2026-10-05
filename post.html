@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.3">
+  <link rel="stylesheet" href="style.css?v=2.7">
 </head>
 <body>
   <header id="site-header"></header>
@@ -22,18 +22,15 @@
             <span class="post-category" id="postCategory">Kategorie</span>
           </div>
           <h1 class="post-title" id="postTitle">Název příspěvku</h1>
-        <div class="author-word-box">
-          <button type="button" class="author-word-toggle" aria-haspopup="dialog">
-            <span>Slovo autora</span>
-            <span class="arrow">▼</span>
-          </button>
-          <div style="display: none;"><p id="authorWord"></p></div>
-        </div>
           <div class="post-author">
-            <a href="#" class="author-link" id="authorLink">
-              <img src="image5.webp" alt="Jméno autora" id="authorImage" loading="lazy">
-              <span class="author-name" id="authorName">Jméno autora</span>
-            </a>
+            <img src="image5.webp" alt="Jméno autora" id="authorImage" loading="lazy">
+            <div class="post-author__identity">
+              <a href="#" class="author-link" id="authorLink"><span class="author-name" id="authorName">Jméno autora</span></a>
+              <div class="author-word-box">
+                <button type="button" class="author-word-toggle" aria-haspopup="dialog">Slovo autora</button>
+                <p id="authorWord" hidden></p>
+              </div>
+            </div>
           </div>
         </header>
 
@@ -62,7 +59,7 @@
   <script src="data.js?v=6" defer></script>
   <script src="utils.js?v=3" defer></script>
   <script src="interactions.js?v=1" defer></script>
-  <script src="catalog.js?v=9" defer></script>
+  <script src="catalog.js?v=13" defer></script>
   <script src="post.js?v=9" defer></script>
 
   <script>

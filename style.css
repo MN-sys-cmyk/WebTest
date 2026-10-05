@@ -756,12 +756,12 @@ ul {
 
 /* Styly pro stránku s textem */
 .post-page {
-    margin-top: 140px;
+    margin-top: 32px;
     padding-bottom: 80px;
 }
 
 .post-content {
-    max-width: 1200px;
+    max-width: 740px;
     margin: 0 auto 60px;
 }
 
@@ -853,8 +853,8 @@ ul {
 }
 
 .post-body {
-    font-size: 18px;
-    line-height: 1.8;
+    font-size: 19px;
+    line-height: 1.9;
     margin-bottom: 40px;
 }
 
@@ -1385,3 +1385,17 @@ button:focus-visible, .author-card:focus-visible, .post-card a:focus-visible { o
 @media (max-width: 1000px) { .authors-grid .author-card { flex-basis: calc((100% - 48px) / 3); } }
 @media (max-width: 650px) { .authors-grid { gap: 16px; } .authors-grid .author-card { flex-basis: calc((100% - 16px) / 2); } .authors-grid .author-name { font-size: 18px; } }
 @media (max-width: 360px) { .authors-grid .author-card { flex-basis: 100%; max-width: 260px; } }
+
+/* Comfortable reading column and a direct return to the catalogue. */
+.reading-nav { max-width: 740px; margin: 0 auto 24px; }
+.reading-nav a { display: inline-flex; align-items: center; min-height: 44px; color: #a43414; font-size: 15px; text-decoration: underline; text-underline-offset: 4px; }
+.reading-nav a:focus-visible { outline: 2px solid #a43414; outline-offset: 4px; }
+.post-content .post-title { text-align: center; overflow-wrap: anywhere; }
+.post-content .post-author { margin-bottom: 8px; }
+.post-content .post-body { overflow-wrap: anywhere; }
+.post-content .post-body p { margin-bottom: 1.4em; }
+@media (max-width: 576px) {
+  .post-page { margin-top: 16px; }
+  .reading-nav { margin-bottom: 20px; }
+  .post-content .post-body { font-size: 18px; line-height: 1.85; }
+}

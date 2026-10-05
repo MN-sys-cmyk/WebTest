@@ -1,13 +1,7 @@
-// Shared cards for the homepage selection and searchable catalogue.
-document.addEventListener('DOMContentLoaded', () => {
-  const grid = document.getElementById('all-posts-grid');
-  const latest = document.getElementById('latest-texts-grid');
-  if (!grid && !latest) return;
-  const posts = Utils.Data.allPosts().sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
+(() => {
   const escape = value => Utils.escape(String(value ?? ''));
   const authorFor = p => Utils.Data.getAuthorById(p.authorId);
-  const normalize = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('cs');
-  function render(target, items) {
+  Utils.renderTextCards = function(target, items) {
     target.innerHTML = items.map(p => {
       const author = authorFor(p);
       const href = `post.html?id=${encodeURIComponent(p.id)}`;
@@ -33,7 +27,18 @@ document.addEventListener('DOMContentLoaded', () => {
       img.addEventListener('error', hide, { once: true });
       if (img.complete && !img.naturalWidth) hide();
     });
-  }
+  };
+})();
+
+// Shared cards for the homepage selection and searchable catalogue.
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.getElementById('all-posts-grid');
+  const latest = document.getElementById('latest-texts-grid');
+  if (!grid && !latest) return;
+  const posts = Utils.Data.allPosts().sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
+  const authorFor = p => Utils.Data.getAuthorById(p.authorId);
+  const normalize = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('cs');
+  const render = Utils.renderTextCards;
   if (latest) render(latest, posts.slice(0, 6));
   if (!grid) return;
   const search = document.getElementById('text-search');

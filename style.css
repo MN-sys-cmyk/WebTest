@@ -489,14 +489,18 @@ ul {
     transform: translateX(0);
 }
 
-.post-card {
+.post-card,
+.latest-posts .text-card,
+.all-posts-page .text-card {
     background-color: white;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.post-card:hover {
+.post-card:hover,
+.latest-posts .text-card:hover,
+.all-posts-page .text-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
@@ -1411,5 +1415,10 @@ button:focus-visible, .author-card:focus-visible, .post-card a:focus-visible { o
 
 /* One row of text cards, paged manually with accessible controls. */
 .texts-carousel { position: relative; padding: 0 54px; }
-.text-carousel-slide { flex: 0 0 100%; min-width: 0; align-content: start; padding: 6px; }
+.text-carousel-slide { flex: 0 0 100%; min-width: 0; align-content: start; padding: 18px 16px; }
 @media (max-width: 600px) { .texts-carousel { padding: 0 28px; } .texts-carousel .carousel-arrow { width: 44px; height: 44px; } .texts-carousel .prev { left: -16px; } .texts-carousel .next { right: -16px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .post-card, .latest-posts .text-card, .all-posts-page .text-card { transition: none; }
+  .post-card:hover, .latest-posts .text-card:hover, .all-posts-page .text-card:hover { transform: none; }
+}

@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.4">
+  <link rel="stylesheet" href="style.css?v=2.5">
 
 </head>
 <body>
@@ -56,7 +56,14 @@
         <p class="section-subtitle">Aktuální tvorba našich autorů</p>
       </div>
 
-      <div class="text-grid" id="latest-texts-grid"></div>
+      <div class="texts-carousel" role="region" aria-label="Nejnovější texty" aria-roledescription="karusel">
+        <button type="button" class="carousel-arrow prev" aria-label="Předchozí texty" aria-controls="latest-texts-grid">❮</button>
+        <div class="carousel-container">
+          <div class="carousel-track" id="latest-texts-grid"></div>
+        </div>
+        <button type="button" class="carousel-arrow next" aria-label="Další texty" aria-controls="latest-texts-grid">❯</button>
+        <div class="carousel-indicator" id="texts-indicator"></div>
+      </div>
 
       <div class="view-all">
         <a href="all-posts.html" class="view-all-button">Zobrazit všechny texty</a>
@@ -69,7 +76,7 @@
   <script src="utils.js?v=3" defer></script>
   <script src="interactions.js?v=1" defer></script>
   <script src="script.js?v=9" defer></script>
-  <script src="catalog.js?v=9" defer></script>
+  <script src="catalog.js?v=11" defer></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'home' }));

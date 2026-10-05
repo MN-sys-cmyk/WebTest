@@ -1408,3 +1408,8 @@ button:focus-visible, .author-card:focus-visible, .post-card a:focus-visible { o
 .related-posts .view-all { margin-top: 28px; }
 @media (max-width: 992px) { .authors-carousel .author-card { flex-basis: calc((100% - 24px) / 2); } }
 @media (max-width: 576px) { .authors-carousel .author-card { flex-basis: 100%; } }
+
+/* One row of text cards, paged manually with accessible controls. */
+.texts-carousel { position: relative; padding: 0 54px; }
+.text-carousel-slide { flex: 0 0 100%; min-width: 0; align-content: start; padding: 6px; }
+@media (max-width: 600px) { .texts-carousel { padding: 0 28px; } .texts-carousel .carousel-arrow { width: 44px; height: 44px; } .texts-carousel .prev { left: -16px; } .texts-carousel .next { right: -16px; } }

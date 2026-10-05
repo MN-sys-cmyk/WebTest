@@ -491,7 +491,7 @@ ul {
 
 .post-card,
 .latest-posts .text-card,
-.all-posts-page .text-card {
+.all-posts-page .text-card, .related-posts .text-card {
     background-color: white;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     overflow: hidden;
@@ -500,7 +500,7 @@ ul {
 
 .post-card:hover,
 .latest-posts .text-card:hover,
-.all-posts-page .text-card:hover {
+.all-posts-page .text-card:hover, .related-posts .text-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
@@ -1419,8 +1419,8 @@ button:focus-visible, .author-card:focus-visible, .post-card a:focus-visible { o
 @media (max-width: 600px) { .texts-carousel { padding: 0 28px; } .texts-carousel .carousel-arrow { width: 44px; height: 44px; } .texts-carousel .prev { left: -16px; } .texts-carousel .next { right: -16px; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .post-card, .latest-posts .text-card, .all-posts-page .text-card { transition: none; }
-  .post-card:hover, .latest-posts .text-card:hover, .all-posts-page .text-card:hover { transform: none; }
+  .post-card, .latest-posts .text-card, .all-posts-page .text-card, .related-posts .text-card { transition: none; }
+  .post-card:hover, .latest-posts .text-card:hover, .all-posts-page .text-card:hover, .related-posts .text-card:hover { transform: none; }
 }
 
 /* Author name and note form one compact identity block. */

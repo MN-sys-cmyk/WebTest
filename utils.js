@@ -7,6 +7,17 @@
   Utils.$$ = (s, r = document) => [...r.querySelectorAll(s)];
   Utils.escape = (str = "") => str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
+  Utils.authorCard = a => `<a href="author.html?id=${encodeURIComponent(a.id)}" class="author-card">
+    <div class="author-image-container"><span class="author-initials" aria-hidden="true">${Utils.escape(a.name.split(/\s+/).slice(0, 2).map(part => part[0]).join(""))}</span>
+    <img src="${Utils.escape(a.image || '')}" alt="${Utils.escape(a.name)}" class="author-image" loading="lazy" decoding="async" width="640" height="640"></div>
+    <h3 class="author-name">${Utils.escape(a.name)}</h3>
+    ${a.genre ? `<p class="author-genre">${Utils.escape(a.genre)}</p>` : ''}</a>`;
+  Utils.hideBrokenImages = root => root.querySelectorAll('img').forEach(img => {
+    const hide = () => { img.hidden = true; };
+    img.addEventListener('error', hide, { once: true });
+    if (img.complete && !img.naturalWidth) hide();
+  });
+
   // 1) Sdílený layout: header/nav/footer inject
   Utils.injectShared = ({ active = "" } = {}) => {
     const navItems = [

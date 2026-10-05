@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const authorFor = p => Utils.Data.getAuthorById(p.authorId);
   const normalize = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('cs');
   const render = Utils.renderTextCards;
-  if (latest) render(latest, posts.slice(0, 6));
+  if (latest) initTextCarousel(posts);
   if (!grid) return;
   const search = document.getElementById('text-search');
   const genre = document.getElementById('text-genre');
@@ -65,3 +65,77 @@ document.addEventListener('DOMContentLoaded', () => {
   reset.addEventListener('click', () => { search.value = ''; genre.value = ''; update(); search.focus(); });
   update();
 });
+
+// Manual pagination: no timers or automatic rotation.
+function initTextCarousel(posts) {
+  const carousel = document.querySelector('.texts-carousel');
+  if (!carousel) return;
+  const track = carousel.querySelector('#latest-texts-grid');
+  const indicators = carousel.querySelector('#texts-indicator');
+  const previous = carousel.querySelector('.prev');
+  const next = carousel.querySelector('.next');
+  const items = posts.slice(0, 6);
+  const status = document.createElement('p');
+  status.className = 'sr-only';
+  status.setAttribute('role', 'status');
+  carousel.appendChild(status);
+  let page = 0;
+  let perPage = 0;
+  let slides = [];
+  let dots = [];
+  function move(index) {
+    if (!slides.length) return;
+    page = (index + slides.length) % slides.length;
+    track.style.transform = `translateX(-${page * 100}%)`;
+    slides.forEach((slide, i) => {
+      slide.inert = i !== page;
+      slide.setAttribute('aria-hidden', String(i !== page));
+      dots[i].classList.toggle('active', i === page);
+      dots[i].setAttribute('aria-pressed', String(i === page));
+    });
+    status.textContent = `Texty: strana ${page + 1} z ${slides.length}`;
+  }
+  function render() {
+    const size = window.innerWidth <= 600 ? 1 : window.innerWidth <= 900 ? 2 : 3;
+    if (size === perPage) return;
+    const firstItem = page * perPage;
+    const focused = carousel.contains(document.activeElement);
+    perPage = size;
+    track.replaceChildren();
+    indicators.replaceChildren();
+    slides = []; dots = [];
+    if (!items.length) {
+      track.textContent = 'Texty zatím nejsou k dispozici.';
+      previous.hidden = next.hidden = true;
+      return;
+    }
+    for (let i = 0; i < items.length; i += perPage) {
+      const slide = document.createElement('div');
+      slide.className = 'text-carousel-slide text-grid';
+      Utils.renderTextCards(slide, items.slice(i, i + perPage));
+      track.appendChild(slide); slides.push(slide);
+      const dot = document.createElement('button');
+      dot.type = 'button'; dot.className = 'indicator-dot';
+      dot.setAttribute('aria-label', `Texty: strana ${slides.length}`);
+      dot.setAttribute('aria-controls', 'latest-texts-grid');
+      const index = slides.length - 1;
+      dot.addEventListener('click', () => move(index));
+      indicators.appendChild(dot); dots.push(dot);
+    }
+    previous.hidden = next.hidden = slides.length < 2;
+    indicators.hidden = slides.length < 2;
+    move(Math.min(Math.floor(firstItem / perPage), slides.length - 1));
+    if (focused && !carousel.contains(document.activeElement)) dots[page].focus();
+  }
+  previous.addEventListener('click', () => move(page - 1));
+  next.addEventListener('click', () => move(page + 1));
+  carousel.addEventListener('keydown', e => {
+    if (!slides.length || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+    e.preventDefault();
+    const wasInSlide = track.contains(document.activeElement);
+    move(e.key === 'Home' ? 0 : e.key === 'End' ? slides.length - 1 : page + (e.key === 'ArrowRight' ? 1 : -1));
+    if (wasInSlide) slides[page].querySelector('a')?.focus();
+  });
+  render();
+  window.addEventListener('resize', render);
+}

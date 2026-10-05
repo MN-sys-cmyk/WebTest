@@ -7,39 +7,18 @@ function formatContent(content) {
 }
 
 /* ===== Related posts render ===== */
-function loadRelatedPosts(authorId, currentPostId) {
-  const grid = document.querySelector('.related-posts .posts-grid');
+function loadRelatedPosts(current) {
+  const section = document.querySelector('.related-posts');
+  const grid = section?.querySelector('.text-grid');
   if (!grid) return;
-
-  const posts = Utils.Data.getPosts({ authorId })
-    .filter(p => String(p.id) !== String(currentPostId))
-    .sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))
+  const score = p => String(p.authorId) === String(current.authorId) ? 2 :
+    p.categories.some(category => current.categories.includes(category)) ? 1 : 0;
+  const posts = Utils.Data.allPosts()
+    .filter(p => String(p.id) !== String(current.id))
+    .sort((a, b) => score(b) - score(a) || (b.date?.getTime() || 0) - (a.date?.getTime() || 0))
     .slice(0, 3);
-
-  if (!posts.length) {
-    grid.innerHTML = '<p>Tento autor zatím nemá žádné další příspěvky.</p>';
-    return;
-  }
-
-  grid.innerHTML = posts.map(p => `
-    <article class="post-card">
-      <div class="post-card-image" style="background-image: url('${p.image}');"></div>
-      <div class="post-card-content">
-        <div class="post-meta">
-          <span class="post-date">${p.date ? p.date.toLocaleDateString('cs-CZ') : ''}</span>
-          <span class="post-category">${(p.categories && p.categories[0]) ? Utils.escape(p.categories[0]) : ''}</span>
-        </div>
-        <h3 class="post-title"><a href="post.html?id=${encodeURIComponent(p.id)}">${Utils.escape(p.title)}</a></h3>
-        <p class="post-excerpt">${Utils.escape(p.excerpt)}</p>
-        <div class="author-word-box">
-          <button type="button" class="author-word-toggle" aria-haspopup="dialog">
-            <span>Slovo autora</span><span class="arrow">▼</span>
-          </button>
-          <div id="aw-rel-${p.id}" style="display:none;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
-        </div>
-      </div>
-    </article>
-  `).join("");
+  section.hidden = !posts.length;
+  Utils.renderTextCards(grid, posts);
 }
 
 /* ===== Init detailu ===== */
@@ -82,6 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  loadRelatedPosts(post.authorId, post.id);
+  loadRelatedPosts(post);
 });
 

@@ -1422,3 +1422,17 @@ button:focus-visible, .author-card:focus-visible, .post-card a:focus-visible { o
   .post-card, .latest-posts .text-card, .all-posts-page .text-card { transition: none; }
   .post-card:hover, .latest-posts .text-card:hover, .all-posts-page .text-card:hover { transform: none; }
 }
+
+/* Author name and note form one compact identity block. */
+.text-card__author { margin-bottom: 0; }
+.text-card .author-word-box, .post-card .author-word-box { text-align: left; margin: 0 0 14px; }
+.author-word-toggle { margin-top: 0; padding: 6px 0; min-height: 44px; text-transform: none; font-size: 13px; font-weight: 400; line-height: 1.5; color: #795644; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 4px; transition: color .2s ease; }
+.author-word-toggle::after { display: none; }
+.author-word-toggle:hover { color: #a43414; text-decoration-style: solid; }
+.text-card .text-card__read { margin-top: auto; }
+.post-header .post-author { gap: 14px; align-items: center; }
+.post-author > img { width: 60px; height: 60px; object-fit: cover; border-radius: 50%; flex-shrink: 0; }
+.post-author__identity { text-align: left; min-width: 0; }
+.post-author__identity .author-name { text-align: left; }
+.post-author__identity .author-word-box { text-align: left; margin: 0; }
+.post-author__identity .author-word-toggle { font-family: var(--font-heading); font-size: 16px; }

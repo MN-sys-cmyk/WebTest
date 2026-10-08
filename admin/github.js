@@ -2,7 +2,7 @@
   function encode(text) { const bytes=new TextEncoder().encode(text);let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));return btoa(binary); }
   function decode(text) { return new TextDecoder().decode(Uint8Array.from(atob(text.replace(/\s/g,'')),c=>c.charCodeAt(0))); }
   class Store {
-    constructor(token, request=fetch) { this.token=token;this.request=request;this.repo='MN-sys-cmyk/WebTest';this.branch='main'; }
+    constructor(token, request=globalThis.fetch.bind(globalThis)) { this.token=token;this.request=request;this.repo='MN-sys-cmyk/WebTest';this.branch='main'; }
     async api(path, options={}) {
       const response=await this.request(`https://api.github.com/repos/${this.repo}/${path}`,{...options,cache:'no-store',headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',Authorization:`Bearer ${this.token}`,...options.headers}});
       if(!response.ok) {

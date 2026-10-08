@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Správa webu — Tvůrčí psaní</title><link rel="stylesheet" href="admin.css"></head>
+<body>
+<header class="top"><a href="../index.html">Tvůrčí psaní <span> / Správa webu</span></a><a href="../index.html" target="_blank" rel="noopener">Otevřít web ↗</a></header>
+<main>
+<section id="login" class="login panel">
+<p class="eyebrow">REDAKCE</p><h1>Prostor pro vaše příběhy</h1><p>Připojte svůj GitHub účet a spravujte autory, fotografie a texty na jednom místě.</p>
+<form id="login-form"><label for="token">Přístupový token GitHub</label><input id="token" type="password" autocomplete="off" spellcheck="false" required placeholder="github_pat_…"><p class="hint">Token se používá pouze v této otevřené stránce. Po obnovení stránky se přihlásíte znovu.</p><button type="submit" class="primary">Přihlásit správce</button></form>
+<details><summary>Jak získám přístupový token?</summary><ol><li>Na GitHubu otevřete <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">nový fine-grained token</a>.</li><li>Vyberte vlastníka MN-sys-cmyk a pouze repozitář <strong>WebTest</strong>.</li><li>V Repository permissions nastavte <strong>Contents → Read and write</strong>. Ostatní oprávnění nejsou potřeba.</li><li>Zvolte expiraci, vytvořte token a vložte jej do pole výše. Neposílejte ho do chatu.</li></ol><p>Pro každodenní testování není potřeba účet na jiné službě. Zápis podléhá oprávněním účtu a ochraně větve GitHub.</p></details>
+</section>
+<p id="notice" role="status" aria-live="polite"></p>
+<section id="workspace" hidden>
+<div class="workspace-head"><div><p class="eyebrow">REDAKCE</p><h1>Správa obsahu</h1></div><div class="toolbar"><button id="refresh">Načíst aktuální data</button><button id="logout">Odhlásit</button></div></div>
+<p class="hint">Uložení spustí aktualizaci webu. Koncepty se na webu nezobrazí; repozitář je ale veřejný. <a href="https://github.com/MN-sys-cmyk/WebTest/actions/workflows/static.yml" target="_blank" rel="noopener">Průběh publikování ↗</a></p>
+<div id="stats" class="stats"></div>
+<nav class="tabs" aria-label="Správa obsahu"><button data-tab="authors" aria-pressed="true">Autoři</button><button data-tab="posts" aria-pressed="false">Texty</button><button data-tab="tags" aria-pressed="false">Štítky</button></nav>
+<div class="list-head"><input type="search" id="search" aria-label="Hledat v obsahu" placeholder="Hledat jméno nebo název…"><button id="add" class="primary">Přidat autora</button></div>
+<div id="list" class="list"></div>
+</section>
+</main>
+<dialog id="editor"><form id="edit-form"><div class="dialog-head"><h2 id="editor-title">Upravit</h2><button type="button" id="close" aria-label="Zavřít editor">×</button></div><fieldset id="fields"></fieldset><p id="form-error" role="alert"></p><div class="dialog-actions"><button type="button" id="preview-button">Náhled</button><button type="button" id="delete" class="danger">Odstranit</button><button type="submit" class="primary" id="save">Uložit změny</button></div></form></dialog>
+<dialog id="preview"><button type="button" id="preview-close">Zavřít náhled</button><article id="preview-content"></article></dialog>
+<script src="../content-model.js"></script><script src="github.js"></script><script src="admin.js"></script>
+</body></html>

@@ -1480,3 +1480,11 @@ html { scroll-behavior: smooth; }
 .author-word-toggle, .author-word-toggle:hover, .author-word-toggle:focus-visible {
   color: var(--accent-color);
 }
+
+/* Content administration: preserve author paragraphs and expose tag filters. */
+#authorBio { white-space: pre-wrap; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.card-tags .tag { padding: 3px 8px; font-size: 12px; }
+.text-filters { grid-template-columns: minmax(0, 2fr) minmax(130px, 1fr) minmax(130px, 1fr) auto; }
+@media (max-width: 800px) { .text-filters { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .text-filters { grid-template-columns: 1fr; } }

@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261008-actions">
+  <link rel="stylesheet" href="style.css?v=admin-1">
 </head>
 <body>
   <header id="site-header"></header>
@@ -20,6 +20,7 @@
     <div class="text-filters" role="search" aria-label="Vyhledávání textů">
       <div><label for="text-search">Hledat text nebo autora</label><input id="text-search" type="search" placeholder="Název, autor nebo klíčové slovo…"></div>
       <div><label for="text-genre">Žánr</label><select id="text-genre"><option value="">Všechny žánry</option></select></div>
+      <div><label for="text-tag">Štítek</label><select id="text-tag"><option value="">Všechny štítky</option></select></div>
       <button id="text-reset" type="button">Zrušit filtry</button>
     </div>
     <p id="text-count" class="text-count" role="status" aria-live="polite"></p>
@@ -30,9 +31,9 @@
   <footer id="site-footer"></footer>
 
   <script src="data.js?v=6" defer></script>
-  <script src="utils.js?v=20261008-actions" defer></script>
+  <script src="utils.js?v=admin-1" defer></script>
   <script src="interactions.js?v=1" defer></script>
-  <script src="catalog.js?v=20261008" defer></script>
+  <script src="catalog.js?v=admin-1" defer></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'posts' }));

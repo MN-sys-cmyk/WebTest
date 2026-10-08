@@ -35,10 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <h3 class="post-title">${Utils.escape(p.title)}</h3>
         <p class="text-card__author"><a href="author.html?id=${encodeURIComponent(p.authorId)}">${Utils.escape(Utils.Data.getAuthorById(p.authorId)?.name || 'Autor neuveden')}</a></p>
-        <div class="author-word-box">
-          <button type="button" class="author-word-toggle" aria-haspopup="dialog"><span>Slovo autora</span><span class="arrow">▼</span></button>
-          <div style="display:none;"><p class="authorWordText">${Utils.escape(p.excerpt)}</p></div>
-        </div>
+        ${Utils.authorWordMarkup(p.authorWord)}
+        ${p.tags.length ? `<div class="card-tags">${Utils.tagMarkup(p.tags)}</div>` : ''}
         <p class="post-excerpt">${Utils.escape(p.excerpt)}</p>
         <a href="post.html?id=${encodeURIComponent(p.id)}" class="read-more">Číst více</a>
       </div>

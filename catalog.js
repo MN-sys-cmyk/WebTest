@@ -13,10 +13,8 @@
           <div class="text-card__meta"><span>${escape(p.categories.join(' · '))}${Utils.readingTimeMarkup(p.content)}</span>${p.date && !Number.isNaN(p.date.getTime()) ? `<time datetime="${p.date.toISOString().slice(0,10)}">${p.date.toLocaleDateString('cs-CZ')}</time>` : ''}</div>
           <h3><a href="${href}">${escape(p.title)}</a></h3>
           <p class="text-card__author">${author ? `<a href="author.html?id=${encodeURIComponent(author.id)}">${escape(author.name)}</a>` : 'Autor neuveden'}</p>
-          <div class="author-word-box">
-            <button type="button" class="author-word-toggle" aria-haspopup="dialog">Slovo autora</button>
-            <p class="authorWordText" hidden>${escape(excerpt)}</p>
-          </div>
+          ${Utils.authorWordMarkup(p.authorWord)}
+          ${p.tags.length ? `<div class="card-tags">${Utils.tagMarkup(p.tags)}</div>` : ''}
           <p class="text-card__excerpt">${escape(short)}</p>
           <a class="text-card__read" href="${href}" aria-label="${escape('Číst text: ' + p.title)}">Číst text <span aria-hidden="true">→</span></a>
         </div>
@@ -46,6 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const count = document.getElementById('text-count');
   const empty = document.getElementById('text-empty');
   const reset = document.getElementById('text-reset');
+  const tag = document.getElementById('text-tag');
+  [...new Set(posts.flatMap(p => p.tags))].sort((a,b) => a.localeCompare(b, 'cs')).forEach(value => { const option = document.createElement('option'); option.value = option.textContent = value; tag.appendChild(option); });
+  tag.value = new URLSearchParams(location.search).get('tag') || '';
+  if (!tag.value) tag.value = '';
+  search.value = new URLSearchParams(location.search).get('search') || '';
   Utils.Data.listCategories().sort((a,b) => a.localeCompare(b, 'cs')).forEach(category => {
     const option = document.createElement('option');
     option.value = category;
@@ -54,15 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   function update() {
     const q = normalize(search.value.trim());
-    const result = posts.filter(p => (!genre.value || p.categories.includes(genre.value)) && (!q || normalize([p.title, p.excerpt, p.content, authorFor(p)?.name, ...p.categories].join(' ')).includes(q)));
+    const result = posts.filter(p => (!genre.value || p.categories.includes(genre.value)) && (!tag.value || p.tags.includes(tag.value)) && (!q || normalize([p.title, p.excerpt, p.content, authorFor(p)?.name, ...p.categories, ...p.tags].join(' ')).includes(q)));
     render(grid, result);
     count.textContent = `Zobrazeno ${result.length} z ${posts.length} textů`;
     empty.hidden = result.length !== 0;
-    reset.disabled = !search.value && !genre.value;
+    reset.disabled = !search.value && !genre.value && !tag.value;
   }
   search.addEventListener('input', update);
   genre.addEventListener('change', update);
-  reset.addEventListener('click', () => { search.value = ''; genre.value = ''; update(); search.focus(); });
+  tag.addEventListener('change', update);
+  reset.addEventListener('click', () => { search.value = ''; genre.value = ''; tag.value = ''; history.replaceState(null, '', location.pathname); update(); search.focus(); });
   update();
 });
 

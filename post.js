@@ -3,7 +3,7 @@ function findPostById(id) {
 }
 function formatContent(content) {
   if (!content) return '';
-  return content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
+  return String(content).split(/\n\s*\n/).filter(p => p.trim()).map(p => `<p>${Utils.escape(p).replace(/\n/g, '<br>')}</p>`).join('');
 }
 
 /* ===== Related posts render ===== */
@@ -44,19 +44,19 @@ document.addEventListener('DOMContentLoaded', () => {
   if (postTitleElement) postTitleElement.textContent = post.title;
   if (authorNameElement) authorNameElement.textContent = Utils.Data.getAuthorById(post.authorId)?.name || '';
   if (postContentElement) postContentElement.innerHTML = formatContent(post.content || '');
-  if (authorWordElement) authorWordElement.textContent = post.excerpt || '';
+  if (authorWordElement) { authorWordElement.textContent = post.authorWord || ''; authorWordElement.closest('.author-word-box').hidden = !post.authorWord.trim(); }
 
   const author = Utils.Data.getAuthorById(post.authorId);
   if (author) {
-    if (authorImageElement) { authorImageElement.src = author.image; authorImageElement.alt = author.name; authorImageElement.loading = 'lazy'; }
+    if (authorImageElement) { if (author.image) authorImageElement.src = author.image; else authorImageElement.hidden = true; authorImageElement.alt = author.name; authorImageElement.loading = 'lazy'; }
     if (authorLinkElement) authorLinkElement.href = `author.html?id=${encodeURIComponent(author.id)}`;
   }
 
   const tagsContainer = document.querySelector('.post-tags');
-  if (tagsContainer && post.categories?.length) {
-    const [cat] = post.categories;
+  if (tagsContainer) {
     tagsContainer.innerHTML = `
-      <a href="category.html?category=${encodeURIComponent(cat)}" class="tag">${Utils.escape(cat)}</a>
+      ${post.categories.map(cat => `<a href="category.html?category=${encodeURIComponent(cat)}" class="tag">${Utils.escape(cat)}</a>`).join('')}
+      ${Utils.tagMarkup(post.tags)}
       <a href="author-category.html?author=${encodeURIComponent(post.authorId)}" class="tag">${Utils.escape(author?.name || '')}</a>
     `;
   }

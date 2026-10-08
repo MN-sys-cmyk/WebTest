@@ -1,0 +1,1 @@
+{"name":"webtest","private":true,"scripts":{"build":"node scripts/build.cjs","test":"node --test tests/*.test.cjs"},"engines":{"node":">=20"}}

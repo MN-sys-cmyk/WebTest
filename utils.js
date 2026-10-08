@@ -21,6 +21,9 @@
     return label ? `<span class="reading-time" title="Odhad při rychlosti 200 slov za minutu" aria-label="Odhad doby čtení: ${label}"> · ${label}</span>` : '';
   };
 
+  Utils.authorWordMarkup = word => String(word || '').trim() ? `<div class="author-word-box"><button type="button" class="author-word-toggle" aria-haspopup="dialog">Slovo autora</button><p class="authorWordText" hidden>${Utils.escape(String(word))}</p></div>` : '';
+  Utils.tagMarkup = tags => (tags || []).map(tag => `<a class="tag" href="all-posts.html?tag=${encodeURIComponent(tag)}">${Utils.escape(tag)}</a>`).join('');
+
   Utils.authorCard = a => `<a href="author.html?id=${encodeURIComponent(a.id)}" class="author-card">
     <div class="author-image-container"><span class="author-initials" aria-hidden="true">${Utils.escape(a.name.split(/\s+/).slice(0, 2).map(part => part[0]).join(""))}</span>
     <img src="${Utils.escape(a.image || '')}" alt="${Utils.escape(a.name)}" class="author-image" loading="lazy" decoding="async" width="640" height="640"></div>
@@ -119,7 +122,9 @@
         title: p.title ?? "Bez názvu",
         date: p.date ? new Date(p.date) : null,
         authorId: p.authorId ?? p.author ?? p.author_id ?? null,
-        categories: p.categories ?? p.tags ?? [],
+        categories: p.categories ?? [],
+        tags: p.tags ?? [],
+        authorWord: p.authorWord ?? "",
         image: p.image ?? p.thumbnail ?? "",
         alt: p.alt ?? "",
         excerpt: p.excerpt ?? (p.content ? String(p.content).slice(0, 140) + "…" : ""),
@@ -138,7 +143,7 @@
           if (authorId && String(p.authorId) !== String(authorId)) return false;
           if (category && !(p.categories || []).map(String).includes(String(category))) return false;
           if (q) {
-            const hay = `${p.title} ${p.excerpt} ${p.content}`.toLowerCase();
+            const hay = `${p.title} ${p.excerpt} ${p.content} ${p.tags.join(" ")}`.toLowerCase();
             if (!hay.includes(q)) return false;
           }
           return true;

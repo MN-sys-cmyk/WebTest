@@ -1473,3 +1473,10 @@ html { scroll-behavior: smooth; }
 .texts-carousel .carousel-track { align-items: stretch; }
 .texts-carousel .text-carousel-slide { align-content: stretch; grid-auto-rows: 1fr; align-items: stretch; }
 .texts-carousel .text-card__media { flex-shrink: 0; }
+
+/* Shared accent for reading actions everywhere, including hover/focus states. */
+.text-card__read, .text-card__read:hover, .text-card__read:focus-visible,
+.read-more, .read-more:hover, .read-more:focus-visible,
+.author-word-toggle, .author-word-toggle:hover, .author-word-toggle:focus-visible {
+  color: var(--accent-color);
+}

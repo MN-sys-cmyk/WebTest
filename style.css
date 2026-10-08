@@ -1442,3 +1442,23 @@ html { scroll-behavior: smooth; }
 #nejnovejsi-texty, #autori { scroll-margin-top: calc(var(--topbar-h) + 16px); }
 .reading-time { white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Keep the reading destination and its directory links together on screen. */
+#nejnovejsi-texty { padding: 12px 0 24px; scroll-margin-top: calc(var(--topbar-h) + 8px); }
+#nejnovejsi-texty .section-header { margin-bottom: 12px; }
+#nejnovejsi-texty .section-title { margin-bottom: 4px; }
+#nejnovejsi-texty .section-title::after { bottom: -8px; }
+#nejnovejsi-texty .section-subtitle { margin-top: 12px; }
+#nejnovejsi-texty .text-carousel-slide { padding-top: 8px; padding-bottom: 8px; }
+#nejnovejsi-texty .text-card__media { aspect-ratio: auto; height: clamp(72px, 11svh, 150px); }
+#nejnovejsi-texty .text-card__body { padding: 12px 20px; }
+#nejnovejsi-texty .text-card__meta { margin-bottom: 8px; }
+#nejnovejsi-texty .author-word-box { margin-bottom: 8px; }
+#nejnovejsi-texty .text-card__excerpt { margin-bottom: 12px; }
+#nejnovejsi-texty .carousel-indicator { margin-top: 4px; }
+.latest-posts-actions { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px 20px; margin-top: 12px; }
+@media (max-width: 600px) {
+  #nejnovejsi-texty .section-title { font-size: 28px; }
+  #nejnovejsi-texty .section-subtitle { font-size: 15px; }
+  .latest-posts-actions .view-all-button { padding: 10px 16px; font-size: 13px; }
+}

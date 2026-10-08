@@ -1436,3 +1436,9 @@ button:focus-visible, .author-card:focus-visible, .post-card a:focus-visible { o
 .post-author__identity .author-name { text-align: left; }
 .post-author__identity .author-word-box { text-align: left; margin: 0; }
 .post-author__identity .author-word-toggle { font-family: var(--font-heading); font-size: 16px; }
+
+/* Homepage links land below the fixed navigation, with motion preferences respected. */
+html { scroll-behavior: smooth; }
+#nejnovejsi-texty, #autori { scroll-margin-top: calc(var(--topbar-h) + 16px); }
+.reading-time { white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

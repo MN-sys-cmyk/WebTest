@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.7">
+  <link rel="stylesheet" href="style.css?v=20261008">
 
 </head>
 <body>
@@ -20,36 +20,14 @@
         <p class="hero-subtitle">Platforma propojující autory, čtenáře a literární nadšence</p>
 
         <div class="hero-actions">
-          <a href="all-posts.html" class="hero-action hero-action--primary">Začít číst</a>
-          <a href="all-authors.html" class="hero-action hero-action--secondary">Poznat autory</a>
+          <a href="#nejnovejsi-texty" class="hero-action hero-action--primary">Začít číst</a>
+          <a href="#autori" class="hero-action hero-action--secondary">Poznat autory</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="authors-section">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Představujeme autory</h2>
-        <p class="section-subtitle">Osobnosti české literární scény</p>
-      </div>
-
-      <div class="authors-carousel" role="region" aria-label="Představujeme autory" aria-roledescription="karusel">
-        <button type="button" class="carousel-arrow prev" aria-label="Předchozí autoři" aria-controls="carousel-track">❮</button>
-        <div class="carousel-container">
-          <div class="carousel-track" id="carousel-track"></div>
-        </div>
-        <button type="button" class="carousel-arrow next" aria-label="Další autoři" aria-controls="carousel-track">❯</button>
-        <div class="carousel-indicator" id="carousel-indicator"></div>
-      </div>
-
-      <div class="view-all">
-        <a href="all-authors.html" class="view-all-button">Zobrazit všechny autory</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="latest-posts">
+  <section class="latest-posts" id="nejnovejsi-texty">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">Nejnovější texty</h2>
@@ -72,11 +50,35 @@
   </section>
 
 
+  <section class="authors-section" id="autori">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Představujeme autory</h2>
+        <p class="section-subtitle">Osobnosti české literární scény</p>
+      </div>
+
+      <div class="authors-carousel" role="region" aria-label="Představujeme autory" aria-roledescription="karusel">
+        <button type="button" class="carousel-arrow prev" aria-label="Předchozí autoři" aria-controls="carousel-track">❮</button>
+        <div class="carousel-container">
+          <div class="carousel-track" id="carousel-track"></div>
+        </div>
+        <button type="button" class="carousel-arrow next" aria-label="Další autoři" aria-controls="carousel-track">❯</button>
+        <div class="carousel-indicator" id="carousel-indicator"></div>
+      </div>
+
+      <div class="view-all">
+        <a href="all-authors.html" class="view-all-button">Zobrazit všechny autory</a>
+      </div>
+    </div>
+  </section>
+
+
+
   <script src="data.js?v=6" defer></script>
-  <script src="utils.js?v=3" defer></script>
+  <script src="utils.js?v=20261008" defer></script>
   <script src="interactions.js?v=1" defer></script>
   <script src="script.js?v=9" defer></script>
-  <script src="catalog.js?v=13" defer></script>
+  <script src="catalog.js?v=20261008" defer></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => Utils.bootstrap({ active: 'home' }));

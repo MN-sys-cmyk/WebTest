@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="post-card-content">
         <div class="post-meta">
           <span class="post-date">${p.date ? p.date.toLocaleDateString('cs-CZ') : ''}</span>
-          <span class="post-category">${(p.categories && p.categories[0]) ? Utils.escape(p.categories[0]) : ''}</span>
+          <span class="post-category">${(p.categories && p.categories[0]) ? Utils.escape(p.categories[0]) : ''}${Utils.readingTimeMarkup(p.content)}</span>
         </div>
         <h3 class="post-title">${Utils.escape(p.title)}</h3>
         <p class="text-card__author"><a href="author.html?id=${encodeURIComponent(p.authorId)}">${Utils.escape(Utils.Data.getAuthorById(p.authorId)?.name || 'Autor neuveden')}</a></p>

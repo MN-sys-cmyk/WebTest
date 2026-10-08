@@ -1451,7 +1451,7 @@ html { scroll-behavior: smooth; }
 #nejnovejsi-texty .section-title::after { bottom: -8px; }
 #nejnovejsi-texty .section-subtitle { margin-top: 12px; }
 #nejnovejsi-texty .text-carousel-slide { padding-top: 8px; padding-bottom: 8px; }
-#nejnovejsi-texty .text-card__media { aspect-ratio: auto; height: clamp(72px, 11svh, 150px); }
+#nejnovejsi-texty .text-card__media { aspect-ratio: auto; height: clamp(72px, calc(100dvh - 660px), 460px); }
 #nejnovejsi-texty .text-card__body { padding: 12px 20px; }
 #nejnovejsi-texty .text-card__meta { margin-bottom: 8px; }
 #nejnovejsi-texty .author-word-box { margin-bottom: 8px; }
@@ -1462,4 +1462,9 @@ html { scroll-behavior: smooth; }
   #nejnovejsi-texty .section-title { font-size: 28px; }
   #nejnovejsi-texty .section-subtitle { font-size: 15px; }
   .latest-posts-actions .view-all-button { padding: 10px 16px; font-size: 13px; }
+}
+
+/* Use taller screens for artwork and comfortable card spacing. */
+@media (min-width: 901px) and (min-height: 850px) {
+  #nejnovejsi-texty .text-card__body { padding: 20px; }
 }

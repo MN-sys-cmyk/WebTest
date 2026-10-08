@@ -37,8 +37,7 @@
     const navItems = [
       { href: "all-posts.html", key: "posts", label: "Texty" },
       { href: "all-authors.html", key: "authors", label: "Autoři" },
-      { href: "about.html", key: "about", label: "O projektu" },
-      { href: "#site-footer", key: "contact", label: "Kontakt" }
+      { href: "about.html", key: "about", label: "O projektu" }
     ];
     // One shared header owns the navigation on every page.
     document.getElementById("site-nav")?.remove();

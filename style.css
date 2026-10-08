@@ -1444,7 +1444,8 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 /* Keep the reading destination and its directory links together on screen. */
-#nejnovejsi-texty { padding: 12px 0 24px; scroll-margin-top: calc(var(--topbar-h) + 8px); }
+/* Full viewport height leaves enough scroll room even on tall displays. */
+#nejnovejsi-texty { padding: 12px 0 24px; min-height: calc(100vh - var(--topbar-h)); min-height: calc(100dvh - var(--topbar-h)); scroll-margin-top: var(--topbar-h); }
 #nejnovejsi-texty .section-header { margin-bottom: 12px; }
 #nejnovejsi-texty .section-title { margin-bottom: 4px; }
 #nejnovejsi-texty .section-title::after { bottom: -8px; }

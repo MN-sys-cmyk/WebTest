@@ -7,6 +7,20 @@
   Utils.$$ = (s, r = document) => [...r.querySelectorAll(s)];
   Utils.escape = (str = "") => str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
+  // Approximate reading time at 200 words per minute, based on the full text.
+  Utils.readingTime = (content = '') => {
+    const text = String(content).replace(/<[^>]*>/g, ' ').replace(/&(?:#\d+|#x[\da-f]+|[a-z]+);/gi, ' ');
+    const words = text.match(/[\p{L}\p{N}]+(?:[’'-][\p{L}\p{N}]+)*/gu) || [];
+    if (!words.length) return '';
+    const minutes = Math.max(1, Math.ceil(words.length / 200));
+    const unit = minutes === 1 ? 'minuta' : minutes < 5 ? 'minuty' : 'minut';
+    return `${minutes} ${unit}`;
+  };
+  Utils.readingTimeMarkup = content => {
+    const label = Utils.readingTime(content);
+    return label ? `<span class="reading-time" title="Odhad při rychlosti 200 slov za minutu" aria-label="Odhad doby čtení: ${label}"> · ${label}</span>` : '';
+  };
+
   Utils.authorCard = a => `<a href="author.html?id=${encodeURIComponent(a.id)}" class="author-card">
     <div class="author-image-container"><span class="author-initials" aria-hidden="true">${Utils.escape(a.name.split(/\s+/).slice(0, 2).map(part => part[0]).join(""))}</span>
     <img src="${Utils.escape(a.image || '')}" alt="${Utils.escape(a.name)}" class="author-image" loading="lazy" decoding="async" width="640" height="640"></div>

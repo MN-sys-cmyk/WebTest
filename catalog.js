@@ -10,7 +10,7 @@
       return `<article class="text-card">
         <div class="text-card__media"><span class="text-card__fallback">${escape(p.categories[0] || 'Literární text')}</span>${p.image ? `<img src="${escape(p.image)}" alt="" loading="lazy" width="640" height="400">` : ''}</div>
         <div class="text-card__body">
-          <div class="text-card__meta"><span>${escape(p.categories.join(' · '))}</span>${p.date && !Number.isNaN(p.date.getTime()) ? `<time datetime="${p.date.toISOString().slice(0,10)}">${p.date.toLocaleDateString('cs-CZ')}</time>` : ''}</div>
+          <div class="text-card__meta"><span>${escape(p.categories.join(' · '))}${Utils.readingTimeMarkup(p.content)}</span>${p.date && !Number.isNaN(p.date.getTime()) ? `<time datetime="${p.date.toISOString().slice(0,10)}">${p.date.toLocaleDateString('cs-CZ')}</time>` : ''}</div>
           <h3><a href="${href}">${escape(p.title)}</a></h3>
           <p class="text-card__author">${author ? `<a href="author.html?id=${encodeURIComponent(author.id)}">${escape(author.name)}</a>` : 'Autor neuveden'}</p>
           <div class="author-word-box">

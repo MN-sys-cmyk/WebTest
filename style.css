@@ -1468,3 +1468,8 @@ html { scroll-behavior: smooth; }
 @media (min-width: 901px) and (min-height: 850px) {
   #nejnovejsi-texty .text-card__body { padding: 20px; }
 }
+
+/* All pages share the tallest card height through the stretched flex track. */
+.texts-carousel .carousel-track { align-items: stretch; }
+.texts-carousel .text-carousel-slide { align-content: stretch; grid-auto-rows: 1fr; align-items: stretch; }
+.texts-carousel .text-card__media { flex-shrink: 0; }
